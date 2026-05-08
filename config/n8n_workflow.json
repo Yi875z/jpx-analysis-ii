@@ -1,0 +1,153 @@
+{
+  "name": "JPX_Weekly_Analysis",
+  "nodes": [
+    {
+      "id": "node_trigger",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 11 * * 4"
+            }
+          ]
+        }
+      },
+      "name": "毎週木曜20時JST",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [200, 300],
+      "notes": "木曜20:00 JST = 11:00 UTC"
+    },
+    {
+      "id": "node_wakeup",
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.SUPABASE_URL }}/rest/v1/weekly_spot?select=week_date&limit=1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey",        "value": "={{ $env.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Supabase起動確認",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [440, 300],
+      "notes": "無料版は7日アクセスなしで停止する。分析前にウェイクアップリクエストを送って確実に起こす。"
+    },
+    {
+      "id": "node_run_main",
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8765/run",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "name": "JPX分析実行",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "notes": "Windows上のapi_server.py経由でmain.pyを実行（タイムアウト5分）"
+    },
+    {
+      "id": "node_check",
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.success }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "成功判定",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [920, 300]
+    },
+    {
+      "id": "node_extract",
+      "parameters": {
+        "method": "GET",
+        "url": "http://host.docker.internal:8765/summary",
+        "options": {}
+      },
+      "name": "レポートサマリー取得",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1160, 160]
+    },
+    {
+      "id": "node_email_success",
+      "parameters": {
+        "fromEmail": "={{ $env.NOTIFY_EMAIL }}",
+        "toEmail": "={{ $env.NOTIFY_EMAIL }}",
+        "subject": "=【JPX需給】週次レポート完成 {{ $now.setZone('Asia/Tokyo').toFormat('yyyy/MM/dd') }}",
+        "text": "={{ 'JPX投資家別売買動向の週次分析が完了しました。\\n\\n' + $node['レポートサマリー取得'].json.stdout + '\\n\\n---\\n自動生成: JPX Analysis System' }}",
+        "options": {}
+      },
+      "name": "完了メール",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1400, 160],
+      "credentials": {
+        "smtp": { "id": "smtp_gmail", "name": "SMTP account" }
+      }
+    },
+    {
+      "id": "node_email_error",
+      "parameters": {
+        "fromEmail": "={{ $env.NOTIFY_EMAIL }}",
+        "toEmail": "={{ $env.NOTIFY_EMAIL }}",
+        "subject": "=【警告】JPX需給システム エラー {{ $now.setZone('Asia/Tokyo').toFormat('yyyy/MM/dd') }}",
+        "text": "=JPX週次分析でエラーが発生しました。手動確認をお願いします。\n\n=== 実行ログ（末尾2000文字）===\n{{ $node['JPX分析実行'].json.stdout.slice(-2000) }}\n\n=== よくある原因と対処 ===\n1. Supabase停止: ダッシュボードでプロジェクトを手動再開 → python main.py を手動実行\n2. SUPABASE_KEY切れ: config/.env の SUPABASE_SERVICE_KEY を更新\n3. JPXサイト構造変更: scripts/fetch_jpx.py の URL を要確認\n4. Claude APIエラー: ANTHROPIC_API_KEY の残高・制限を確認",
+        "options": {}
+      },
+      "name": "エラーメール",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1400, 440],
+      "credentials": {
+        "smtp": { "id": "smtp_gmail", "name": "SMTP account" }
+      }
+    }
+  ],
+  "connections": {
+    "毎週木曜20時JST": {
+      "main": [
+        [{ "node": "Supabase起動確認", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase起動確認": {
+      "main": [
+        [{ "node": "JPX分析実行", "type": "main", "index": 0 }]
+      ]
+    },
+    "JPX分析実行": {
+      "main": [
+        [{ "node": "成功判定", "type": "main", "index": 0 }]
+      ]
+    },
+    "成功判定": {
+      "main": [
+        [{ "node": "レポートサマリー取得", "type": "main", "index": 0 }],
+        [{ "node": "エラーメール", "type": "main", "index": 0 }]
+      ]
+    },
+    "レポートサマリー取得": {
+      "main": [
+        [{ "node": "完了メール", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Tokyo"
+  }
+}

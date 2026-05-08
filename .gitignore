@@ -1,0 +1,55 @@
+# 環境変数・APIキー（絶対にコミットしない）
+config/.env
+.env
+*.env
+
+# Pythonキャッシュ
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# 仮想環境
+venv/
+.venv/
+env/
+ENV/
+
+# ログ・出力
+logs/
+outputs/
+*.log
+
+# Streamlitキャッシュ
+.streamlit/secrets.toml
+
+# IDEキャッシュ
+.cursor/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 一時ファイル
+*.tmp
+*.bak
+~$*
+
+# パスワードメモ
+n8n使用Gmailメール送付パスワード.txt
+
+# graphify生成キャッシュ（再生成可能なため除外）
+graphify-out/cache/
+graphify-out/converted/
+
+# Excel出力
+*.xlsx
+*.xls
+
+# Claude Code ローカル設定
+.claude/settings.local.json

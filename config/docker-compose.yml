@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - C:\CarSol\jpx-analysis:/CarSol/jpx-analysis
+    environment:
+      - SUPABASE_URL=https://syyojlcrnachuvrbvttw.supabase.co
+      - SUPABASE_SERVICE_KEY=***REMOVED-SUPABASE-KEY***
+      - NOTIFY_EMAIL=y.ioku1973@gmail.com
+      - GENERIC_TIMEZONE=Asia/Tokyo
+      - TZ=Asia/Tokyo
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+
+volumes:
+  n8n_data:
+    external: true
