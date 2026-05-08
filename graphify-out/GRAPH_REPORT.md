@@ -1,11 +1,11 @@
 # Graph Report - jpx-analysis  (2026-05-08)
 
 ## Corpus Check
-- 32 files · ~62,780 words
+- 34 files · ~63,011 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 219 nodes · 292 edges · 21 communities detected
+- 221 nodes · 292 edges · 21 communities detected
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 10 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -30,7 +30,7 @@
 - [[_COMMUNITY_Community 17|Community 17]]
 - [[_COMMUNITY_Community 18|Community 18]]
 - [[_COMMUNITY_Community 19|Community 19]]
-- [[_COMMUNITY_Community 26|Community 26]]
+- [[_COMMUNITY_Community 28|Community 28]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `get_client()` - 16 edges
@@ -138,7 +138,7 @@ Nodes (1): 合算分析ページ - 現物 vs 先物 方向一致/乖離チャー
 Cohesion: 1.0
 Nodes (1): Supabase スキーマ確認スクリプト information_schema からテーブル名・カラム名・型を一覧表示する
 
-### Community 26 - "Community 26"
+### Community 28 - "Community 28"
 Cohesion: 1.0
 Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
@@ -159,14 +159,14 @@ Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成す
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 19`** (2 nodes): `show_schema.py`, `Supabase スキーマ確認スクリプト information_schema からテーブル名・カラム名・型を一覧表示する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 28`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `CsvLinkParser` connect `Community 0` to `Community 3`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `fetch_all()` (e.g. with `parse_spot_xls()` and `parse_futures_csv()`) actually correct?**
   _`fetch_all()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `LinkParser` (e.g. with `fetch_spot_data()` and `fetch_futures_data()`) actually correct?**
