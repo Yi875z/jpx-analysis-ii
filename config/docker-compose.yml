@@ -17,6 +17,7 @@ services:
       - GENERIC_TIMEZONE=Asia/Tokyo
       - TZ=Asia/Tokyo
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - DISCORD_WEBHOOK_URL=***REMOVED-DISCORD-WEBHOOK***
 
 volumes:
   n8n_data:
