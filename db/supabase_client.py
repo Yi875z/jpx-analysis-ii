@@ -5,11 +5,14 @@ Supabaseへの全CRUD操作を集約したモジュール
 
 import os
 from datetime import date, datetime
+from pathlib import Path
 from typing import Optional
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
-load_dotenv()
+# プロジェクトルート固定の .env を参照（cwd 依存を排除）
+_PROJECT_ROOT = Path(__file__).parent.parent
+load_dotenv(_PROJECT_ROOT / "config" / ".env")
 
 _client: Optional[Client] = None
 
@@ -17,8 +20,13 @@ _client: Optional[Client] = None
 def get_client() -> Client:
     global _client
     if _client is None:
-        url = os.environ["SUPABASE_URL"]
-        key = os.environ["SUPABASE_SERVICE_KEY"]
+        url = os.environ.get("SUPABASE_URL")
+        # SUPABASE_SERVICE_KEY を優先し、なければ SUPABASE_KEY にフォールバック
+        key = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_KEY")
+        if not url or not key:
+            raise RuntimeError(
+                f"SUPABASE_URL / SUPABASE_(SERVICE_)KEY が {_PROJECT_ROOT}/config/.env に設定されていません"
+            )
         _client = create_client(url, key)
     return _client
 

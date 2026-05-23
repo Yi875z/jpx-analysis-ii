@@ -71,7 +71,9 @@ def _get_week_date() -> date:
 def _save_markdown(content: str, week_date: date) -> Path:
     dir_ = OUTPUT_DIR / "reports"
     dir_.mkdir(parents=True, exist_ok=True)
-    fname = f"jpx_investor_{week_date.strftime('%Y%m%d')}.md"
+    # 期間（月曜〜金曜）でファイル名を構成: jpx_investor_YYYYMMDD_YYYYMMDD.md
+    week_start = week_date - timedelta(days=4)
+    fname = f"jpx_investor_{week_start.strftime('%Y%m%d')}_{week_date.strftime('%Y%m%d')}.md"
     path  = dir_ / fname
     path.write_text(content, encoding="utf-8")
     logger.info(f"[MD] 保存: {path}")
@@ -138,6 +140,14 @@ def run_weekly(week_date: date, spot_path: str = None,
     spot_rows    = fetch_result.get("spot", [])
     futures_rows = fetch_result.get("futures", [])
     errors       = fetch_result.get("errors", [])
+    resolved_wd  = fetch_result.get("resolved_week_date")
+
+    # JPX 記載の対象期間が呼び出し側の指定と異なる場合は実態を採用
+    if resolved_wd and resolved_wd != week_date:
+        logger.warning(
+            f"[week_date補正] 指定 {week_date} → JPX実態 {resolved_wd} に変更"
+        )
+        week_date = resolved_wd
 
     if errors:
         for e in errors:

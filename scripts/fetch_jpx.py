@@ -251,32 +251,66 @@ def parse_futures(content: bytes, week_date: date, source_url: str,
 # ─────────────────────────────────────────
 # メイン取得関数
 # ─────────────────────────────────────────
+def _resolve_actual_week_end(target_url: str, fallback: date) -> date:
+    """取得ファイルのURLとJPXページの記載から、実態の週末日を取得する。
+    取れなければ fallback（呼び出し側の希望日付）を返す。
+    """
+    try:
+        # 遅延 import で循環を避ける
+        from .jpx_week_resolver import extract_filename_stem, resolve_from_jpx
+        stem = extract_filename_stem(target_url)
+        if not stem:
+            return fallback
+        mapping = resolve_from_jpx()
+        wi = mapping.get(stem)
+        if wi is None:
+            return fallback
+        if wi.week_end != fallback:
+            logger.warning(
+                f"[week_date補正] 指定 {fallback} → JPX実態 {wi.week_end} "
+                f"(file={stem}, JPX表記={wi.year}年{wi.month}月第{wi.week_num}週)"
+            )
+        return wi.week_end
+    except Exception as e:
+        logger.warning(f"[week_date解決失敗] {e} → fallback {fallback} を使用")
+        return fallback
+
+
 def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
-    """JPXから現物・先物を自動取得してパース結果を返す"""
-    result = {"spot": [], "futures": [], "errors": []}
+    """JPXから現物・先物を自動取得してパース結果を返す。
+
+    取得時に各ファイルの「JPXに記載された対象期間」を解決し、
+    呼び出し側の week_date と乖離していたら **JPX側を採用** する。
+    （これにより main.py の `_get_week_date()` が公開遅延等で
+      実態とズレていても、DB には常に正しい週末日が入る）
+    """
+    result = {"spot": [], "futures": [], "errors": [], "resolved_week_date": week_date}
 
     # ── 現物（XLS形式） ──────────────────────────────────────────────────
     try:
         links = _get_csv_links(JPX_SPOT_INDEX)
-        # XLSリンクを優先、なければCSVリンク
         xls_links = [l for l in links if l.lower().endswith(".xls") or l.lower().endswith(".xlsx")]
         target = xls_links[0] if xls_links else (links[0] if links else None)
         if target is None:
             result["errors"].append("現物ファイルリンクが見つかりません")
         else:
             logger.info(f"[自動取得] 現物: {target}")
+            # JPX 記載の対象期間で week_date を補正
+            actual_wd = _resolve_actual_week_end(target, week_date)
+            result["resolved_week_date"] = actual_wd
+
             tmp = _download_to_tempfile(target)
             try:
                 ext = tmp.suffix.lower()
                 if ext in (".xls", ".xlsx"):
                     from .parse_spot_xls import parse_spot_xls
-                    rows = parse_spot_xls(str(tmp), str(week_date))
+                    rows = parse_spot_xls(str(tmp), str(actual_wd))
                     for row in rows:
                         row.setdefault("source_url", target)
                     result["spot"] = rows
                 else:
                     content = tmp.read_bytes()
-                    result["spot"] = parse_spot(content, week_date, target)
+                    result["spot"] = parse_spot(content, actual_wd, target)
             finally:
                 tmp.unlink(missing_ok=True)
     except Exception as e:
@@ -293,15 +327,30 @@ def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
             result["errors"].append("先物CSVリンクが見つかりません")
         else:
             logger.info(f"[自動取得] 先物: {target}")
+            # 先物ファイル名は Tousi_DV_W_YYYYMMDD_YYYYMMDD で対象期間が直接埋め込み済み
+            import re as _re
+            m = _re.search(r"Tousi_DV_W_(\d{8})_(\d{8})", target)
+            if m:
+                fut_wd = date.fromisoformat(
+                    f"{m.group(2)[:4]}-{m.group(2)[4:6]}-{m.group(2)[6:8]}"
+                )
+                if fut_wd != result["resolved_week_date"]:
+                    logger.warning(
+                        f"[先物week_date] 現物={result['resolved_week_date']} と先物={fut_wd} が不一致。"
+                        " 先物データは先物ファイル名通りで保存します。"
+                    )
+            else:
+                fut_wd = result["resolved_week_date"]
+
             tmp = _download_to_tempfile(target)
             try:
                 ext = tmp.suffix.lower()
                 if ext == ".csv":
                     from .parse_futures_csv import parse_futures_csv
-                    result["futures"] = parse_futures_csv(str(tmp), str(week_date))
+                    result["futures"] = parse_futures_csv(str(tmp), str(fut_wd))
                 else:
                     content = tmp.read_bytes()
-                    result["futures"] = parse_futures(content, week_date, target, index_close)
+                    result["futures"] = parse_futures(content, fut_wd, target, index_close)
             finally:
                 tmp.unlink(missing_ok=True)
     except Exception as e:

@@ -10,6 +10,9 @@ from components.data_loader import (
     get_weekly_spot,
     get_weekly_combined,
     get_latest_week_date,
+    get_report_list,
+    get_report_content,
+    extract_executive_summary,
 )
 from components.metrics import latest_net, prev_net, wow_delta, format_oku
 from components.charts import COLORS
@@ -111,6 +114,26 @@ else:
 
 st.divider()
 
+# ─── 最新AIレポートのサマリー ──────────────────────────────────
+_weekly_reports = get_report_list(report_type="weekly")
+if _weekly_reports:
+    _latest_rid = _weekly_reports[0]["id"]
+    _latest_md  = get_report_content(_latest_rid, report_type="weekly")
+    if _latest_md:
+        _summary = extract_executive_summary(_latest_md)
+        with st.expander(f"📋 AI需給サマリー（{_latest_rid}週）— クリックで展開", expanded=True):
+            if _summary:
+                st.markdown(_summary)
+            else:
+                st.caption("エグゼクティブサマリーを抽出できませんでした。全文は「📋 6_AIレポート」ページで閲覧してください。")
+            st.caption("👈 全文・過去レポートは左サイドバーの **「6_AIレポート」** ページから")
+    else:
+        st.info("最新AIレポートが見つかりません。`python main.py` を実行してください。")
+else:
+    st.info("AIレポートがまだありません。`python main.py` を実行してください。")
+
+st.divider()
+
 # ─── 直近4週トレンドグラフ ────────────────────────────────────
 st.subheader("4週間 現物・先物合算NET推移（億円）")
 
@@ -158,6 +181,7 @@ with st.sidebar:
 - ⚡ 3_合算分析
 - 📊 4_Zスコア
 - 📅 5_月次集計
+- 📋 6_AIレポート
 """)
     st.divider()
     render_theme_toggle()

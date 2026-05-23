@@ -1,9 +1,12 @@
 import sys
-sys.path.insert(0, '.')
-sys.path.insert(0, 'scripts')
 import os
+from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv('config/.env')
+
+_HERE = Path(__file__).parent
+sys.path.insert(0, str(_HERE))
+sys.path.insert(0, str(_HERE / "scripts"))
+load_dotenv(_HERE / "config" / ".env")
 from parse_spot_xls import parse_spot_xls
 from db.supabase_client import upsert_spot, save_log
 
