@@ -277,14 +277,18 @@ def _resolve_actual_week_end(target_url: str, fallback: date) -> date:
 
 
 def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
-    """JPXから現物・先物を自動取得してパース結果を返す。
+    """JPXから現物・先物・オプションを自動取得してパース結果を返す。
 
     取得時に各ファイルの「JPXに記載された対象期間」を解決し、
     呼び出し側の week_date と乖離していたら **JPX側を採用** する。
-    （これにより main.py の `_get_week_date()` が公開遅延等で
-      実態とズレていても、DB には常に正しい週末日が入る）
+    オプションは先物と同じ CSV (Tousi_DV_W_*) に含まれているため、
+    先物CSVをパース後に追加でオプションコードを抽出する。
     """
-    result = {"spot": [], "futures": [], "errors": [], "resolved_week_date": week_date}
+    result = {
+        "spot": [], "futures": [], "options": [],
+        "errors": [],
+        "resolved_week_date": week_date,
+    }
 
     # ── 現物（XLS形式） ──────────────────────────────────────────────────
     try:
@@ -348,6 +352,14 @@ def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
                 if ext == ".csv":
                     from .parse_futures_csv import parse_futures_csv
                     result["futures"] = parse_futures_csv(str(tmp), str(fut_wd))
+                    # 同じCSVからオプション（日経225/ミニ・コール/プット）も抽出
+                    try:
+                        from .parse_options_csv import parse_options_csv
+                        opt_rows = parse_options_csv(str(tmp), str(fut_wd), source_url=target)
+                        result["options"] = opt_rows
+                        logger.info(f"[オプション] パース完了: {len(opt_rows)}件")
+                    except Exception as oe:
+                        result["errors"].append(f"オプションパースエラー: {oe}")
                 else:
                     content = tmp.read_bytes()
                     result["futures"] = parse_futures(content, fut_wd, target, index_close)
@@ -368,7 +380,7 @@ def parse_manual(spot_path: str = None, futures_path: str = None,
     if week_date is None:
         week_date = date.today()
 
-    result = {"spot": [], "futures": [], "errors": []}
+    result = {"spot": [], "futures": [], "options": [], "errors": []}
 
     if spot_path:
         try:
@@ -393,6 +405,15 @@ def parse_manual(spot_path: str = None, futures_path: str = None,
                 # JPX先物CSVはヘッダーなし列インデックス形式 → 修正済みパーサーを使用
                 from .parse_futures_csv import parse_futures_csv
                 result["futures"] = parse_futures_csv(futures_path, str(week_date))
+                # オプションも同CSVから抽出
+                try:
+                    from .parse_options_csv import parse_options_csv
+                    result["options"] = parse_options_csv(
+                        futures_path, str(week_date),
+                        source_url=f"manual:{futures_path}",
+                    )
+                except Exception as oe:
+                    result["errors"].append(f"オプション手動パースエラー: {oe}")
             else:
                 content = Path(futures_path).read_bytes()
                 result["futures"] = parse_futures(content, week_date, f"manual:{futures_path}", index_close)

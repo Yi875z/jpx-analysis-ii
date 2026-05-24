@@ -21,7 +21,8 @@ echo ============================================================
 echo.
 
 REM ───── Streamlit を別ウィンドウ（最小化）で起動 ─────
-start "JPX Dashboard (port 8503)" /min cmd /c "streamlit run dashboard\app.py --server.port 8503 --server.headless true"
+REM   --server.address 0.0.0.0 : LAN内・Tailscale経由の他デバイスからもアクセス可能
+start "JPX Dashboard (port 8503)" /min cmd /c "streamlit run dashboard\app.py --server.port 8503 --server.headless true --server.address 0.0.0.0"
 
 REM ───── 起動完了を待ってブラウザを開く ─────
 echo [INFO] 起動中... (約5秒)

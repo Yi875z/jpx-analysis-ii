@@ -13,7 +13,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.data_loader import get_weekly_spot, get_weekly_futures
+from components.data_loader import (
+    get_weekly_spot, get_weekly_futures, render_report_section_panel,
+)
 from components.charts import COLORS
 from components.theme import render_theme_toggle, plot_layout
 
@@ -22,6 +24,11 @@ st.set_page_config(
     layout="wide",
 )
 st.title("📊 Zスコア分析")
+
+render_report_section_panel(
+    ["📅 先週比・Zスコア", "Zスコア分析"],
+    "Zスコア — 最新週AI解釈",
+)
 
 # ─── サイドバー ───────────────────────────────────────────────
 with st.sidebar:

@@ -10,12 +10,17 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.data_loader import get_weekly_futures
+from components.data_loader import get_weekly_futures, render_report_section_panel
 from components.charts import COLORS, INV_BAR_COLORS
 from components.theme import render_theme_toggle, plot_layout
 
 st.set_page_config(page_title="先物フロー｜JPX投資主体別売買動向ダッシュボード", layout="wide")
 st.title("📉 先物フロー")
+
+render_report_section_panel(
+    ["📈 先物", "先物（日経225"],
+    "先物フロー — 最新週AI解釈",
+)
 
 # ─── サイドバー フィルター ────────────────────────────────────
 with st.sidebar:

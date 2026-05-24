@@ -93,6 +93,80 @@ BREAKDOWN_LABELS = {
     "dealer":     "自己",
 }
 
+# オプションは投資信託(inv_trust)カラムがDBに無い場合があるため、
+# 投資家コード対応の "investment_trust" にもフォールバック
+OPTION_TYPE_JP = {
+    "nikkei225_call":      "日経225オプション コール",
+    "nikkei225_put":       "日経225オプション プット",
+    "nikkei225_mini_call": "日経225miniオプション コール",
+    "nikkei225_mini_put":  "日経225miniオプション プット",
+}
+OPTION_TYPE_ORDER = ["nikkei225_call", "nikkei225_put", "nikkei225_mini_call", "nikkei225_mini_put"]
+# オプションパーサで使われる投資家キー (parse_options_csv.INVESTOR_CODES と一致)
+OPTION_INVESTORS = ["foreign", "trust_bank", "individual", "investment_trust", "corporate", "dealer"]
+OPTION_INVESTOR_JP = {
+    "foreign":          "海外投資家",
+    "trust_bank":       "信託銀行",
+    "individual":       "個人",
+    "investment_trust": "投資信託",
+    "corporate":        "事業法人",
+    "dealer":           "自己",
+}
+
+
+def _build_options_table(options_rows: list[dict]) -> str:
+    """オプション売買データから AI プロンプト用テキストを生成。
+
+    投資家×コール/プット×標準/ミニ のクロス集計
+    """
+    if not options_rows:
+        return "=== オプション売買データなし ==="
+
+    # {investor: {option_type: {net_lots, net_oku}}}
+    from collections import defaultdict
+    data: dict = defaultdict(lambda: defaultdict(lambda: {"net_lots": 0, "net_oku": 0.0}))
+    for r in options_rows:
+        inv = r.get("investor_type", "")
+        ot  = r.get("option_type", "")
+        data[inv][ot]["net_lots"] += r.get("net_lots", 0) or 0
+        data[inv][ot]["net_oku"]  += r.get("net_amount_oku", 0.0) or 0.0
+
+    lines = [
+        "=== 日経225オプション 投資家別 売買差引（net、正=買い越し / 負=売り越し）===",
+        "  表記: 枚数 / 億円 (プレミアム金額換算、負=プレミアム支払超過、正=プレミアム受取超過)",
+        "",
+    ]
+    # ヘッダー
+    col_w = 22
+    header = f"{'投資家':<14}" + "".join(f"{OPTION_TYPE_JP[ot]:>{col_w}}" for ot in OPTION_TYPE_ORDER)
+    lines.append(header)
+    lines.append("-" * (14 + col_w * len(OPTION_TYPE_ORDER)))
+
+    for inv in OPTION_INVESTORS:
+        if inv not in data:
+            continue
+        row_label = OPTION_INVESTOR_JP.get(inv, inv)
+        cells = []
+        for ot in OPTION_TYPE_ORDER:
+            d = data[inv].get(ot, {"net_lots": 0, "net_oku": 0.0})
+            cells.append(f"{d['net_lots']:+,}枚/{d['net_oku']:+.1f}億")
+        line = f"{row_label:<14}" + "".join(f"{c:>{col_w}}" for c in cells)
+        lines.append(line)
+
+    # 海外投資家のヘッジ姿勢ヒント（プット買い vs コール買いの比較）
+    fdata = data.get("foreign", {})
+    fp = fdata.get("nikkei225_put", {}).get("net_lots", 0) + fdata.get("nikkei225_mini_put", {}).get("net_lots", 0)
+    fc = fdata.get("nikkei225_call", {}).get("net_lots", 0) + fdata.get("nikkei225_mini_call", {}).get("net_lots", 0)
+    if fp != 0 or fc != 0:
+        lines.append("")
+        lines.append(
+            f"※ 海外投資家のオプション差引（標準＋ミニ合算）: "
+            f"プット net {fp:+,}枚、コール net {fc:+,}枚 "
+            f"(プット買い越し優位 = 下方ヘッジ姿勢、コール買い越し優位 = 上方期待)"
+        )
+
+    return "\n".join(lines)
+
 
 def _build_futures_breakdown(futures_rows: list[dict]) -> str:
     """先物内訳テーブル（商品種別×投資家）を生成"""
@@ -228,6 +302,12 @@ def _build_data_table(context: dict) -> str:
         lines.append("")
         lines.append(_build_spot_futures_detail(context, futures_rows))
 
+    # オプション集計（存在する場合のみ追加）
+    options_rows = context.get("options_rows", [])
+    if options_rows:
+        lines.append("")
+        lines.append(_build_options_table(options_rows))
+
     return "\n".join(lines)
 
 
@@ -292,6 +372,25 @@ def generate_weekly_report(week_date: date, context: dict,
 「両輪買い（Twin-Buy）」とは現物・先物の両方が正の値（買い越し）であること。
 「両輪売り（Twin-Sell）」とは現物・先物の両方が負の値（売り越し）であること。
 現物と先物の符号が逆方向の場合は「両輪」ではなく「裁定的／ヘッジ的」「方向性乖離」と表現すること。
+
+## 【新規】オプションフローの解釈ルール
+
+データには日経225オプション（標準・ミニ）の投資家別 net 枚数が含まれる場合があります。
+解釈の基本：
+- **プット買い越し（net_lots > 0）= 下方ヘッジ・ボラ上昇期待・弱気バイアス**
+- **プット売り越し（net_lots < 0）= プットライト/プレミアム獲得・横ばい〜強気想定**
+- **コール買い越し = 上方期待・ロングガンマ取得（ボラ上昇期待）**
+- **コール売り越し = カバードコール／レンジ想定／上方抑制要因**
+- **海外投資家のプット買いが継続的・大規模** = 現物先物のヘッジ目的が明確（=リスクオン姿勢でも保険を掛けている）
+- **コール売り＋プット買い（ベア・コンビネーション）** = リスクオフ志向
+- **コール買い＋プット売り（ブル・コンビネーション）** = リスクオン志向
+
+GEX 環境判定への寄与：
+- **証券会社（dealer）のオプションネット** はマーケットメーカーのデルタヘッジ需要を映す
+- **海外プット買い＋自己プット売り** が同時発生 → 自己（MM）がショートガンマを背負う = **-GEX（ボラ拡大環境）リスク**
+- **海外プット売り＋自己プット買い** = 自己がロングガンマ = **+GEX（Pinning安定環境）**
+
+「現物先物の方向性乖離」とオプションフローを必ずセットで分析し、海外勢のリスク管理姿勢を立体的に解釈すること。
 
 ## 参照知識（解釈フレームワークとして活用）
 
@@ -372,6 +471,14 @@ Markdownレポートを生成してください。
 ### 🟡 個人投資家
 ### 🟤 投資信託
 （特異動向があれば事業法人・自己も）
+
+## 🎯 オプションフロー分析（日経225標準＋ミニ）
+データにオプション売買差引が含まれる場合のみ出力:
+- 海外投資家・自己・個人の **コール/プット別 net 枚数** をテーブルで提示
+- **海外プット買い ≷ コール買い** の比較から下方ヘッジ姿勢の強弱を判定
+- **自己のプット net** から MM のガンマ・ポジション（+GEX / -GEX）を推定
+- 現物・先物の方向性乖離との整合性（ヘッジ的フローの裏付けになっているか）を解説
+- データが空（過去週でオプションデータ未投入）の場合は本セクションを省略してよい
 
 ## 📅 先週比・Zスコア分析
 （統計的な位置付けを言及）

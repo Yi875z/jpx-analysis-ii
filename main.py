@@ -139,6 +139,7 @@ def run_weekly(week_date: date, spot_path: str = None,
 
     spot_rows    = fetch_result.get("spot", [])
     futures_rows = fetch_result.get("futures", [])
+    options_rows = fetch_result.get("options", [])
     errors       = fetch_result.get("errors", [])
     resolved_wd  = fetch_result.get("resolved_week_date")
 
@@ -161,7 +162,12 @@ def run_weekly(week_date: date, spot_path: str = None,
     # ② Supabaseに蓄積
     n_spot    = db.upsert_spot(spot_rows)
     n_futures = db.upsert_futures(futures_rows)
-    logger.info(f"[DB] 現物={n_spot}件, 先物={n_futures}件 upsert完了")
+    # week_date を resolved_wd で再付与（resolved_wd と元のラベルが乖離してたケース対応）
+    if options_rows and resolved_wd:
+        for r in options_rows:
+            r["week_date"] = str(resolved_wd)
+    n_options = db.upsert_options(options_rows) if options_rows else 0
+    logger.info(f"[DB] 現物={n_spot}件, 先物={n_futures}件, オプション={n_options}件 upsert完了")
 
     # ③ 合算計算
     combined = analyze_jpx.build_combined(spot_rows, futures_rows, week_date)

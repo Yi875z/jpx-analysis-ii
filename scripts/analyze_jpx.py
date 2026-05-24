@@ -195,6 +195,11 @@ def build_analysis_context(week_date: date, db) -> dict:
     """
     spot_rows    = db.fetch_week_spot(week_date)
     futures_rows = db.fetch_week_futures(week_date)
+    # オプションは weekly_options テーブルから（存在しない過去週は空でOK）
+    try:
+        options_rows = db.fetch_week_options(week_date)
+    except Exception:
+        options_rows = []
 
     spot_map    = {r["investor_type"]: r for r in spot_rows}
     futures_map = defaultdict(lambda: {"net_amount_oku": 0, "long_lots": 0, "short_lots": 0})
@@ -251,4 +256,5 @@ def build_analysis_context(week_date: date, db) -> dict:
         "investors":  investors_summary,
         "spot_rows":  spot_rows,
         "futures_rows": futures_rows,
+        "options_rows": options_rows,
     }

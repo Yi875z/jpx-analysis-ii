@@ -104,6 +104,16 @@ def get_weekly_stats(weeks: int = 52) -> pd.DataFrame:
 
 
 @st.cache_data(ttl=3600)
+def get_weekly_options(weeks: int = 52) -> pd.DataFrame:
+    """投資家別オプション売買データ（日経225 / ミニ × コール/プット）"""
+    return _fetch(
+        "weekly_options",
+        "week_date,investor_type,option_type,long_lots,short_lots,net_lots,net_amount_oku",
+        weeks=weeks,
+    )
+
+
+@st.cache_data(ttl=3600)
 def get_monthly_summary(months: int = 12) -> pd.DataFrame:
     return _fetch(
         "monthly_summary",
@@ -246,23 +256,80 @@ def get_report_content(report_id: str, report_type: str = "weekly") -> str:
 
 def extract_executive_summary(md: str) -> str:
     """レポートMarkdownからエグゼクティブサマリー部分のみ抽出"""
+    return extract_section(md, "エグゼクティブサマリー", include_heading=False)
+
+
+def extract_section(md: str, section_keyword: str,
+                    include_heading: bool = True) -> str:
+    """## レベル見出しに section_keyword を含むセクションを抽出する。
+
+    次の ## 見出しまでを返す（途中の `---` セパレータは無視）。
+    include_heading=False の場合は見出し行を含めない。
+    """
     if not md:
         return ""
-    lines = md.split("\n")
     out: list[str] = []
-    in_summary = False
-    for line in lines:
-        stripped = line.lstrip("#").strip()
-        # サマリー開始
-        if line.startswith("##") and "エグゼクティブサマリー" in stripped:
-            in_summary = True
-            continue
-        # 次の見出しでサマリー終了
-        if in_summary and line.startswith("##"):
-            break
-        # サマリー終了マーカー（---）
-        if in_summary and line.strip() == "---":
-            break
-        if in_summary:
+    in_section = False
+    for line in md.split("\n"):
+        if line.startswith("##") and not line.startswith("###"):
+            if section_keyword in line:
+                in_section = True
+                if include_heading:
+                    out.append(line)
+                continue
+            elif in_section:
+                break
+        if in_section:
             out.append(line)
-    return "\n".join(out).strip()
+    # 末尾の余計な空行と区切り線をトリム
+    text = "\n".join(out).strip()
+    while text.endswith("---"):
+        text = text[:-3].rstrip()
+    return text
+
+
+@st.cache_data(ttl=600)
+def get_latest_section(section_keyword: str, report_type: str = "weekly",
+                       include_heading: bool = True) -> tuple[str, str]:
+    """最新レポートから指定セクションを抽出。返り値: (report_id, section_text)"""
+    items = get_report_list(report_type=report_type)
+    if not items:
+        return "", ""
+    latest_id = items[0]["id"]
+    content = get_report_content(latest_id, report_type=report_type)
+    if not content:
+        return latest_id, ""
+    return latest_id, extract_section(content, section_keyword, include_heading=include_heading)
+
+
+def render_report_section_panel(section_keywords: list[str], panel_title: str,
+                                report_type: str = "weekly",
+                                expanded: bool = False,
+                                fallback_summary: bool = True) -> None:
+    """各ページで「対応するAIレポート解釈」を expander 表示する共通関数。
+
+    section_keywords は複数キーワードを順に試し、最初に当たったものを採用する。
+    （絵文字付き / なし のレポートが混在しても拾える）
+    fallback_summary=True なら、該当セクションが空のときは
+    エグゼクティブサマリーをフォールバックとして表示。
+    """
+    rid, section_md = "", ""
+    for kw in section_keywords:
+        rid, section_md = get_latest_section(kw, report_type=report_type, include_heading=False)
+        if section_md:
+            break
+
+    if not section_md and fallback_summary:
+        rid, section_md = get_latest_section(
+            "エグゼクティブサマリー", report_type=report_type, include_heading=False,
+        )
+        if section_md:
+            panel_title = f"{panel_title}（該当セクションなし → サマリーで代替）"
+
+    if not section_md:
+        return  # 表示するものがなければ何もしない
+
+    label = f"📋 {panel_title}（{rid}週 AI解釈）" if rid else f"📋 {panel_title}（AI解釈）"
+    with st.expander(label, expanded=expanded):
+        st.markdown(section_md)
+        st.caption("👉 全文は左サイドバーの「📋 6_AIレポート」ページから")

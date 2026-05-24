@@ -182,6 +182,7 @@ with st.sidebar:
 - 📊 4_Zスコア
 - 📅 5_月次集計
 - 📋 6_AIレポート
+- 🎯 7_オプション
 """)
     st.divider()
     render_theme_toggle()

@@ -11,7 +11,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.data_loader import get_weekly_spot, get_weekly_futures
+from components.data_loader import (
+    get_weekly_spot, get_weekly_futures, render_report_section_panel,
+)
 from components.charts import COLORS, INV_BAR_COLORS
 from components.theme import render_theme_toggle, plot_layout, get_theme
 
@@ -20,6 +22,20 @@ st.set_page_config(
     layout="wide",
 )
 st.title("📅 月次集計")
+
+# 月次レポート（あれば）から「エグゼクティブサマリー＋中期見通し」を表示
+render_report_section_panel(
+    ["📋 エグゼクティブサマリー"],
+    "月次サマリー — 最新月AI解釈",
+    report_type="monthly",
+    fallback_summary=False,
+)
+render_report_section_panel(
+    ["💡 中期見通し", "💡 戦略示唆"],
+    "月次 中期見通し — AI解釈",
+    report_type="monthly",
+    fallback_summary=False,
+)
 
 # ─── サイドバー ───────────────────────────────────────────────
 with st.sidebar:

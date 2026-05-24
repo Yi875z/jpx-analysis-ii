@@ -53,6 +53,37 @@ def upsert_futures(rows: list[dict]) -> int:
     return len(rows)
 
 
+def upsert_options(rows: list[dict]) -> int:
+    """オプション週次データをupsert"""
+    if not rows:
+        return 0
+    sb = get_client()
+    sb.table("weekly_options").upsert(rows, on_conflict="week_date,investor_type,option_type").execute()
+    return len(rows)
+
+
+def fetch_options_history(investor_type: str, weeks: int = 52) -> list[dict]:
+    """オプションの過去N週データを取得（全 option_type 横断）"""
+    sb = get_client()
+    res = (sb.table("weekly_options")
+             .select("week_date,investor_type,option_type,long_lots,short_lots,net_lots,net_amount_oku")
+             .eq("investor_type", investor_type)
+             .order("week_date", desc=True)
+             .limit(weeks * 4)   # 4 option_type
+             .execute())
+    return res.data or []
+
+
+def fetch_week_options(week_date) -> list[dict]:
+    """指定週のオプションデータを全投資家・全 option_type で取得"""
+    sb = get_client()
+    res = (sb.table("weekly_options")
+             .select("*")
+             .eq("week_date", str(week_date))
+             .execute())
+    return res.data or []
+
+
 def upsert_combined(rows: list[dict]) -> int:
     """合算データをupsert"""
     if not rows:

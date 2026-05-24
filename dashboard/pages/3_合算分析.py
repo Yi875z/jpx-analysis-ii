@@ -11,12 +11,17 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.data_loader import get_weekly_combined
+from components.data_loader import get_weekly_combined, render_report_section_panel
 from components.charts import COLORS
 from components.theme import render_theme_toggle, plot_layout, get_theme
 
 st.set_page_config(page_title="合算分析｜JPX投資主体別売買動向ダッシュボード", layout="wide")
 st.title("⚡ 合算分析")
+
+render_report_section_panel(
+    ["🔢 合算", "合算（現物"],
+    "合算分析 — 最新週AI解釈",
+)
 
 # ─── サイドバー ───────────────────────────────────────────────
 with st.sidebar:
