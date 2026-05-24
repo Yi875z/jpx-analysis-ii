@@ -8,30 +8,44 @@ import plotly.graph_objects as go
 
 # ─── Streamlit Cloud パスワード保護（ローカル実行時はスキップ） ─────
 # Cloud デプロイ時のみ st.secrets に [auth] セクションがある想定。
-# 詳細手順は DEPLOY.md 参照。
+# bcrypt 自前実装でシンプルに認証する（streamlit-authenticator のバージョン依存を回避）
+_has_auth = False
 try:
-    _has_auth = hasattr(st, "secrets") and "auth" in st.secrets
+    if hasattr(st, "secrets") and "auth" in st.secrets:
+        _has_auth = True
 except Exception:
     _has_auth = False
+
 if _has_auth:
-    try:
-        import streamlit_authenticator as _stauth
-        _cfg = st.secrets["auth"]
-        _authenticator = _stauth.Authenticate(
-            credentials={"usernames": {_cfg["username"]: {
-                "name":     _cfg["username"],
-                "password": _cfg["password_hash"],
-            }}},
-            cookie_name=_cfg["cookie_name"],
-            key=_cfg["cookie_key"],
-            cookie_expiry_days=int(_cfg.get("cookie_expiry_days", 30)),
-        )
-        _authenticator.login("main")
-        if not st.session_state.get("authentication_status"):
-            st.error("ログインしてください")
-            st.stop()
-    except ImportError:
-        st.warning("streamlit-authenticator がインストールされていません")
+    _cfg = st.secrets["auth"]
+    if not st.session_state.get("authenticated"):
+        st.title("🔐 JPX Dashboard Login")
+        st.caption("Username と Password を入力してください")
+        with st.form("login_form"):
+            _username = st.text_input("Username")
+            _password = st.text_input("Password", type="password")
+            _submitted = st.form_submit_button("Login", type="primary")
+            if _submitted:
+                _pw_ok = False
+                try:
+                    import bcrypt as _bcrypt
+                    _pw_ok = _bcrypt.checkpw(
+                        _password.encode("utf-8"),
+                        _cfg["password_hash"].encode("utf-8"),
+                    )
+                except Exception as _e:
+                    st.error(f"bcrypt検証エラー: {_e}")
+                if _username == _cfg["username"] and _pw_ok:
+                    st.session_state["authenticated"] = True
+                    st.rerun()
+                else:
+                    st.error("ユーザー名またはパスワードが正しくありません")
+        st.stop()
+    # ログイン済みならサイドバーにログアウトボタン
+    with st.sidebar:
+        if st.button("🚪 ログアウト", use_container_width=True):
+            st.session_state["authenticated"] = False
+            st.rerun()
 
 from components.data_loader import (
     get_weekly_spot,
