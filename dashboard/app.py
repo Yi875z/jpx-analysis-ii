@@ -6,6 +6,33 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# ─── Streamlit Cloud パスワード保護（ローカル実行時はスキップ） ─────
+# Cloud デプロイ時のみ st.secrets に [auth] セクションがある想定。
+# 詳細手順は DEPLOY.md 参照。
+try:
+    _has_auth = hasattr(st, "secrets") and "auth" in st.secrets
+except Exception:
+    _has_auth = False
+if _has_auth:
+    try:
+        import streamlit_authenticator as _stauth
+        _cfg = st.secrets["auth"]
+        _authenticator = _stauth.Authenticate(
+            credentials={"usernames": {_cfg["username"]: {
+                "name":     _cfg["username"],
+                "password": _cfg["password_hash"],
+            }}},
+            cookie_name=_cfg["cookie_name"],
+            key=_cfg["cookie_key"],
+            cookie_expiry_days=int(_cfg.get("cookie_expiry_days", 30)),
+        )
+        _authenticator.login("main")
+        if not st.session_state.get("authentication_status"):
+            st.error("ログインしてください")
+            st.stop()
+    except ImportError:
+        st.warning("streamlit-authenticator がインストールされていません")
+
 from components.data_loader import (
     get_weekly_spot,
     get_weekly_combined,
@@ -35,6 +62,36 @@ except Exception:
 
 st.title("📊 JPX投資主体別売買動向ダッシュボード")
 st.caption(f"最新週: {week_label}")
+
+# ─── アラート表示 ─────────────────────────────────────────────
+import json
+from pathlib import Path as _Path
+_ALERT_PATH = _Path(__file__).parent.parent / "outputs" / "alerts" / "latest.json"
+if _ALERT_PATH.exists():
+    try:
+        _ar = json.loads(_ALERT_PATH.read_text(encoding="utf-8"))
+        _alerts = _ar.get("alerts", [])
+        if _alerts:
+            high_count = sum(1 for a in _alerts if a.get("level") == "high")
+            med_count  = sum(1 for a in _alerts if a.get("level") == "medium")
+            st.markdown(
+                f"""<div style="background:#fff5e6;border-left:4px solid #ff6b35;
+                padding:10px 16px;border-radius:6px;margin-bottom:8px;color:#5a2a00;">
+                ⚠️ <b>アクティブアラート: {len(_alerts)} 件</b>
+                （HIGH: {high_count} / MEDIUM: {med_count}） — {_ar.get("week_date", "")} 週評価
+                </div>""", unsafe_allow_html=True)
+            with st.expander("🔔 アラート詳細を表示", expanded=False):
+                for a in _alerts:
+                    color = "#e63946" if a.get("level") == "high" else "#f5a623"
+                    st.markdown(
+                        f"""<div style="border-left:3px solid {color};padding:6px 12px;margin:6px 0;">
+                        <b>[{a['level'].upper()}] {a['title']}</b><br>
+                        <span style="color:#666;font-size:13px;">{a.get('message','')}</span>
+                        </div>""", unsafe_allow_html=True)
+                st.caption(f"閾値: {_ar.get('thresholds', {})}")
+    except Exception:
+        pass
+
 st.divider()
 
 # ─── データ取得 ────────────────────────────────────────────────

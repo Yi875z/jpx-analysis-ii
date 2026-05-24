@@ -191,7 +191,20 @@ def run_weekly(week_date: date, spot_path: str = None,
     xlsx_path = _save_excel(week_date)
     db.save_report(week_date, "weekly", "excel", xlsx_path.name)
 
-    # ⑧ ログ記録
+    # ⑧ アラート評価（自動実行）
+    try:
+        from scripts import check_alerts
+        alert_result = check_alerts.evaluate(week_date)
+        check_alerts.write_outputs(alert_result)
+        check_alerts.send_mail_if_configured(alert_result)
+        if alert_result["alerts"]:
+            logger.warning(f"[アラート] {len(alert_result['alerts'])} 件検出:")
+            for a in alert_result["alerts"]:
+                logger.warning(f"  [{a['level'].upper()}] {a['title']}")
+    except Exception as e:
+        logger.warning(f"[アラート評価エラー] {e}")
+
+    # ⑨ ログ記録
     duration = time.time() - t0
     db.save_log(week_date, "success",
                 spot_rows=n_spot, futures_rows=n_futures,

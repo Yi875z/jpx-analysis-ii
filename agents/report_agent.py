@@ -96,12 +96,21 @@ BREAKDOWN_LABELS = {
 # オプションは投資信託(inv_trust)カラムがDBに無い場合があるため、
 # 投資家コード対応の "investment_trust" にもフォールバック
 OPTION_TYPE_JP = {
-    "nikkei225_call":      "日経225オプション コール",
-    "nikkei225_put":       "日経225オプション プット",
-    "nikkei225_mini_call": "日経225miniオプション コール",
-    "nikkei225_mini_put":  "日経225miniオプション プット",
+    "nikkei225_call":      "日経225 コール",
+    "nikkei225_put":       "日経225 プット",
+    "nikkei225_mini_call": "日経225mini コール",
+    "nikkei225_mini_put":  "日経225mini プット",
+    "topix_call":          "TOPIX コール",
+    "topix_put":           "TOPIX プット",
+    "jpx400_call":         "JPX400 コール",
+    "jpx400_put":          "JPX400 プット",
 }
-OPTION_TYPE_ORDER = ["nikkei225_call", "nikkei225_put", "nikkei225_mini_call", "nikkei225_mini_put"]
+OPTION_TYPE_ORDER = [
+    "nikkei225_call", "nikkei225_put",
+    "nikkei225_mini_call", "nikkei225_mini_put",
+    "topix_call", "topix_put",
+    "jpx400_call", "jpx400_put",
+]
 # オプションパーサで使われる投資家キー (parse_options_csv.INVESTOR_CODES と一致)
 OPTION_INVESTORS = ["foreign", "trust_bank", "individual", "investment_trust", "corporate", "dealer"]
 OPTION_INVESTOR_JP = {

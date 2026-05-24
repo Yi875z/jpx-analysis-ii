@@ -1,6 +1,10 @@
 """
 Supabase データ取得モジュール
-既存の config/.env から接続情報を読み込む
+
+接続情報の優先順位:
+  1. Streamlit Cloud の st.secrets（クラウドデプロイ用）
+  2. config/.env（ローカル実行）
+  3. 環境変数（CI/別ホスト）
 """
 import os
 import re
@@ -10,15 +14,30 @@ import streamlit as st
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
-# プロジェクトルートの config/.env を読み込む
+# プロジェクトルートの config/.env を読み込む（あれば）
 _PROJECT_ROOT = Path(__file__).parent.parent.parent
 _ENV_PATH = _PROJECT_ROOT / "config" / ".env"
-load_dotenv(_ENV_PATH)
+if _ENV_PATH.exists():
+    load_dotenv(_ENV_PATH)
 
 _REPORTS_DIR = _PROJECT_ROOT / "outputs" / "reports"
 
-_SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-_SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") or os.environ.get("SUPABASE_KEY", "")
+
+def _read_secret(key: str, default: str = "") -> str:
+    """st.secrets → 環境変数 の順で取得"""
+    try:
+        if hasattr(st, "secrets") and key in st.secrets:
+            return st.secrets[key]
+    except Exception:
+        pass
+    return os.environ.get(key, default)
+
+
+_SUPABASE_URL = _read_secret("SUPABASE_URL")
+_SUPABASE_KEY = (
+    _read_secret("SUPABASE_SERVICE_KEY")
+    or _read_secret("SUPABASE_KEY")
+)
 
 
 @st.cache_resource

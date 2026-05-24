@@ -6,3 +6,9 @@ openpyxl>=3.1.0
 requests>=2.31.0
 numpy>=1.26.0
 reportlab>=4.0.0
+
+# ─── Dashboard / Streamlit Cloud ───────────────────────
+streamlit>=1.32.0
+plotly>=5.18.0
+streamlit-authenticator>=0.3.2  # ログイン保護用（Cloud デプロイ時に有効化）
+pypdf>=4.0.0                    # JPX仕様確認・将来のPDF抽出用

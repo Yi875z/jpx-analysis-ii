@@ -25,12 +25,18 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# 商品コード → 内部キー
+# 商品コード → 内部キー（JPX PDF順序からマッピング確定済み）
 OPTIONS_CODES: dict[int, str] = {
     303: "nikkei225_put",
     304: "nikkei225_call",
     332: "nikkei225_mini_put",
     333: "nikkei225_mini_call",
+    # 拡張: TOPIX オプション
+    319: "topix_put",
+    320: "topix_call",
+    # 拡張: JPX日経400 オプション
+    327: "jpx400_put",
+    328: "jpx400_call",
 }
 
 # 投資家コード（parse_futures_csv.py と同じ）
