@@ -1,11 +1,11 @@
 name: JPX 週次データ取得・AIレポート生成
 
 # トリガー:
-#   1. 毎週木曜 11:00 UTC（= 木曜 20:00 JST）の自動実行
+#   1. 毎週木曜 09:00 UTC（= 木曜 18:00 JST）の自動実行
 #   2. GitHub の Actions タブからの手動実行（workflow_dispatch）
 on:
   schedule:
-    - cron: '0 11 * * 4'
+    - cron: '0 9 * * 4'
   workflow_dispatch:
     inputs:
       date:
@@ -91,6 +91,10 @@ jobs:
               python main.py --monthly "$DATE_ARG"
               ;;
           esac
+
+      - name: Send summary mail (on success)
+        if: success()
+        run: python scripts/send_summary_mail.py
 
       - name: Show logs on failure
         if: failure()
