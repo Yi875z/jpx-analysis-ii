@@ -1,6 +1,9 @@
 # JPX需給分析システム 操作マニュアル
 
-**最終更新: 2026-05-24**
+**最終更新: 2026-05-25**
+
+> 🌐 **公開URL（要認証）**: https://jpx-investor-flow.streamlit.app
+> 本機を起動していなくても、スマホ・別PCから外出先でも閲覧可能。
 
 ---
 
@@ -59,9 +62,12 @@ streamlit run dashboard/app.py --server.port 8503 --server.headless true --serve
 |---|---|
 | 本機 | `http://localhost:8503` |
 | 同じWi-Fi内の別PC・スマホ | `http://192.168.11.12:8503`（Wi-FiのIPは可変） |
-| Tailscale経由（外出先含む） | `http://is-2025-lenovo:8503`（MagicDNS有効時）<br>または `http://100.90.57.39:8503` |
+| Tailscale経由（外出先含む・本機ON必要） | `http://is-2025-lenovo:8503`（MagicDNS有効時）<br>または `http://100.90.57.39:8503` |
+| **Streamlit Cloud（本機OFFでも閲覧可・要認証）** | **https://jpx-investor-flow.streamlit.app** |
 
 > Tailscale を利用する場合はスマホ・別PCにも Tailscale アプリをインストールして本機と同じアカウントでログインする。MagicDNSをONにしておくと短いデバイス名でアクセス可能。
+>
+> Streamlit Cloud は本機を起動していなくてもクラウド側で常時稼働。Username `yioku` + bcrypt生成時のパスワードでログイン。データ取得・AIレポート生成は本機側で行い、結果は Supabase 経由で Cloud へ反映される。
 
 ### 共通操作（全ページ共通）
 
