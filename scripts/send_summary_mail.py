@@ -155,8 +155,9 @@ def send_mail(subject: str, body: str) -> bool:
     msg["To"] = to
 
     try:
-        host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-        port = int(os.environ.get("SMTP_PORT", 587))
+        host = (os.environ.get("SMTP_HOST") or "smtp.gmail.com").strip()
+        port_str = (os.environ.get("SMTP_PORT") or "587").strip()
+        port = int(port_str)
         with smtplib.SMTP(host, port, timeout=30) as s:
             s.starttls()
             s.login(user, pw)
