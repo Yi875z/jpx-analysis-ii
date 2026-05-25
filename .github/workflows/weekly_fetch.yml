@@ -1,0 +1,115 @@
+name: JPX 週次データ取得・AIレポート生成
+
+# トリガー:
+#   1. 毎週木曜 11:00 UTC（= 木曜 20:00 JST）の自動実行
+#   2. GitHub の Actions タブからの手動実行（workflow_dispatch）
+on:
+  schedule:
+    - cron: '0 11 * * 4'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '対象週末日 YYYY-MM-DD（空欄なら直近金曜を自動検出）'
+        required: false
+        type: string
+      mode:
+        description: '実行モード'
+        required: false
+        type: choice
+        default: 'weekly'
+        options:
+          - weekly        # 通常の週次取得＋AIレポート
+          - report-only   # 既存DBデータからAIレポートのみ再生成
+          - monthly       # 月次レポート（input.date を YYYY-MM として解釈）
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      TZ: Asia/Tokyo
+      # Supabase URL は公開情報なので直接記載
+      SUPABASE_URL: https://syyojlcrnachuvrbvttw.supabase.co
+      # 機密キーは GitHub Secrets から
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+      # アラートメール送信を有効化したい場合（任意）
+      SMTP_HOST:         ${{ secrets.SMTP_HOST }}
+      SMTP_PORT:         ${{ secrets.SMTP_PORT }}
+      SMTP_USER:         ${{ secrets.SMTP_USER }}
+      SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
+      NOTIFY_EMAIL:      ${{ secrets.NOTIFY_EMAIL }}
+      # オプション設定
+      CLAUDE_MODEL: claude-sonnet-4-6
+      OUTPUT_DIR: ./outputs
+      LOG_DIR:    ./logs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run JPX weekly fetch
+        id: fetch
+        run: |
+          set -e
+          MODE="${{ inputs.mode || 'weekly' }}"
+          DATE_ARG="${{ inputs.date }}"
+
+          echo "Mode: $MODE"
+          echo "Date: ${DATE_ARG:-(auto)}"
+          echo "TZ:   $TZ"
+          date
+
+          case "$MODE" in
+            weekly)
+              if [ -n "$DATE_ARG" ]; then
+                python main.py --date "$DATE_ARG"
+              else
+                python main.py
+              fi
+              ;;
+            report-only)
+              if [ -n "$DATE_ARG" ]; then
+                python main.py --report-only --date "$DATE_ARG"
+              else
+                python main.py --report-only
+              fi
+              ;;
+            monthly)
+              python main.py --monthly "$DATE_ARG"
+              ;;
+          esac
+
+      - name: Show logs on failure
+        if: failure()
+        run: |
+          echo "=== logs/ ==="
+          ls -la logs/ 2>/dev/null || echo "(no logs/ directory)"
+          for f in logs/*.log; do
+            [ -f "$f" ] || continue
+            echo "─── $f ───"
+            tail -80 "$f"
+          done
+
+      - name: Upload artifacts (logs & latest alert) on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-logs-${{ github.run_id }}
+          path: |
+            logs/
+            outputs/alerts/
+          retention-days: 14
+          if-no-files-found: ignore
