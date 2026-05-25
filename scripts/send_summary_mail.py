@@ -68,7 +68,7 @@ def fetch_latest_weekly_report() -> dict | None:
     """Supabase reports から最新の週次レポートを取得"""
     sb = db.get_client()
     res = (sb.table("reports")
-             .select("week_date,content_md,file_name,created_at")
+             .select("week_date,content_md,file_name")
              .eq("report_type", "weekly")
              .eq("format", "markdown")
              .order("week_date", desc=True)
