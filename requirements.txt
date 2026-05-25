@@ -6,6 +6,8 @@ openpyxl>=3.1.0
 requests>=2.31.0
 numpy>=1.26.0
 reportlab>=4.0.0
+matplotlib>=3.8.0
+bcrypt>=4.0.0
 
 # ─── Dashboard / Streamlit Cloud ───────────────────────
 streamlit>=1.32.0
