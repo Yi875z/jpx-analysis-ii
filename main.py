@@ -214,6 +214,13 @@ def run_weekly(week_date: date, spot_path: str = None,
     logger.info(f"  Markdown: {md_path}")
     logger.info(f"  Excel:    {xlsx_path}")
 
+    # ⑩ 前月の月次レポートを自動生成（未生成時のみ・冪等）
+    #    月初の最初の週次実行で1回だけ生成され、以降の週はスキップされる。
+    try:
+        _maybe_generate_previous_month(week_date)
+    except Exception as e:
+        logger.warning(f"[月次自動化エラー] {e}")
+
     # ⑨ ターミナルにサマリーを表示
     print("\n" + "="*60)
     print(f"[OK] JPX需給分析完了: {week_date}")
@@ -229,6 +236,46 @@ def run_weekly(week_date: date, spot_path: str = None,
     print("="*60)
 
     return {"md_path": md_path, "xlsx_path": xlsx_path, "report_md": report_md}
+
+
+def _monthly_report_exists(year_month: str) -> bool:
+    """指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。
+
+    week_date は date 型のため LIKE は使えず、月初〜月末の範囲指定で絞り込む。
+    判定不能（接続エラー等）の場合は「存在する」扱いにして
+    重複生成を避ける（安全側に倒す）。
+    """
+    import calendar
+    y, m = int(year_month[:4]), int(year_month[5:7])
+    last = calendar.monthrange(y, m)[1]
+    try:
+        sb = db.get_client()
+        res = (sb.table("reports")
+               .select("week_date")
+               .eq("report_type", "monthly")
+               .gte("week_date", f"{year_month}-01")
+               .lte("week_date", f"{year_month}-{last:02d}")
+               .limit(1)
+               .execute())
+        return bool(res.data)
+    except Exception as e:
+        logger.warning(f"[月次存在チェック失敗] {e} → 生成済み扱いでスキップ")
+        return True
+
+
+def _maybe_generate_previous_month(week_date: date):
+    """前月の月次レポートが未生成なら自動生成する（冪等）。
+
+    今週の week_date が属する月の「前月」を対象とする。
+    例: 2026-05 のどの週次実行でも 2026-04 を対象に、未生成なら1回だけ生成。
+    """
+    prev_last = week_date.replace(day=1) - timedelta(days=1)
+    prev_ym = prev_last.strftime("%Y-%m")
+    if _monthly_report_exists(prev_ym):
+        logger.info(f"[月次自動化] {prev_ym} は生成済み → スキップ")
+        return
+    logger.info(f"[月次自動化] {prev_ym} が未生成 → 自動生成します")
+    run_monthly(prev_ym)
 
 
 def run_monthly(year_month: str):
