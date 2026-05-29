@@ -255,7 +255,12 @@ def get_report_content(report_id: str, report_type: str = "weekly") -> str:
         if report_type == "weekly":
             q = q.eq("week_date", report_id)
         else:
-            q = q.like("week_date", f"{report_id}-%")
+            # week_date は date 型のため LIKE は使えない（operator does not exist: date ~~）。
+            # 月初〜月末の範囲指定で該当月を絞り込む。
+            import calendar as _cal
+            _y, _m = int(report_id[:4]), int(report_id[5:7])
+            _last = _cal.monthrange(_y, _m)[1]
+            q = q.gte("week_date", f"{report_id}-01").lte("week_date", f"{report_id}-{_last:02d}")
         resp = q.limit(1).execute()
         if resp.data and resp.data[0].get("content_md"):
             return resp.data[0]["content_md"]
