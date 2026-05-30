@@ -1,8 +1,12 @@
+# 既定モードはライト（theme.py の theme_mode 既定="light"）。
+# ネイティブ部品（ツールバー/ダウンロードボタン/st.dataframe表）はこの設定に従うため
+# ライト基調に揃える。ダークモードは実行時にCSSで切り替える設計。
 [theme]
+base = "light"
 primaryColor = "#1f4e79"
-backgroundColor = "#0e1117"
-secondaryBackgroundColor = "#1a1a2e"
-textColor = "#ffffff"
+backgroundColor = "#f5f7fa"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#1a1a2a"
 font = "sans serif"
 
 [server]
