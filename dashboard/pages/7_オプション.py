@@ -72,7 +72,12 @@ if df.empty:
 df["week_date"] = pd.to_datetime(df["week_date"])
 latest = df["week_date"].max()
 
-# 標準＋ミニ合算ヘルパー
+# ラージ（指数×1,000円）/ ミニ（×100円, 1/10・個人向け）の商品コード
+_LARGE = ("nikkei225_call", "nikkei225_put")
+_MINI  = ("nikkei225_mini_call", "nikkei225_mini_put")
+
+
+# 標準＋ミニ合算ヘルパー（net_lots と net_amount_oku の両方を集約）
 def _agg_call_put(sub: pd.DataFrame) -> pd.DataFrame:
     """option_type を call/put に集約"""
     sub = sub.copy()
@@ -80,17 +85,18 @@ def _agg_call_put(sub: pd.DataFrame) -> pd.DataFrame:
         lambda x: "call" if "call" in x else "put"
     )
     return (sub.groupby(["week_date", "investor_type", "side"])
-              ["net_lots"].sum().reset_index())
+              [["net_lots", "net_amount_oku"]].sum().reset_index())
 
-# ─── KPI: 最新週の海外勢 PCR ────────────────────────────────
+# ─── KPI: 最新週の海外勢 PCR（ラージのみ・機関フローを正しく反映） ──────────
 latest_df = df[df["week_date"] == latest]
-agg = _agg_call_put(latest_df)
-foreign_agg = agg[agg["investor_type"] == "foreign"]
+agg = _agg_call_put(latest_df)                                              # 全商品（棒グラフ用）
+agg_large = _agg_call_put(latest_df[latest_df["option_type"].isin(_LARGE)])  # ラージのみ（PCR/KPI/GEX用）
+foreign_agg = agg_large[agg_large["investor_type"] == "foreign"]
 foreign_call = float(foreign_agg[foreign_agg["side"] == "call"]["net_lots"].sum() or 0)
 foreign_put  = float(foreign_agg[foreign_agg["side"] == "put"]["net_lots"].sum() or 0)
 pcr = (foreign_put / foreign_call) if foreign_call > 0 else None
 
-dealer_agg = agg[agg["investor_type"] == "dealer"]
+dealer_agg = agg_large[agg_large["investor_type"] == "dealer"]
 dealer_call = float(dealer_agg[dealer_agg["side"] == "call"]["net_lots"].sum() or 0)
 dealer_put  = float(dealer_agg[dealer_agg["side"] == "put"]["net_lots"].sum() or 0)
 
@@ -117,16 +123,17 @@ def _kpi_card(col, title: str, value: str, sub: str, color: str):
             </div>""", unsafe_allow_html=True
         )
 pcr_color = "#e63946" if (pcr is not None and pcr > 1.5) else "#2dc653" if (pcr is not None and pcr < 0.7) else "#f5a623"
-_kpi_card(k1, "海外 PCR（プット/コール）", f"{pcr:.2f}" if pcr is not None else "—",
+_kpi_card(k1, "海外 PCR（プット/コール・ラージ）", f"{pcr:.2f}" if pcr is not None else "—",
           "1.5+ = ヘッジ強・弱気バイアス", pcr_color)
-_kpi_card(k2, "海外プット net 枚数", f"{int(foreign_put):+,}", "正=買い越し（下方ヘッジ）", "#1a6b9e")
-_kpi_card(k3, "海外コール net 枚数", f"{int(foreign_call):+,}", "正=買い越し（上方期待）", "#2dc653")
-_kpi_card(k4, "MM ガンマ推定", gex_label, "自己コール・プット net から推定", gex_color)
+_kpi_card(k2, "海外プット net 枚数（ラージ）", f"{int(foreign_put):+,}", "正=買い越し（下方ヘッジ）", "#1a6b9e")
+_kpi_card(k3, "海外コール net 枚数（ラージ）", f"{int(foreign_call):+,}", "正=買い越し（上方期待）", "#2dc653")
+_kpi_card(k4, "MM ガンマ推定（ラージ）", gex_label, "自己コール・プット net から推定", gex_color)
 
 st.divider()
 
-# ─── 投資家別 コール/プット 棒グラフ（最新週） ─────────────────
-st.subheader("最新週: 投資家別 コール/プット 売買差引（net 枚数）")
+# ─── 投資家別 コール/プット 棒グラフ（最新週・金額建て） ─────────────────
+st.subheader("最新週: 投資家別 コール/プット 売買差引（net 億円）")
+st.caption("ラージ＋ミニを net 金額（億円）で合算。金額建てなので大小オプションを公平に比較できる。")
 plot_df = agg[agg["investor_type"].isin(selected)].copy()
 plot_df["inv_label"] = plot_df["investor_type"].map(ALL_INVESTORS)
 
@@ -136,15 +143,15 @@ for side, color in [("call", "#2dc653"), ("put", "#e63946")]:
     fig_bar.add_trace(go.Bar(
         name="コール" if side == "call" else "プット",
         x=sub["inv_label"],
-        y=sub["net_lots"],
+        y=sub["net_amount_oku"],
         marker_color=color,
         hovertemplate=("コール" if side == "call" else "プット") +
-                      "<br>%{x}: %{y:+,}枚<extra></extra>",
+                      "<br>%{x}: %{y:+,.1f}億円<extra></extra>",
         opacity=0.85,
     ))
 fig_bar.update_layout(barmode="group", **plot_layout(
     xaxis=dict(title="投資家"),
-    yaxis=dict(title="net 枚数（買い越し=正）"),
+    yaxis=dict(title="net 金額（億円, 買い越し=正）"),
     height=380,
 ))
 st.plotly_chart(fig_bar, use_container_width=True)
@@ -152,9 +159,9 @@ st.plotly_chart(fig_bar, use_container_width=True)
 st.divider()
 
 # ─── PCR 時系列 ───────────────────────────────────────────
-st.subheader(f"海外投資家 PCR（プット/コール比）の推移（直近{period}週）")
+st.subheader(f"海外投資家 PCR（プット/コール比・ラージ）の推移（直近{period}週）")
 cutoff = pd.Timestamp.today() - pd.DateOffset(weeks=period)
-all_agg = _agg_call_put(df[df["week_date"] >= cutoff])
+all_agg = _agg_call_put(df[(df["week_date"] >= cutoff) & (df["option_type"].isin(_LARGE))])
 f_agg = all_agg[all_agg["investor_type"] == "foreign"]
 pivot = f_agg.pivot(index="week_date", columns="side", values="net_lots").fillna(0)
 if not pivot.empty and "call" in pivot.columns and "put" in pivot.columns:
@@ -280,8 +287,6 @@ st.caption(
     "ミニ（2023年上場・個人向け設計）で個人の比率が高く、ラージで海外・自己（機関）の比率が"
     "高いほど「ミニ＝個人／ラージ＝機関」の通説と整合する。枚数の大小は%化で打ち消されるため公平に比較できる。"
 )
-_LARGE = ("nikkei225_call", "nikkei225_put")
-_MINI  = ("nikkei225_mini_call", "nikkei225_mini_put")
 comp_src = df[df["week_date"] >= cutoff].copy()
 comp_src["市場"] = comp_src["option_type"].apply(
     lambda x: "ラージ" if x in _LARGE else ("ミニ" if x in _MINI else None)
