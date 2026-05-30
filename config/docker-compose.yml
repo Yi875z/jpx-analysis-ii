@@ -10,14 +10,16 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - C:\CarSol\jpx-analysis:/CarSol/jpx-analysis
+    # 秘密情報は config/.env から読み込む（.env は .gitignore 済み・リポジトリに含めない）
+    # docker compose は config/ ディレクトリで実行すること（同階層の .env を参照するため）
     environment:
-      - SUPABASE_URL=https://syyojlcrnachuvrbvttw.supabase.co
-      - SUPABASE_SERVICE_KEY=***REMOVED-SUPABASE-KEY***
-      - NOTIFY_EMAIL=y.ioku1973@gmail.com
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - NOTIFY_EMAIL=${NOTIFY_EMAIL}
       - GENERIC_TIMEZONE=Asia/Tokyo
       - TZ=Asia/Tokyo
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
-      - DISCORD_WEBHOOK_URL=***REMOVED-DISCORD-WEBHOOK***
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
 
 volumes:
   n8n_data:
