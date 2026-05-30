@@ -206,6 +206,22 @@ def _inject_css(mode: str):
             fill: {t['text']} !important;
         }}
 
+        /* ── テーブル（HTMLテーブル: st.markdown(df.to_html)） ── */
+        .dataframe, table {{
+            background-color: {t['bg2']} !important;
+            color: {t['text']} !important;
+            border-collapse: collapse;
+        }}
+        .dataframe td, .dataframe th, table td, table th {{
+            border: 1px solid {t['border']} !important;
+            color: {t['text']} !important;
+            padding: 4px 10px;
+        }}
+        thead tr th {{
+            background-color: {t['bg']} !important;
+            color: {t['text']} !important;
+        }}
+
         /* ── divider ── */
         hr {{ border-color: {t['border']} !important; }}
         </style>
@@ -293,12 +309,25 @@ def _inject_css(mode: str):
         color: {t['text']} !important;
     }}
 
-    /* ── ボタン ── */
+    /* ── ボタン（新旧testid・サイドバー・ダウンロード含む） ── */
     [data-testid="baseButton-secondary"],
-    [data-testid="baseButton-primary"] {{
+    [data-testid="baseButton-primary"],
+    [data-testid="stBaseButton-secondary"],
+    [data-testid="stBaseButton-primary"],
+    .stButton button,
+    .stDownloadButton button,
+    [data-testid="stDownloadButton"] button,
+    section[data-testid="stSidebar"] button {{
         background-color: {t['bg2']} !important;
         color: {t['text']} !important;
         border-color: {t['border']} !important;
+    }}
+    .stButton button p,
+    .stDownloadButton button p,
+    section[data-testid="stSidebar"] button p,
+    .stButton button span,
+    .stDownloadButton button span {{
+        color: {t['text']} !important;
     }}
 
     /* ── アラート ── */
@@ -308,14 +337,57 @@ def _inject_css(mode: str):
         color: {t['text']} !important;
     }}
 
-    /* ── テーブル ── */
+    /* ── テーブル（HTMLテーブル: st.markdown(df.to_html)） ── */
     .dataframe, table {{
         background-color: {t['bg2']} !important;
+        color: {t['text']} !important;
+        border-color: {t['border']} !important;
+    }}
+    .dataframe td, .dataframe th, table td, table th {{
+        border-color: {t['border']} !important;
         color: {t['text']} !important;
     }}
     thead tr th {{
         background-color: {t['bg']} !important;
         color: {t['subtext']} !important;
+    }}
+
+    /* ── ヘッダーバー・ツールバー（config がライトのため明示的に暗くする） ── */
+    header[data-testid="stHeader"],
+    [data-testid="stHeader"],
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"] {{
+        background-color: {t['bg']} !important;
+        color: {t['text']} !important;
+    }}
+    header[data-testid="stHeader"] *,
+    [data-testid="stToolbar"] * {{
+        color: {t['text']} !important;
+        fill: {t['text']} !important;
+    }}
+
+    /* ── expander ヘッダー ── */
+    [data-testid="stExpander"] {{
+        border-color: {t['border']} !important;
+    }}
+    [data-testid="stExpander"] details,
+    [data-testid="stExpander"] summary {{
+        background-color: {t['bg2']} !important;
+        color: {t['text']} !important;
+    }}
+    [data-testid="stExpander"] summary p,
+    [data-testid="stExpander"] summary span,
+    [data-testid="stExpander"] summary svg {{
+        color: {t['text']} !important;
+        fill: {t['text']} !important;
+    }}
+
+    /* ── マルチページナビ（非アクティブの薄さを解消） ── */
+    [data-testid="stSidebarNav"] *,
+    [data-testid="stSidebarNavItems"] *,
+    [data-testid="stSidebarNavLink"] * {{
+        color: {t['text']} !important;
+        opacity: 1 !important;
     }}
 
     /* ── divider ── */

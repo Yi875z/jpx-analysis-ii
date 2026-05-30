@@ -233,4 +233,9 @@ with st.expander("📊 直近週の詳細データ（全投資家・全 option_t
     show["投資家"] = show["investor_type"].map(ALL_INVESTORS).fillna(show["investor_type"])
     show = show[["投資家", "option_type", "long_lots", "short_lots", "net_lots", "net_amount_oku"]]
     show.columns = ["投資家", "種別", "買 (枚)", "売 (枚)", "net (枚)", "net (億円)"]
-    st.dataframe(show, use_container_width=True, hide_index=True)
+    # st.dataframe(対話型グリッド)はcanvas描画でconfig.tomlのテーマにしか従わず、
+    # 実行時のダーク/ライト切替に追従しない。HTMLテーブルにして theme.py のCSSで両モード対応する。
+    st.markdown(
+        f'<div style="overflow-x:auto">{show.to_html(index=False, border=0, justify="center")}</div>',
+        unsafe_allow_html=True,
+    )
