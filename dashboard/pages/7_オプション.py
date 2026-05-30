@@ -36,7 +36,7 @@ render_report_section_panel(
 
 # サイドバー
 ALL_INVESTORS = {
-    "foreign":          "外国人",
+    "foreign":          "海外投資家",
     "trust_bank":       "信託銀行",
     "individual":       "個人",
     "investment_trust": "投資信託",

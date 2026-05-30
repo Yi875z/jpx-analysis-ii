@@ -39,7 +39,7 @@ with st.sidebar:
         format_func=lambda x: "現物" if x == "spot" else "先物（億円換算）"
     )
     ALL_INVESTORS = {
-        "foreign":    "外国人",
+        "foreign":    "海外投資家",
         "trust_bank": "信託銀行",
         "individual": "個人",
         "corporate":  "事業法人",

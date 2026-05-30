@@ -7,7 +7,7 @@ import plotly.express as px
 import pandas as pd
 
 COLORS = {
-    "外国人":   "#29b6f6",  # sky blue
+    "海外投資家":   "#29b6f6",  # sky blue
     "信託銀行": "#ffa726",  # amber
     "個人":     "#ef5350",  # red
     "事業法人": "#66bb6a",  # green
@@ -19,7 +19,7 @@ COLORS = {
 # バーチャート専用: 投資家別 買い越し（明）/ 売り越し（暗）カラーペア
 # 5色を hue で完全分離: 青 / 橙 / 赤 / 緑 / 紫
 INV_BAR_COLORS = {
-    "外国人":   {"pos": "#29b6f6", "neg": "#0277bd"},   # sky blue / dark blue
+    "海外投資家":   {"pos": "#29b6f6", "neg": "#0277bd"},   # sky blue / dark blue
     "信託銀行": {"pos": "#ffa726", "neg": "#bf360c"},   # amber / burnt orange
     "個人":     {"pos": "#ef5350", "neg": "#b71c1c"},   # red / dark red
     "事業法人": {"pos": "#66bb6a", "neg": "#1b5e20"},   # light green / dark green
@@ -27,7 +27,7 @@ INV_BAR_COLORS = {
 }
 
 INVESTOR_LABEL = {
-    "foreign":    "外国人",
+    "foreign":    "海外投資家",
     "trust_bank": "信託銀行",
     "inv_trust":  "投資信託",
     "individual": "個人",

@@ -43,7 +43,7 @@ with st.sidebar:
     months_opt = st.radio("表示月数", [6, 12, 24], index=1, format_func=lambda m: f"{m}ヶ月")
 
     ALL_INVESTORS = {
-        "foreign":    "外国人",
+        "foreign":    "海外投資家",
         "trust_bank": "信託銀行",
         "individual": "個人",
         "corporate":  "事業法人",

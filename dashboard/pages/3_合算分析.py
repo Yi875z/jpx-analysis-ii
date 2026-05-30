@@ -2,7 +2,7 @@
 合算分析ページ
 - 現物 vs 先物 方向一致/乖離チャート（2軸）
 - ツインエンジン発動履歴（ヒートマップ）
-- 外国人 現物+先物合算 累積フロー（棒+折れ線）
+- 海外投資家 現物+先物合算 累積フロー（棒+折れ線）
 """
 import streamlit as st
 import pandas as pd
@@ -45,11 +45,11 @@ df["week_date"] = pd.to_datetime(df["week_date"])
 df["week_label"] = df["week_date"].dt.strftime("%m/%d")
 
 # ─── セクション1: 現物 vs 先物 方向一致/乖離チャート ──────────
-st.subheader("外国人：現物 vs 先物 方向一致 / 乖離チャート")
+st.subheader("海外投資家：現物 vs 先物 方向一致 / 乖離チャート")
 
 foreign = df[df["investor_type"] == "foreign"].sort_values("week_date")
 if foreign.empty:
-    st.info("外国人データがありません。")
+    st.info("海外投資家データがありません。")
 else:
     fig_dual = go.Figure()
     # 現物NET（棒グラフ）
@@ -75,11 +75,11 @@ else:
         x=foreign["week_label"],
         y=foreign["futures_net_oku"],
         mode="lines+markers",
-        line=dict(color=COLORS["外国人"], width=2, dash="dot"),
+        line=dict(color=COLORS["海外投資家"], width=2, dash="dot"),
         marker=dict(size=5),
         yaxis="y2",
         hovertemplate="先物NET<br>%{x}: %{y:,.0f}億円<extra></extra>",
-        hoverlabel=dict(bgcolor=COLORS["外国人"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
+        hoverlabel=dict(bgcolor=COLORS["海外投資家"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
     ))
     _t = get_theme()
     fig_dual.update_layout(
@@ -119,7 +119,7 @@ else:
     ).sort_index()
 
     # カラム名を日本語に変換
-    inv_ja = {"foreign": "外国人", "trust_bank": "信託銀行", "inv_trust": "投資信託",
+    inv_ja = {"foreign": "海外投資家", "trust_bank": "信託銀行", "inv_trust": "投資信託",
               "individual": "個人", "corporate": "事業法人", "dealer": "自己"}
     twin_pivot.columns = [inv_ja.get(c, c) for c in twin_pivot.columns]
     twin_pivot.index = twin_pivot.index.strftime("%m/%d")
@@ -148,11 +148,11 @@ else:
 
 st.divider()
 
-# ─── セクション3: 外国人 累積フロー（棒+折れ線複合） ─────────
-st.subheader("外国人 現物+先物合算 累積フロー（億円）")
+# ─── セクション3: 海外投資家 累積フロー（棒+折れ線複合） ─────────
+st.subheader("海外投資家 現物+先物合算 累積フロー（億円）")
 
 if foreign.empty:
-    st.info("外国人データがありません。")
+    st.info("海外投資家データがありません。")
 else:
     foreign = foreign.copy()
     foreign["cumulative_net"] = foreign["combined_net"].cumsum()
@@ -178,11 +178,11 @@ else:
         x=foreign["week_label"],
         y=foreign["cumulative_net"],
         mode="lines+markers",
-        line=dict(color=COLORS["外国人"], width=2),
+        line=dict(color=COLORS["海外投資家"], width=2),
         marker=dict(size=5),
         yaxis="y2",
         hovertemplate="累積NET<br>%{x}: %{y:,.0f}億円<extra></extra>",
-        hoverlabel=dict(bgcolor=COLORS["外国人"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
+        hoverlabel=dict(bgcolor=COLORS["海外投資家"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
     ))
     fig_cum.update_layout(
         **plot_layout(

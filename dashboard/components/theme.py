@@ -63,6 +63,16 @@ def _inject_css(mode: str):
     if mode == "light":
         st.markdown(f"""
         <style>
+        /* ── Streamlit テーマ変数を上書き（ネイティブ部品をライトに揃える） ── */
+        :root, .stApp, [data-testid="stApp"],
+        [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+        [data-testid="stMain"], section[data-testid="stSidebar"] {{
+            --background-color: {t['bg']} !important;
+            --secondary-background-color: {t['bg2']} !important;
+            --text-color: {t['text']} !important;
+            --border-color: {t['border']} !important;
+            --primary-color: #1f4e79 !important;
+        }}
         /* ── メイン背景 ── */
         .stApp, [data-testid="stAppViewContainer"],
         [data-testid="stMain"], .block-container {{
@@ -138,7 +148,7 @@ def _inject_css(mode: str):
             color: {t['text']} !important;
         }}
 
-        /* ── 選択済みタグ（外国人 × 等） ── */
+        /* ── 選択済みタグ（海外投資家 × 等） ── */
         [data-baseweb="tag"],
         [data-baseweb="tag"] span {{
             background-color: {t['border']} !important;
@@ -233,6 +243,17 @@ def _inject_css(mode: str):
     # → KPI カード等 inline-styled <div> が !important で上書きされるのを防ぐ
     st.markdown(f"""
     <style>
+    /* ── Streamlit テーマ変数を上書き（ボタン/ヘッダー/expander 等のネイティブ部品は
+          内部CSSが var(--*) を参照しているため、変数自体を書き換えるのが最も確実） ── */
+    :root, .stApp, [data-testid="stApp"],
+    [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+    [data-testid="stMain"], section[data-testid="stSidebar"] {{
+        --background-color: {t['bg']} !important;
+        --secondary-background-color: {t['bg2']} !important;
+        --text-color: {t['text']} !important;
+        --border-color: {t['border']} !important;
+        --primary-color: #29b6f6 !important;
+    }}
     /* ── 背景 ── */
     .stApp,
     [data-testid="stAppViewContainer"],

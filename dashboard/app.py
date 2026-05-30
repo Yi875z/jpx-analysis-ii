@@ -112,15 +112,15 @@ st.divider()
 spot_df     = get_weekly_spot(weeks=8)
 combined_df = get_weekly_combined(weeks=8)
 
-# KPIカード用（外国人 / 信託銀行 / 個人）
+# KPIカード用（海外投資家 / 信託銀行 / 個人）
 KPI_TARGETS = [
-    ("foreign",     "外国人"),
+    ("foreign",     "海外投資家"),
     ("trust_bank",  "信託銀行"),
     ("individual",  "個人"),
 ]
 # グラフ用（5投資家全員）
 CHART_TARGETS = [
-    ("foreign",     "外国人"),
+    ("foreign",     "海外投資家"),
     ("trust_bank",  "信託銀行"),
     ("individual",  "個人"),
     ("corporate",   "事業法人"),
@@ -175,7 +175,7 @@ if not combined_df.empty:
     if latest_combined is not None:
         is_twin = latest_combined.get("is_twin_engine", False)
         if is_twin:
-            st.success("ツインエンジン: 🟢 ON  ─ 外国人が現物・先物ともに買い越し")
+            st.success("ツインエンジン: 🟢 ON  ─ 海外投資家が現物・先物ともに買い越し")
         else:
             st.info("ツインエンジン: ⚪ OFF ─ 現物・先物どちらかが売り越し")
     else:

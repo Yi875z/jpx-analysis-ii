@@ -28,7 +28,7 @@ with st.sidebar:
     period = st.radio("表示期間", [4, 13, 26, 52], index=2, format_func=lambda w: f"{w}週")
 
     ALL_INVESTORS = {
-        "foreign":    "外国人",
+        "foreign":    "海外投資家",
         "trust_bank": "信託銀行",
         "individual": "個人",
         "corporate":  "事業法人",
