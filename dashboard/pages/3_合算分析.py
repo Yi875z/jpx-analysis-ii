@@ -75,11 +75,11 @@ else:
         x=foreign["week_label"],
         y=foreign["futures_net_oku"],
         mode="lines+markers",
-        line=dict(color=COLORS["海外投資家"], width=2, dash="dot"),
+        line=dict(color=COLORS.get("海外投資家", "#29b6f6"), width=2, dash="dot"),
         marker=dict(size=5),
         yaxis="y2",
         hovertemplate="先物NET<br>%{x}: %{y:,.0f}億円<extra></extra>",
-        hoverlabel=dict(bgcolor=COLORS["海外投資家"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
+        hoverlabel=dict(bgcolor=COLORS.get("海外投資家", "#29b6f6"), font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
     ))
     _t = get_theme()
     fig_dual.update_layout(
@@ -178,11 +178,11 @@ else:
         x=foreign["week_label"],
         y=foreign["cumulative_net"],
         mode="lines+markers",
-        line=dict(color=COLORS["海外投資家"], width=2),
+        line=dict(color=COLORS.get("海外投資家", "#29b6f6"), width=2),
         marker=dict(size=5),
         yaxis="y2",
         hovertemplate="累積NET<br>%{x}: %{y:,.0f}億円<extra></extra>",
-        hoverlabel=dict(bgcolor=COLORS["海外投資家"], font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
+        hoverlabel=dict(bgcolor=COLORS.get("海外投資家", "#29b6f6"), font=dict(color="#ffffff", size=13), bordercolor="rgba(0,0,0,0)"),
     ))
     fig_cum.update_layout(
         **plot_layout(

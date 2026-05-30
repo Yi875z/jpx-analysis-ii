@@ -1,12 +1,13 @@
-# 既定モードはライト（theme.py の theme_mode 既定="light"）。
-# ネイティブ部品（ツールバー/ダウンロードボタン/st.dataframe表）はこの設定に従うため
-# ライト基調に揃える。ダークモードは実行時にCSSで切り替える設計。
+# 既定モードはダーク（theme.py の theme_mode 既定="dark"）。
+# ネイティブ部品（ツールバー/ボタン/expander/st.dataframe）はこの設定に従うため
+# ダーク基調に揃える。ライトモードは実行時にCSSで切り替える設計
+# （Streamlitはconfigと一致するモードのみネイティブ部品まで完璧になる仕様）。
 [theme]
-base = "light"
-primaryColor = "#1f4e79"
-backgroundColor = "#f5f7fa"
-secondaryBackgroundColor = "#ffffff"
-textColor = "#1a1a2a"
+base = "dark"
+primaryColor = "#29b6f6"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#1a1a2e"
+textColor = "#ffffff"
 font = "sans serif"
 
 [server]

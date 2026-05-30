@@ -43,18 +43,18 @@ THEMES = {
 
 def get_theme() -> dict:
     """現在のテーマ設定を返す"""
-    mode = st.session_state.get("theme_mode", "light")
+    mode = st.session_state.get("theme_mode", "dark")
     return THEMES[mode]
 
 
 def render_theme_toggle():
     """サイドバーにダーク/ライト切り替えボタンを表示し、CSSを注入する"""
-    mode = st.session_state.get("theme_mode", "light")
+    mode = st.session_state.get("theme_mode", "dark")
     label = "🌙 ダークモード" if mode == "light" else "☀️ ライトモード"
     if st.sidebar.button(label, use_container_width=True):
         st.session_state["theme_mode"] = "dark" if mode == "light" else "light"
         st.rerun()
-    _inject_css(st.session_state.get("theme_mode", "light"))
+    _inject_css(st.session_state.get("theme_mode", "dark"))
 
 
 def _inject_css(mode: str):
