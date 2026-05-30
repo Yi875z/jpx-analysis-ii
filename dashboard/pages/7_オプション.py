@@ -222,20 +222,52 @@ st.plotly_chart(fig_ts, use_container_width=True)
 st.divider()
 
 # ─── データテーブル ──────────────────────────────────────
-with st.expander("📊 直近週の詳細データ（全投資家・全 option_type）"):
+# 投資家11区分・オプション商品8種すべての日本語ラベル（未対応をNaN/英語のまま出さない）
+INVESTOR_JP_FULL = {
+    "dealer":             "自己（MM）",
+    "insurance":          "生損保",
+    "city_regional_bank": "都銀・地銀",
+    "trust_bank":         "信託銀行",
+    "other_financial":    "その他金融機関",
+    "investment_trust":   "投資信託",
+    "corporate":          "事業法人",
+    "other_institution":  "その他法人",
+    "securities":         "証券会社",
+    "individual":         "個人",
+    "foreign":            "海外投資家",
+}
+OPT_TYPE_JP = {
+    "nikkei225_call":      "日経225 コール",
+    "nikkei225_put":       "日経225 プット",
+    "nikkei225_mini_call": "日経225ミニ コール",
+    "nikkei225_mini_put":  "日経225ミニ プット",
+    "topix_call":          "TOPIX コール",
+    "topix_put":           "TOPIX プット",
+    "jpx400_call":         "JPX400 コール",
+    "jpx400_put":          "JPX400 プット",
+}
+
+with st.expander("📊 直近週の詳細データ（建玉のある投資家・商品のみ）"):
     show = latest_df.copy()
-    show["option_type"] = show["option_type"].map({
-        "nikkei225_call": "日経225 コール",
-        "nikkei225_put":  "日経225 プット",
-        "nikkei225_mini_call": "ミニ コール",
-        "nikkei225_mini_put":  "ミニ プット",
-    })
-    show["投資家"] = show["investor_type"].map(ALL_INVESTORS).fillna(show["investor_type"])
-    show = show[["投資家", "option_type", "long_lots", "short_lots", "net_lots", "net_amount_oku"]]
-    show.columns = ["投資家", "種別", "買 (枚)", "売 (枚)", "net (枚)", "net (億円)"]
-    # st.dataframe(対話型グリッド)はcanvas描画でconfig.tomlのテーマにしか従わず、
-    # 実行時のダーク/ライト切替に追従しない。HTMLテーブルにして theme.py のCSSで両モード対応する。
-    st.markdown(
-        f'<div style="overflow-x:auto">{show.to_html(index=False, border=0, justify="center")}</div>',
-        unsafe_allow_html=True,
-    )
+    # 売買が全くゼロの行（建玉なし）は除外して見やすくする
+    show = show[(show["long_lots"] != 0) | (show["short_lots"] != 0) | (show["net_lots"] != 0)]
+    # ネット金額の絶対値が大きい順（注目すべきフローを上に）
+    show = show.sort_values("net_amount_oku", key=lambda s: s.abs(), ascending=False)
+    show["投資家"] = show["investor_type"].map(INVESTOR_JP_FULL).fillna(show["investor_type"])
+    show["商品"]   = show["option_type"].map(OPT_TYPE_JP).fillna(show["option_type"])
+
+    disp = show[["投資家", "商品", "long_lots", "short_lots", "net_lots", "net_amount_oku"]].copy()
+    disp.columns = ["投資家", "商品", "買 (枚)", "売 (枚)", "ネット (枚)", "ネット (億円)"]
+    for c in ["買 (枚)", "売 (枚)", "ネット (枚)"]:
+        disp[c] = disp[c].map(lambda v: f"{int(v):,}")
+    disp["ネット (億円)"] = disp["ネット (億円)"].map(lambda v: f"{v:,.2f}")
+
+    if disp.empty:
+        st.caption("直近週は建玉のある投資家・商品がありません。")
+    else:
+        # st.dataframe(対話型グリッド)はcanvas描画でconfig.tomlのテーマにしか従わず、
+        # 実行時のダーク/ライト切替に追従しない。HTMLテーブルにして theme.py のCSSで両モード対応する。
+        st.markdown(
+            f'<div style="overflow-x:auto">{disp.to_html(index=False, border=0, justify="center")}</div>',
+            unsafe_allow_html=True,
+        )
