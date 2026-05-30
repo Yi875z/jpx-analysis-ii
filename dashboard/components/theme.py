@@ -92,15 +92,17 @@ def _inject_css(mode: str):
             color: {t['text']} !important;
         }}
 
-        /* ── マルチページナビゲーション ── */
-        [data-testid="stSidebarNav"],
-        [data-testid="stSidebarNav"] a,
-        [data-testid="stSidebarNav"] span,
-        [data-testid="stSidebarNav"] li {{
-            background-color: {t['bg2']} !important;
+        /* ── マルチページナビゲーション（非アクティブ文字が薄グレーで同化する問題を修正） ── */
+        /* 新しい Streamlit は stSidebarNavLink 内の span に分かれ、非アクティブ時に
+           opacity が下がるため、color だけでなく opacity も明示的に戻す */
+        [data-testid="stSidebarNav"] *,
+        [data-testid="stSidebarNavItems"] *,
+        [data-testid="stSidebarNavLink"] * {{
             color: {t['text']} !important;
+            opacity: 1 !important;
         }}
-        [data-testid="stSidebarNav"] a:hover {{
+        [data-testid="stSidebarNav"] a:hover,
+        [data-testid="stSidebarNavLink"]:hover {{
             background-color: {t['bg']} !important;
         }}
 
@@ -186,6 +188,22 @@ def _inject_css(mode: str):
         body [data-baseweb="menu"] span {{
             background-color: {t['bg2']} !important;
             color: {t['subtext']} !important;
+        }}
+
+        /* ── expander ヘッダー（ライトモードで暗背景・暗文字に同化する問題を修正） ── */
+        [data-testid="stExpander"] {{
+            border-color: {t['border']} !important;
+        }}
+        [data-testid="stExpander"] details,
+        [data-testid="stExpander"] summary {{
+            background-color: {t['bg2']} !important;
+            color: {t['text']} !important;
+        }}
+        [data-testid="stExpander"] summary p,
+        [data-testid="stExpander"] summary span,
+        [data-testid="stExpander"] summary svg {{
+            color: {t['text']} !important;
+            fill: {t['text']} !important;
         }}
 
         /* ── divider ── */
