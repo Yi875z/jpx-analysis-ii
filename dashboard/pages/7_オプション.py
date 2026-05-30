@@ -185,36 +185,34 @@ else:
 
 st.divider()
 
-# ─── 海外投資家の4オプション net 時系列 ───────────────────
-st.subheader(f"海外投資家 オプション net 時系列（直近{period}週）")
+# ─── 海外投資家 日経225ラージ・オプション net 時系列（金額・億円） ──────────
+# ラージ（指数×1,000円）とミニ（×100円, 1/10）は単位も参加者層も異なる。
+# 海外勢の機関フローはラージに出るため、ラージのみ・net金額(億円)で表示して
+# 枚数混在による歪みを排除する。ミニ(個人向け)は下の構成比セクションで扱う。
+st.subheader(f"海外投資家 日経225オプション（ラージ）net 時系列・金額建て（直近{period}週）")
+st.caption(
+    "海外勢の本気のポジションはラージ（指数×1,000円）に表れる。ミニ（×100円・個人向け）は"
+    "経済的価値が1/10で枚数比較が歪むためここでは除外し、net 金額（億円）で表示。"
+    "プット買い越し＝下方ヘッジ／弱気、コール買い越し＝上方期待／強気。"
+)
+LARGE_JP = {"nikkei225_call": "日経225 コール", "nikkei225_put": "日経225 プット"}
+LARGE_COLORS = {"nikkei225_call": "#2dc653", "nikkei225_put": "#e63946"}
 f_df = df[(df["investor_type"] == "foreign") & (df["week_date"] >= cutoff)].copy()
 f_df["label"] = f_df["week_date"].dt.strftime("%m/%d")
 fig_ts = go.Figure()
-OPT_COLORS = {
-    "nikkei225_call":      "#2dc653",
-    "nikkei225_put":       "#e63946",
-    "nikkei225_mini_call": "#a8d8b9",
-    "nikkei225_mini_put":  "#f5a8b0",
-}
-OPT_JP = {
-    "nikkei225_call":      "日経225 コール",
-    "nikkei225_put":       "日経225 プット",
-    "nikkei225_mini_call": "ミニ コール",
-    "nikkei225_mini_put":  "ミニ プット",
-}
-for ot, color in OPT_COLORS.items():
+for ot, jp in LARGE_JP.items():
     sub = f_df[f_df["option_type"] == ot].sort_values("week_date")
     if sub.empty:
         continue
     fig_ts.add_trace(go.Scatter(
-        x=sub["label"], y=sub["net_lots"],
-        mode="lines+markers", name=OPT_JP[ot],
-        line=dict(color=color, width=2), marker=dict(size=6),
-        hovertemplate=f"{OPT_JP[ot]}<br>%{{x}}: %{{y:+,}}枚<extra></extra>",
+        x=sub["label"], y=sub["net_amount_oku"],
+        mode="lines+markers", name=jp,
+        line=dict(color=LARGE_COLORS[ot], width=2.5), marker=dict(size=6),
+        hovertemplate=f"{jp}<br>%{{x}}: %{{y:+,.1f}}億円<extra></extra>",
     ))
 fig_ts.update_layout(**plot_layout(
     xaxis=dict(title="週末日"),
-    yaxis=dict(title="net 枚数（買い越し=正）"),
+    yaxis=dict(title="net 金額（億円, 買い越し=正）"),
     height=380,
 ))
 st.plotly_chart(fig_ts, use_container_width=True)
@@ -271,3 +269,46 @@ with st.expander("📊 直近週の詳細データ（建玉のある投資家・
             f'<div style="overflow-x:auto">{disp.to_html(index=False, border=0, justify="center")}</div>',
             unsafe_allow_html=True,
         )
+
+st.divider()
+
+# ─── ラージ vs ミニ：投資部門の構成比（誰がその市場を動かしているか） ──────────
+# 「ミニ＝個人向け／ラージ＝機関」という通説を、JPX投資部門別データ自体で検証する。
+st.subheader(f"ラージ vs ミニ：投資部門の構成比（直近{period}週・売買高ベース）")
+st.caption(
+    "各市場の総売買高（買＋売 枚数）に占める投資家区分のシェア。"
+    "ミニ（2023年上場・個人向け設計）で個人の比率が高く、ラージで海外・自己（機関）の比率が"
+    "高いほど「ミニ＝個人／ラージ＝機関」の通説と整合する。枚数の大小は%化で打ち消されるため公平に比較できる。"
+)
+_LARGE = ("nikkei225_call", "nikkei225_put")
+_MINI  = ("nikkei225_mini_call", "nikkei225_mini_put")
+comp_src = df[df["week_date"] >= cutoff].copy()
+comp_src["市場"] = comp_src["option_type"].apply(
+    lambda x: "ラージ" if x in _LARGE else ("ミニ" if x in _MINI else None)
+)
+comp_src = comp_src[comp_src["市場"].notna()].copy()
+comp_src["vol"] = comp_src["long_lots"].abs() + comp_src["short_lots"].abs()
+comp_src["投資家"] = comp_src["investor_type"].map(INVESTOR_JP_FULL).fillna(comp_src["investor_type"])
+
+if comp_src.empty or comp_src["vol"].sum() == 0:
+    st.caption("構成比を計算できるデータがありません。")
+else:
+    pivot = comp_src.groupby(["市場", "投資家"], as_index=False)["vol"].sum()
+    pivot["share"] = pivot.groupby("市場")["vol"].transform(lambda s: s / s.sum() * 100)
+    # 投資家の並び順はラージのシェア降順で固定（左右の比較をしやすく）
+    order = (pivot[pivot["市場"] == "ラージ"].sort_values("share")["投資家"].tolist()
+             or pivot["投資家"].drop_duplicates().tolist())
+    fig_comp = go.Figure()
+    for mkt, color in [("ラージ", "#29b6f6"), ("ミニ", "#f5a8b0")]:
+        sub = pivot[pivot["市場"] == mkt].set_index("投資家").reindex(order).reset_index()
+        fig_comp.add_trace(go.Bar(
+            y=sub["投資家"], x=sub["share"], name=mkt, orientation="h",
+            marker_color=color, opacity=0.85,
+            hovertemplate=f"{mkt}　%{{y}}: %{{x:.1f}}%<extra></extra>",
+        ))
+    fig_comp.update_layout(barmode="group", **plot_layout(
+        xaxis=dict(title="構成比（%）"),
+        yaxis=dict(title=""),
+        height=460,
+    ))
+    st.plotly_chart(fig_comp, use_container_width=True)
