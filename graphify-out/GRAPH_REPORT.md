@@ -1,4 +1,4 @@
-# Graph Report - jpx-analysis  (2026-05-31)
+# Graph Report - jpx-analysis  (2026-06-01)
 
 ## Corpus Check
 - 45 files · ~74,857 words
