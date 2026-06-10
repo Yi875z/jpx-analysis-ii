@@ -111,10 +111,13 @@ C:\CarSol\jpx-analysis\
 ---
 
 ## .env の形式
+
+実値は `config/.env` を参照すること（URL・キーの実値をチャット・ドキュメントに書かない）。
+
 ```
-SUPABASE_URL=https://syyojlcrnachuvrbvttw.supabase.co
-SUPABASE_KEY=eyJ...（サービスロールキー）
-ANTHROPIC_API_KEY=sk-ant-api03-...
+SUPABASE_URL=（config/.env 参照）
+SUPABASE_KEY=（config/.env 参照・サービスロールキー）
+ANTHROPIC_API_KEY=（config/.env 参照）
 ```
 
 ---
