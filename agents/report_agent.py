@@ -601,7 +601,8 @@ def _build_monthly_data_table(monthly_rows: list[dict], target_month: str) -> st
     return "\n".join(parts)
 
 
-def generate_monthly_report(year_month: str, monthly_rows: list[dict]) -> str:
+def generate_monthly_report(year_month: str, monthly_rows: list[dict],
+                            index_data: dict | None = None) -> str:
     """月次需給レポートを生成する。
 
     Parameters
@@ -610,6 +611,10 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict]) -> str:
         対象年月 "YYYY-MM"
     monthly_rows : list[dict]
         fetch_monthly_summary() の返り値（直近13ヶ月分推奨）
+    index_data : dict | None
+        実勢の指数終値アンカー。例:
+        {"month_end": ("2026-05-29", 66329.5), "latest": ("2026-06-05", 66588.12)}
+        渡されない場合、プロンプト側で具体的な株価水準への言及を禁止する。
     """
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
@@ -637,10 +642,36 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict]) -> str:
 {quant_tech}
 """
 
+    # ── 指数終値アンカー（価格ハルシネーション防止） ──
+    if index_data:
+        anchor_lines = []
+        if index_data.get("month_end"):
+            d, c = index_data["month_end"]
+            anchor_lines.append(f"- {year_month} 月末終値（{d}）: 日経225 = {c:,.0f}円")
+        if index_data.get("latest"):
+            d, c = index_data["latest"]
+            anchor_lines.append(f"- 直近終値（{d}）: 日経225 = {c:,.0f}円")
+        price_block = f"""## 実勢の指数水準（唯一の価格根拠）
+
+{chr(10).join(anchor_lines)}
+
+価格水準・株価目標・レンジに言及する場合は、**必ず上記の実勢終値のみを基準**にしてください。
+あなたの記憶や学習データ上の株価水準は古く、実勢と大きく乖離している可能性があります。
+上記以外の指数水準を根拠なく持ち出すことは厳禁です。
+"""
+    else:
+        price_block = """## 価格水準への言及禁止
+
+本レポートには実勢の指数終値データが提供されていません。
+したがって**具体的な株価水準・指数レンジ・株価目標（「○○円台」等）には一切言及しないでください。**
+見通しは需給フロー（買い越し/売り越しの方向と規模）のみで定性的に述べてください。
+"""
+
     dynamic_system = f"""## 重要：分析対象月
 
 **本レポートの対象月は {year_month} です。** すべての分析・季節性判定はこの月を基準にしてください。
-"""
+
+{price_block}"""
 
     user_prompt = f"""以下のJPX月次需給データ（{year_month}）を分析し、
 月次需給レポートをMarkdown形式で生成してください。
@@ -698,6 +729,9 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict]) -> str:
 - 連続買い越し/売り越しの月数を具体的に数えて記載すること
 - 単月の異常値だけでなく、3〜6ヶ月スパンのトレンドを重視すること
 - 客観的・簡潔に。投資家が中期戦略の参考にできる内容を目指す
+- **株価水準・指数レンジ・株価目標に言及する場合は、system に記載の「実勢の指数水準」のみを根拠とすること。**
+  実勢データが提供されていない場合は、具体的な株価水準には一切触れず、需給フローの方向性のみで見通しを述べること。
+  あなたの記憶上の日経平均水準は古く実勢と乖離しているため、絶対に使わないこと。
 """
 
     model = _get_model()

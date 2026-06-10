@@ -46,7 +46,7 @@ logger = logging.getLogger("main")
 # ─────────────────────────────────────────
 sys.path.insert(0, str(Path(__file__).parent))
 from db           import supabase_client as db
-from scripts      import fetch_jpx, analyze_jpx, build_excel as excel_builder
+from scripts      import fetch_jpx, analyze_jpx, build_excel as excel_builder, fetch_index
 from agents       import report_agent
 
 OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", "./outputs"))
@@ -158,6 +158,21 @@ def run_weekly(week_date: date, spot_path: str = None,
         logger.error("[エラー] データが取得できませんでした")
         db.save_log(week_date, "error", error_message="データ取得失敗")
         return
+
+    # ①-b 指数終値を補完（CLI で明示指定が無ければ実勢を取得）
+    #     先物CSVに現物指数は含まれないため、外部取得して index_close を埋める。
+    if index_close and index_close > 0:
+        resolved_close = index_close  # CLI --index-close を優先
+    else:
+        hit = fetch_index.get_close_on_or_before(week_date, "nikkei225")
+        resolved_close = hit[1] if hit else 0.0
+        if hit:
+            logger.info(f"[指数] 日経225終値 補完: {hit[0]} = {hit[1]:,.0f}円")
+        else:
+            logger.warning("[指数] 日経225終値を取得できず → index_close=0.0 のまま")
+    if resolved_close > 0:
+        for r in futures_rows:
+            r["index_close"] = resolved_close
 
     # ② Supabaseに蓄積
     n_spot    = db.upsert_spot(spot_rows)
@@ -290,16 +305,30 @@ def run_monthly(year_month: str):
 
     # ② 直近13ヶ月分を取得してAIレポート生成
     monthly_rows = db.fetch_monthly_summary(13)
-    report_md = report_agent.generate_monthly_report(year_month, monthly_rows)
+
+    # 価格ハルシネーション防止：実勢の指数終値をアンカーとして渡す
+    year, month = int(year_month[:4]), int(year_month[5:7])
+    month_end_day = date(year, month, calendar.monthrange(year, month)[1])
+    index_data = {}
+    me = fetch_index.get_close_on_or_before(month_end_day, "nikkei225")
+    if me:
+        index_data["month_end"] = (me[0].isoformat(), me[1])
+    latest = fetch_index.get_latest_close("nikkei225")
+    if latest:
+        index_data["latest"] = (latest[0].isoformat(), latest[1])
+    if index_data:
+        logger.info(f"[月次] 指数アンカー取得: {index_data}")
+    else:
+        logger.warning("[月次] 指数終値を取得できず → 価格水準への言及を抑制します")
+
+    report_md = report_agent.generate_monthly_report(
+        year_month, monthly_rows, index_data=index_data or None)
 
     # ③ ファイル保存
     md_path = _save_monthly_markdown(report_md, year_month)
 
     # ④ Supabaseのreportsテーブルに記録（week_date は月末日で代用）
-    year, month = int(year_month[:4]), int(year_month[5:7])
-    last_day = calendar.monthrange(year, month)[1]
-    month_end = date(year, month, last_day)
-    db.save_report(month_end, "monthly", "markdown", md_path.name, content_md=report_md)
+    db.save_report(month_end_day, "monthly", "markdown", md_path.name, content_md=report_md)
 
     logger.info(f"[月次レポート] 完了: {md_path}")
     print(f"\n[OK] 月次需給レポート生成完了: {year_month}")
