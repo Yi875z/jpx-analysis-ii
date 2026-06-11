@@ -1,11 +1,15 @@
 name: JPX 週次データ取得・AIレポート生成
 
 # トリガー:
-#   1. 毎週木曜 09:00 UTC（= 木曜 18:00 JST）の自動実行
+#   1. 毎週木曜 09:17 UTC（= 木曜 18:17 JST）の自動実行
 #   2. GitHub の Actions タブからの手動実行（workflow_dispatch）
+#
+# 注意: 分は意図的に 00 を避け 17 にしている。
+# GitHub Actions の schedule は共有キューで処理され、毎時00分は全世界のジョブが
+# 集中して数十分〜数時間の遅延・取りこぼしが起きる。00分以外（例:17分）にずらすと改善する。
 on:
   schedule:
-    - cron: '0 9 * * 4'
+    - cron: '17 9 * * 4'
   workflow_dispatch:
     inputs:
       date:
