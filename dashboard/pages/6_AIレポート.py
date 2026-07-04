@@ -138,6 +138,21 @@ st.markdown(content)
 
 st.divider()
 
+# ─── ChatGPT査読用プロンプト ──────────────────────────────────
+_REVIEW_TPL = Path(__file__).parent.parent.parent / "docs" / "chatgpt_review_prompt.md"
+with st.expander("🔎 外部AI査読用プロンプト（ChatGPT等でセカンドオピニオン）"):
+    if _REVIEW_TPL.exists():
+        st.caption(
+            "下のブロック右上のコピーアイコンで全文コピーし、ChatGPT等に貼り付けてください。"
+            "符号規約・GEX定義・査読タスクと、このレポート全文が一体になっています。"
+        )
+        st.code(
+            _REVIEW_TPL.read_text(encoding="utf-8") + "\n" + content,
+            language=None,
+        )
+    else:
+        st.info("docs/chatgpt_review_prompt.md が見つかりません。")
+
 # ─── Excelデータエクスポート ──────────────────────────────────
 with st.expander("📊 Excelデータエクスポート"):
     st.caption(
