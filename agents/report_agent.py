@@ -528,7 +528,8 @@ Markdownレポートを生成してください。
         messages=[{"role": "user", "content": user_prompt}],
     )
 
-    report_md = message.content[0].text
+    # thinkingブロックが先頭に付くモデル（Sonnet 5等）でも動くようtextブロックのみ抽出
+    report_md = "\n".join(b.text for b in message.content if b.type == "text")
     _log_cache_usage(message, label="週次")
     if message.stop_reason == "max_tokens":
         logger.warning(f"[AIエージェント] 週次レポートがmax_tokens上限で途中切断 ({len(report_md)}文字)")
@@ -755,7 +756,8 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
         messages=[{"role": "user", "content": user_prompt}],
     )
 
-    report_md = message.content[0].text
+    # thinkingブロックが先頭に付くモデル（Sonnet 5等）でも動くようtextブロックのみ抽出
+    report_md = "\n".join(b.text for b in message.content if b.type == "text")
     _log_cache_usage(message, label="月次")
     if message.stop_reason == "max_tokens":
         logger.warning(f"[AIエージェント] 月次レポートがmax_tokens上限で途中切断 ({len(report_md)}文字)")
