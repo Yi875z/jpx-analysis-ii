@@ -51,23 +51,31 @@ def _client() -> Client:
 
 _PAGE_SIZE = 1000  # Supabase max-rows 上限
 
-def _fetch(table: str, columns: str, weeks: int | None = None, months: int | None = None) -> pd.DataFrame:
-    """ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する"""
+def _fetch(table: str, columns: str, weeks: int | None = None, months: int | None = None,
+           date_col: str = "week_date") -> pd.DataFrame:
+    """ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
+
+    date_col: 並べ替え・期間絞り込みに使う列。monthly_summary のように
+    week_date を持たないテーブルは "year_month" を指定する。
+    """
     try:
         client = _client()
 
         cutoff = None
         if weeks is not None:
-            cutoff = (pd.Timestamp.today() - pd.DateOffset(weeks=weeks)).strftime("%Y-%m-%d")
+            cutoff = pd.Timestamp.today() - pd.DateOffset(weeks=weeks)
         elif months is not None:
-            cutoff = (pd.Timestamp.today() - pd.DateOffset(months=months)).strftime("%Y-%m-%d")
+            cutoff = pd.Timestamp.today() - pd.DateOffset(months=months)
+        if cutoff is not None:
+            # year_month は "YYYY-MM" 文字列のため同形式で辞書順比較する
+            cutoff = cutoff.strftime("%Y-%m" if date_col == "year_month" else "%Y-%m-%d")
 
         all_rows: list = []
         offset = 0
         while True:
-            q = client.table(table).select(columns).order("week_date", desc=False)
+            q = client.table(table).select(columns).order(date_col, desc=False)
             if cutoff:
-                q = q.gte("week_date", cutoff)
+                q = q.gte(date_col, cutoff)
             resp = q.range(offset, offset + _PAGE_SIZE - 1).execute()
             rows = resp.data or []
             all_rows.extend(rows)
@@ -138,7 +146,65 @@ def get_monthly_summary(months: int = 12) -> pd.DataFrame:
         "monthly_summary",
         "year_month,investor_type,spot_net_sum,futures_net_sum,combined_net",
         months=months,
+        date_col="year_month",
     )
+
+
+@st.cache_data(ttl=600)
+def get_fetch_logs(limit: int = 100) -> pd.DataFrame:
+    """fetch_logs（週次自動実行の記録）を新しい順に取得"""
+    try:
+        client = _client()
+        resp = (client.table("fetch_logs")
+                .select("*")
+                .order("run_at", desc=True)
+                .limit(limit)
+                .execute())
+        return pd.DataFrame(resp.data or [])
+    except Exception as e:
+        st.error(f"Supabase 接続エラー (fetch_logs): {e}")
+        return pd.DataFrame()
+
+
+@st.cache_data(ttl=3600)
+def build_excel_export(weeks: int = 104, months: int = 36) -> bytes:
+    """Supabase蓄積データを1つのExcelブック（bytes）にまとめる。
+
+    ダッシュボードのダウンロードボタン用。CIで生成されるExcelは
+    ランナー上で破棄されて配布されないため、アプリ内でオンデマンド生成する。
+    """
+    import io
+    sheets = {
+        "現物":     get_weekly_spot(weeks),
+        "先物":     get_weekly_futures(weeks),
+        "合算":     get_weekly_combined(weeks),
+        "Zスコア":  get_weekly_stats(weeks),
+        "月次":     get_monthly_summary(months),
+    }
+    buf = io.BytesIO()
+    with pd.ExcelWriter(buf, engine="openpyxl") as writer:
+        for name, df in sheets.items():
+            if df.empty:
+                continue
+            d = df.copy()
+            if "week_date" in d.columns:
+                d["week_date"] = pd.to_datetime(d["week_date"]).dt.strftime("%Y-%m-%d")
+            d.to_excel(writer, sheet_name=name, index=False)
+    return buf.getvalue()
+
+
+# 完結したレポートの最終行はこのいずれかで終わる（免責文・表・強調など）。
+# max_tokens 切断は文中で唐突に終わるため、末尾文字だけで高精度に判定できる。
+# scripts/send_summary_mail.py の report_health() と同一基準を維持すること。
+_COMPLETE_TAILS = tuple("。」）)*|！？!?％%円")
+
+
+def is_report_complete(md: str) -> bool:
+    """レポート末尾の完結性を簡易判定する"""
+    text = (md or "").rstrip()
+    if not text:
+        return False
+    return text.split("\n")[-1].strip().endswith(_COMPLETE_TAILS)
 
 
 @st.cache_data(ttl=3600)

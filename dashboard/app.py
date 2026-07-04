@@ -254,6 +254,7 @@ with st.sidebar:
 - 📅 5_月次集計
 - 📋 6_AIレポート
 - 🎯 7_オプション
+- 🗂 8_実行ログ
 """)
     st.divider()
     render_theme_toggle()

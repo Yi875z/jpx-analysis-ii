@@ -207,7 +207,7 @@ def fetch_combined_history(weeks: int = 26) -> list[dict]:
     res = (sb.table("weekly_combined")
              .select("*")
              .order("week_date", desc=True)
-             .limit(weeks * 5)   # 5投資家区分
+             .limit(weeks * 6)   # 6投資家区分（投信含む）
              .execute())
     return res.data or []
 

@@ -64,6 +64,25 @@ def _extract_section(md: str, keyword: str) -> str:
     return text
 
 
+# 完結したレポートの最終行はこのいずれかで終わる（免責文・表・強調など）。
+# max_tokens 切断は文中で唐突に終わるため、末尾文字だけで高精度に判定できる。
+_COMPLETE_TAILS = tuple("。」）)*|！？!?％%円")
+
+
+def report_health(content: str) -> tuple[bool, str]:
+    """レポート末尾の完結性を簡易判定し、(正常か, 説明文) を返す"""
+    text = (content or "").rstrip()
+    if not text:
+        return False, "本文が空です"
+    last_line = text.split("\n")[-1].strip()
+    n = len(text)
+    if not last_line.endswith(_COMPLETE_TAILS):
+        return False, f"途中切断の疑い（{n:,}字・末尾「…{last_line[-12:]}」）"
+    if n > 15000:
+        return True, f"全文生成OK（{n:,}字）※出力上限16,384トークンに接近中"
+    return True, f"全文生成OK（{n:,}字）"
+
+
 def fetch_latest_weekly_report() -> dict | None:
     """Supabase reports から最新の週次レポートを取得"""
     sb = db.get_client()
@@ -109,6 +128,9 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
     if not summary:
         summary = "(エグゼクティブサマリーが抽出できませんでした)"
 
+    healthy, health_note = report_health(content)
+    status_line = ("✅ " if healthy else "⚠️ ") + health_note
+
     # アラート部分
     alert_block = ""
     if alerts:
@@ -122,6 +144,7 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
     body = f"""JPX 投資主体別売買動向 — 週次レポート
 
 【対象期間】 {period_label}
+【生成ステータス】 {status_line}
 
 {alert_block}【エグゼクティブサマリー】
 
@@ -136,6 +159,8 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
 """
     subject = f"[JPX需給] {period_label} レポート完成 ({len(alerts)} アラート)" if alerts \
               else f"[JPX需給] {period_label} レポート完成"
+    if not healthy:
+        subject = f"[JPX需給] ⚠️ {period_label} レポート生成に問題あり"
     return subject, body
 
 
