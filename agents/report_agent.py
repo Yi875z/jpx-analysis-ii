@@ -84,12 +84,13 @@ FUTURES_TYPE_JP = {
     "topix_mini":      "TOPIXミニ",
 }
 FUTURES_TYPE_ORDER = ["nikkei225_large", "nikkei225_mini", "topix_large", "topix_mini"]
-BREAKDOWN_INVESTORS = ["foreign", "trust_bank", "individual", "inv_trust", "dealer"]
+BREAKDOWN_INVESTORS = ["foreign", "trust_bank", "individual", "inv_trust", "corporate", "dealer"]
 BREAKDOWN_LABELS = {
     "foreign":    "海外投資家",
     "trust_bank": "信託銀行",
     "individual": "個人",
     "inv_trust":  "投資信託",
+    "corporate":  "事業法人",
     "dealer":     "自己",
 }
 
@@ -189,7 +190,14 @@ def _build_futures_breakdown(futures_rows: list[dict]) -> str:
         data[ft][inv]["net_oku"]  += r.get("net_amount_oku", 0.0) or 0.0
 
     col_w = 18
-    lines = ["=== 先物内訳（商品種別×投資家）枚数 / 億円 ==="]
+    lines = [
+        "=== 先物内訳（商品種別×投資家）枚数 / 億円 ===",
+        "  ※金額はJPX公表の実約定金額。明細セルは億円に丸めて表示しており、",
+        "    丸め前の値で計算する合計と±1億円程度ずれることがある。",
+        "  ※枚数はラージ/ミニで乗数が、日経/TOPIXで原資産が異なるため、",
+        "    商品をまたぐ枚数の合算は経済的に無意味。合計は金額のみ。",
+        "",
+    ]
     header = f"{'商品':<18}" + "".join(f" {BREAKDOWN_LABELS[i]:>{col_w}}" for i in BREAKDOWN_INVESTORS)
     lines.append(header)
     lines.append("-" * (18 + (col_w + 1) * len(BREAKDOWN_INVESTORS)))
@@ -205,15 +213,13 @@ def _build_futures_breakdown(futures_rows: list[dict]) -> str:
         lines.append(row)
 
     lines.append("-" * (18 + (col_w + 1) * len(BREAKDOWN_INVESTORS)))
-    totals_lots: dict = defaultdict(int)
-    totals_oku:  dict = defaultdict(float)
+    totals_oku: dict = defaultdict(float)
     for ft in data:
         for inv in BREAKDOWN_INVESTORS:
-            totals_lots[inv] += data[ft][inv]["net_lots"]
-            totals_oku[inv]  += data[ft][inv]["net_oku"]
-    total_row = f"{'合計（全商品）':<18}"
+            totals_oku[inv] += data[ft][inv]["net_oku"]
+    total_row = f"{'金額合計（全商品）':<18}"
     for inv in BREAKDOWN_INVESTORS:
-        cell = f"{totals_lots[inv]:+,}枚/{totals_oku[inv]:+.0f}億"
+        cell = f"{totals_oku[inv]:+,.1f}億"
         total_row += f" {cell:>{col_w}}"
     lines.append(total_row)
 
@@ -234,7 +240,7 @@ def _build_spot_futures_detail(context: dict, futures_rows: list[dict]) -> str:
     inv_map = {i["key"]: i for i in context["investors"]}
     lines = ["=== 海外投資家・信託銀行 現物／先物クロス詳細 ==="]
 
-    for inv_key, inv_label in [("foreign", "海外投資家"), ("trust_bank", "信託銀行（GPIF）")]:
+    for inv_key, inv_label in [("foreign", "海外投資家"), ("trust_bank", "信託銀行")]:
         inv = inv_map.get(inv_key, {})
         spot_net = inv.get("spot_net", 0) or 0
         lines.append(f"\n【{inv_label}】")
@@ -265,8 +271,8 @@ def _build_data_table(context: dict) -> str:
     """分析コンテキストから簡易テーブル文字列を生成"""
     lines = []
     lines.append("=== 現物 投資家別売買（億円）===")
-    lines.append(f"{'投資家':<12} {'現物買い':>10} {'現物売り':>10} {'現物ネット':>12} {'特記'}")
-    lines.append("-" * 60)
+    lines.append(f"{'投資家':<12} {'現物買い':>12} {'現物売り':>12} {'現物ネット':>12} {'特記'}")
+    lines.append("-" * 64)
     for inv in context["investors"]:
         tag = ""
         if inv.get("is_twin_buy"):
@@ -275,8 +281,8 @@ def _build_data_table(context: dict) -> str:
             tag = "[両輪売り:Twin-Sell]"
         lines.append(
             f"{inv['label']:<12}"
-            f" {inv.get('spot_buy', 0):>10,.0f}"
-            f" {inv.get('spot_sell', 0):>10,.0f}"
+            f" {inv.get('spot_buy', 0):>12,.1f}"
+            f" {inv.get('spot_sell', 0):>12,.1f}"
             f" {_fmt_net(inv['spot_net']):>12}"
             f"  {tag}"
         )
