@@ -20,6 +20,17 @@ INVESTOR_JP = {
     "dealer":     "自己（証券会社）",
 }
 
+# 投資信託のキーは weekly_spot / weekly_combined が「inv_trust」、
+# weekly_futures / weekly_options（パーサー出力）が「investment_trust」と不整合。
+# 先物データの集計時は必ず inv_trust に正規化し、
+# weekly_futures へのクエリ時は investment_trust に逆変換する。
+FUTURES_INVESTOR_ALIASES = {"investment_trust": "inv_trust"}
+FUTURES_QUERY_KEYS = {"inv_trust": "investment_trust"}
+
+
+def _norm_futures_inv(investor_type: str) -> str:
+    return FUTURES_INVESTOR_ALIASES.get(investor_type, investor_type)
+
 
 def calc_zscore(values: list[float], window: int) -> float | None:
     """過去window週のZスコアを計算"""
@@ -49,7 +60,7 @@ def build_combined(spot_rows: list[dict], futures_rows: list[dict],
 
     for r in futures_rows:
         oku = r.get("net_amount_oku") or 0
-        futures_net[r["investor_type"]] += oku
+        futures_net[_norm_futures_inv(r["investor_type"])] += oku
 
     combined = []
     for inv in INVESTORS:
@@ -102,7 +113,7 @@ def build_stats(week_date: date, db) -> list[dict]:
             })
 
         # 先物（全先物種別の合算）
-        fut_hist = db.fetch_futures_history(inv, weeks=52)
+        fut_hist = db.fetch_futures_history(FUTURES_QUERY_KEYS.get(inv, inv), weeks=52)
         # week_dateごとに合算
         fut_by_week = defaultdict(float)
         for r in fut_hist:
@@ -201,6 +212,11 @@ def build_analysis_context(week_date: date, db) -> dict:
     except Exception:
         options_rows = []
 
+    # 先物行の投資家キーを正規化（investment_trust → inv_trust）。
+    # context["futures_rows"] 経由でレポート生成側の内訳テーブルにもこの正規化が効く。
+    for r in futures_rows:
+        r["investor_type"] = _norm_futures_inv(r.get("investor_type", ""))
+
     spot_map    = {r["investor_type"]: r for r in spot_rows}
     futures_map = defaultdict(lambda: {"net_amount_oku": 0, "long_lots": 0, "short_lots": 0})
     for r in futures_rows:
@@ -243,7 +259,8 @@ def build_analysis_context(week_date: date, db) -> dict:
         inv_data["wow_change"] = round(nets[0] - nets[1], 2) if len(nets) >= 2 else None
 
         # 先物Zスコア（nikkei225_large + topix_large 合算）
-        fut_hist = db.fetch_futures_history(inv_data["key"], weeks=52)
+        fut_hist = db.fetch_futures_history(
+            FUTURES_QUERY_KEYS.get(inv_data["key"], inv_data["key"]), weeks=52)
         fut_by_week = defaultdict(float)
         for r in fut_hist:
             fut_by_week[r["week_date"]] += (r.get("net_amount_oku") or 0)
