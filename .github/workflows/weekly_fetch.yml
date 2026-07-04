@@ -45,7 +45,10 @@ jobs:
       SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
       NOTIFY_EMAIL:      ${{ secrets.NOTIFY_EMAIL }}
       # オプション設定
-      CLAUDE_MODEL: claude-sonnet-4-6
+      # 2026-07-05 A/Bテスト（6/26週3モデル比較）の結果 Opus 4.8 に切替。
+      # バージョンは固定指定＝新モデルが出ても自動では変わらない（意図的）。
+      # 新Opusが出たら outputs/ab_test/ の手順でA/B比較してからここを変更する。
+      CLAUDE_MODEL: claude-opus-4-8
       OUTPUT_DIR: ./outputs
       LOG_DIR:    ./logs
 
