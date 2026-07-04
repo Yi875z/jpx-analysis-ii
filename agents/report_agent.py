@@ -513,7 +513,7 @@ Markdownレポートを生成してください。
     logger.info(f"[AIエージェント] レポート生成開始 (model={model})...")
     message = client.messages.create(
         model=model,
-        max_tokens=8192,
+        max_tokens=16384,
         system=[
             {
                 "type": "text",
@@ -530,6 +530,8 @@ Markdownレポートを生成してください。
 
     report_md = message.content[0].text
     _log_cache_usage(message, label="週次")
+    if message.stop_reason == "max_tokens":
+        logger.warning(f"[AIエージェント] 週次レポートがmax_tokens上限で途中切断 ({len(report_md)}文字)")
     logger.info(f"[AIエージェント] レポート生成完了 ({len(report_md)}文字)")
     return report_md
 
@@ -738,7 +740,7 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
     logger.info(f"[AIエージェント] 月次レポート生成開始: {year_month} (model={model})")
     message = client.messages.create(
         model=model,
-        max_tokens=8192,
+        max_tokens=16384,
         system=[
             {
                 "type": "text",
@@ -755,5 +757,7 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
 
     report_md = message.content[0].text
     _log_cache_usage(message, label="月次")
+    if message.stop_reason == "max_tokens":
+        logger.warning(f"[AIエージェント] 月次レポートがmax_tokens上限で途中切断 ({len(report_md)}文字)")
     logger.info(f"[AIエージェント] 月次レポート生成完了 ({len(report_md)}文字)")
     return report_md
