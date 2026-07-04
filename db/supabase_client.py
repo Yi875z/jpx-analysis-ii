@@ -163,7 +163,7 @@ def fetch_futures_history(investor_type: str, weeks: int = 52) -> list[dict]:
              .select("week_date,net_lots,net_amount_oku,futures_type")
              .eq("investor_type", investor_type)
              .order("week_date", desc=True)
-             .limit(weeks)
+             .limit(weeks * 4)   # 1週 = 4商品種別（日経L/M・TOPIX L/M）で4行
              .execute())
     return res.data or []
 
