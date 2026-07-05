@@ -357,6 +357,21 @@ def run_monthly(year_month: str):
     print(f"     保存先: {md_path}")
 
 
+def run_excel_only(week_date: date | None = None):
+    """取得済みデータでExcel累積ファイルのみ再生成。
+
+    Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）でしか
+    生成されないため、ローカルのファイルを最新化する手段として使う。
+    """
+    wd = week_date or db.fetch_latest_week()
+    if not wd:
+        logger.error("[Excel] DBにデータがありません")
+        return
+    logger.info(f"=== Excel再生成: {wd}（{wd.year}年ブック） ===")
+    path = _save_excel(wd)
+    print(f"\n[OK] Excel再生成完了: {path}")
+
+
 def run_report_only(week_date: date, market_data: dict | None = None):
     """取得済みデータでレポートのみ再生成"""
     logger.info(f"=== レポート再生成: {week_date} ===")
@@ -380,6 +395,7 @@ def main():
     parser.add_argument("--index-close", type=float, default=0.0, help="指数終値（先物換算用）")
     parser.add_argument("--monthly",     help="月次サマリー集計 YYYY-MM")
     parser.add_argument("--report-only", action="store_true", help="レポートのみ再生成")
+    parser.add_argument("--excel-only",  action="store_true", help="取得済みデータでExcelのみ再生成")
     parser.add_argument("--vix",        type=float, help="VIX現在値（例: 18.5）")
     parser.add_argument("--nikkei-vi",  type=float, help="日経VI現在値（例: 22.0）")
     parser.add_argument("--usdjpy",     type=float, help="USD/JPYレート（例: 143.50）")
@@ -407,6 +423,8 @@ def main():
         run_monthly(args.monthly)
     elif args.report_only:
         run_report_only(week_date, market_data=market_data)
+    elif args.excel_only:
+        run_excel_only(week_date if args.date else None)
     else:
         run_weekly(
             week_date=week_date,

@@ -160,7 +160,7 @@ def fetch_futures_history(investor_type: str, weeks: int = 52) -> list[dict]:
     """先物の過去N週データを取得"""
     sb = get_client()
     res = (sb.table("weekly_futures")
-             .select("week_date,net_lots,net_amount_oku,futures_type")
+             .select("week_date,investor_type,net_lots,net_amount_oku,futures_type")
              .eq("investor_type", investor_type)
              .order("week_date", desc=True)
              .limit(weeks * 4)   # 1週 = 4商品種別（日経L/M・TOPIX L/M）で4行

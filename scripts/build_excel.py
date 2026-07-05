@@ -92,11 +92,12 @@ def _zscore_fill(z):
 
 
 def _write_spot_sheet(ws, spot_history: list[dict], futures_history: list[dict],
-                      zscore_history: list[dict] = None):
+                      zscore_history: list[dict] = None,
+                      sheet_title: str = "現物_週次"):
     """現物週次シートを書き込む（ネット額＋Zスコアカラム付き）
     zscore_history: Zスコア計算用の全履歴（年をまたいだ52週窓のため spot_history より広い範囲）
     """
-    ws.title = "現物_週次"
+    ws.title = sheet_title
 
     # ヘッダー：ネット列（A〜H）＋区切り＋Zスコア列（J〜O）
     net_headers = ["基準週", "海外投資家", "個人投資家", "信託銀行",
@@ -471,6 +472,18 @@ def build_all_years():
               f"月次{len({r['year_month'] for r in monthly_y})}ヶ月")
 
 
+def _aggregate_futures_weekly(futures_history: list[dict]) -> list[dict]:
+    """先物履歴（商品別行）を週×投資家の金額ネットに集計し、現物シートと同形式の行にする"""
+    if not futures_history:
+        return []
+    from collections import defaultdict
+    agg = defaultdict(float)
+    for r in futures_history:
+        agg[(r["week_date"], r.get("investor_type", ""))] += r.get("net_amount_oku") or 0.0
+    return [{"week_date": wd, "investor_type": inv, "net_amount": round(v, 2)}
+            for (wd, inv), v in sorted(agg.items())]
+
+
 def build_excel(spot_history: list[dict], futures_history: list[dict],
                 monthly_data: list[dict], output_path: Path,
                 all_spot_history: list[dict] = None,
@@ -489,6 +502,15 @@ def build_excel(spot_history: list[dict], futures_history: list[dict],
     # 現物週次（Zスコア列付き）
     ws_spot = wb.create_sheet("現物_週次")
     _write_spot_sheet(ws_spot, spot_history, futures_history, zscore_base)
+
+    # 先物週次（週×投資家の金額ネット＋Zスコア列。商品別の内訳はレポート側で扱う）
+    fut_rows_year = _aggregate_futures_weekly(futures_history)
+    if fut_rows_year:
+        fut_zbase = (_aggregate_futures_weekly(all_futures_history)
+                     if all_futures_history else fut_rows_year)
+        ws_fut = wb.create_sheet("先物_週次")
+        _write_spot_sheet(ws_fut, fut_rows_year, None, fut_zbase,
+                          sheet_title="先物_週次")
 
     # チャート（外国人ネット・全投資家比較）
     _write_chart_sheet(wb, spot_history)
