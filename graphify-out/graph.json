@@ -286,7 +286,7 @@
       "label": "_fmt_net()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L42",
+      "source_location": "L75",
       "id": "agents_report_agent_fmt_net",
       "community": 4,
       "norm_label": "_fmt_net()"
@@ -295,7 +295,7 @@
       "label": "_fmt_diff()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L52",
+      "source_location": "L85",
       "id": "agents_report_agent_fmt_diff",
       "community": 4,
       "norm_label": "_fmt_diff()"
@@ -304,7 +304,7 @@
       "label": "_log_cache_usage()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L58",
+      "source_location": "L91",
       "id": "agents_report_agent_log_cache_usage",
       "community": 4,
       "norm_label": "_log_cache_usage()"
@@ -313,7 +313,7 @@
       "label": "_build_options_table()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L126",
+      "source_location": "L160",
       "id": "agents_report_agent_build_options_table",
       "community": 4,
       "norm_label": "_build_options_table()"
@@ -322,7 +322,7 @@
       "label": "_build_futures_breakdown()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L180",
+      "source_location": "L228",
       "id": "agents_report_agent_build_futures_breakdown",
       "community": 4,
       "norm_label": "_build_futures_breakdown()"
@@ -331,7 +331,7 @@
       "label": "_build_spot_futures_detail()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L223",
+      "source_location": "L294",
       "id": "agents_report_agent_build_spot_futures_detail",
       "community": 4,
       "norm_label": "_build_spot_futures_detail()"
@@ -340,7 +340,7 @@
       "label": "_build_data_table()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L264",
+      "source_location": "L335",
       "id": "agents_report_agent_build_data_table",
       "community": 4,
       "norm_label": "_build_data_table()"
@@ -349,7 +349,7 @@
       "label": "generate_weekly_report()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L323",
+      "source_location": "L398",
       "id": "agents_report_agent_generate_weekly_report",
       "community": 4,
       "norm_label": "generate_weekly_report()"
@@ -358,7 +358,7 @@
       "label": "_build_monthly_data_table()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L556",
+      "source_location": "L637",
       "id": "agents_report_agent_build_monthly_data_table",
       "community": 4,
       "norm_label": "_build_monthly_data_table()"
@@ -367,7 +367,7 @@
       "label": "generate_monthly_report()",
       "file_type": "code",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L608",
+      "source_location": "L689",
       "id": "agents_report_agent_generate_monthly_report",
       "community": 4,
       "norm_label": "generate_monthly_report()"
@@ -385,82 +385,82 @@
       "label": "AI \u306b\u6e21\u3059\u30c7\u30fc\u30bf\u30c6\u30fc\u30d6\u30eb\u7528: \u7b26\u53f7\u4ed8\u304d\u6570\u5024\uff08\u6b63=\u8cb7\u3044\u8d8a\u3057\u3001\u8ca0=\u58f2\u308a\u8d8a\u3057\uff09\u3002     \u25b2/\u25bc \u306f\u4f1a\u8a08\u4e0a\u300c\u30de\u30a4\u30ca\u30b9\u300d\u3092\u610f\u5473\u3059\u308b\u7528\u6cd5\u3082\u3042\u308a AI \u304c\u8aa4\u8aad\u3057\u3084\u3059\u3044\u305f\u3081",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L43",
+      "source_location": "L76",
       "community": 4,
       "norm_label": "ai \u306b\u6e21\u3059\u30c6\u30fc\u30bf\u30c6\u30fc\u30d5\u30eb\u7528: \u7b26\u53f7\u4ed8\u304d\u6570\u5024(\u6b63=\u8cb7\u3044\u8d8a\u3057\u3001\u8ca0=\u58f2\u308a\u8d8a\u3057)\u3002     \u25b2/\u25bc \u306f\u4f1a\u8a08\u4e0a\u300c\u30de\u30a4\u30ca\u30b9\u300d\u3092\u610f\u5473\u3059\u308b\u7528\u6cd5\u3082\u3042\u308a ai \u304b\u8aa4\u8aad\u3057\u3084\u3059\u3044\u305f\u3081",
-      "id": "agents_report_agent_rationale_43"
+      "id": "agents_report_agent_rationale_76"
     },
     {
       "label": "Anthropic API \u30ec\u30b9\u30dd\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30b0\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L59",
+      "source_location": "L92",
       "community": 4,
       "norm_label": "anthropic api \u30ec\u30b9\u30db\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30af\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
-      "id": "agents_report_agent_rationale_59"
+      "id": "agents_report_agent_rationale_92"
     },
     {
       "label": "\u30aa\u30d7\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c7\u30fc\u30bf\u304b\u3089 AI \u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u30c6\u30ad\u30b9\u30c8\u3092\u751f\u6210\u3002      \u6295\u8cc7\u5bb6\u00d7\u30b3\u30fc\u30eb/\u30d7\u30c3\u30c8\u00d7\u6a19\u6e96/\u30df\u30cb \u306e\u30af\u30ed\u30b9\u96c6\u8a08",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L127",
+      "source_location": "L161",
       "community": 4,
       "norm_label": "\u30aa\u30d5\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c6\u30fc\u30bf\u304b\u3089 ai \u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u30c6\u30ad\u30b9\u30c8\u3092\u751f\u6210\u3002      \u6295\u8cc7\u5bb6\u00d7\u30b3\u30fc\u30eb/\u30d5\u30c3\u30c8\u00d7\u6a19\u6e96/\u30df\u30cb \u306e\u30af\u30ed\u30b9\u96c6\u8a08",
-      "id": "agents_report_agent_rationale_127"
+      "id": "agents_report_agent_rationale_161"
     },
     {
       "label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d6\u30eb\uff08\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6\uff09\u3092\u751f\u6210",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L181",
+      "source_location": "L229",
       "community": 4,
       "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
-      "id": "agents_report_agent_rationale_181"
+      "id": "agents_report_agent_rationale_229"
     },
     {
       "label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L224",
+      "source_location": "L295",
       "community": 4,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
-      "id": "agents_report_agent_rationale_224"
+      "id": "agents_report_agent_rationale_295"
     },
     {
       "label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d6\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L265",
+      "source_location": "L336",
       "community": 4,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
-      "id": "agents_report_agent_rationale_265"
+      "id": "agents_report_agent_rationale_336"
     },
     {
       "label": "Claude API\u3092\u547c\u3073\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30dd\u30fc\u30c8\u306eMarkdown\u3092\u751f\u6210\u3059\u308b      Parameters     ----------     week_dat",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L326",
+      "source_location": "L401",
       "community": 4,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
-      "id": "agents_report_agent_rationale_326"
+      "id": "agents_report_agent_rationale_401"
     },
     {
       "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L557",
+      "source_location": "L638",
       "community": 4,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
-      "id": "agents_report_agent_rationale_557"
+      "id": "agents_report_agent_rationale_638"
     },
     {
       "label": "\u6708\u6b21\u9700\u7d66\u30ec\u30dd\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      Parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L610",
+      "source_location": "L691",
       "community": 4,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
-      "id": "agents_report_agent_rationale_610"
+      "id": "agents_report_agent_rationale_691"
     },
     {
       "label": "__init__.py",
@@ -945,7 +945,7 @@
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L1",
       "id": "dashboard_components_theme_py",
-      "community": 10,
+      "community": 11,
       "norm_label": "theme.py"
     },
     {
@@ -954,7 +954,7 @@
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L44",
       "id": "components_theme_get_theme",
-      "community": 10,
+      "community": 11,
       "norm_label": "get_theme()"
     },
     {
@@ -963,7 +963,7 @@
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L50",
       "id": "components_theme_render_theme_toggle",
-      "community": 10,
+      "community": 11,
       "norm_label": "render_theme_toggle()"
     },
     {
@@ -972,7 +972,7 @@
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L60",
       "id": "components_theme_inject_css",
-      "community": 10,
+      "community": 11,
       "norm_label": "_inject_css()"
     },
     {
@@ -981,7 +981,7 @@
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L420",
       "id": "components_theme_plot_layout",
-      "community": 10,
+      "community": 11,
       "norm_label": "plot_layout()"
     },
     {
@@ -989,7 +989,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L1",
-      "community": 10,
+      "community": 11,
       "norm_label": "\u30c6\u30fc\u30de\u7ba1\u7406\u30e2\u30b7\u30e5\u30fc\u30eb(\u30bf\u30fc\u30af / \u30e9\u30a4\u30c8\u5207\u308a\u66ff\u3048) config.toml \u306f base=\"light\" \u3092\u524d\u63d0\u3068\u3059\u308b\u3002 - \u30e9\u30a4\u30c8\u30e2\u30fc\u30c8: streamlit",
       "id": "components_theme_rationale_1"
     },
@@ -998,7 +998,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L51",
-      "community": 10,
+      "community": 11,
       "norm_label": "\u30b5\u30a4\u30c8\u30cf\u30fc\u306b\u30bf\u30fc\u30af/\u30e9\u30a4\u30c8\u5207\u308a\u66ff\u3048\u30db\u30bf\u30f3\u3092\u8868\u793a\u3057\u3001css\u3092\u6ce8\u5165\u3059\u308b",
       "id": "components_theme_rationale_51"
     },
@@ -1007,7 +1007,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L421",
-      "community": 10,
+      "community": 11,
       "norm_label": "plotly\u30af\u30e9\u30d5\u306elayout\u5171\u901a\u8a2d\u5b9a\u3092\u30c6\u30fc\u30de\u306b\u5408\u308f\u305b\u3066\u8fd4\u3059(\u30cd\u30b9\u30c8dict\u6df1\u5408\u6210)",
       "id": "components_theme_rationale_421"
     },
@@ -1044,7 +1044,7 @@
       "source_file": "dashboard\\pages\\2_\u5148\u7269\u30d5\u30ed\u30fc.py",
       "source_location": "L1",
       "id": "dashboard_pages_2_py",
-      "community": 10,
+      "community": 11,
       "norm_label": "2_\u5148\u7269\u30d5\u30ed\u30fc.py"
     },
     {
@@ -1053,7 +1053,7 @@
       "source_file": "dashboard\\pages\\2_\u5148\u7269\u30d5\u30ed\u30fc.py",
       "source_location": "L64",
       "id": "pages_2_render_futures_tab",
-      "community": 10,
+      "community": 11,
       "norm_label": "_render_futures_tab()"
     },
     {
@@ -1061,7 +1061,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\pages\\2_\u5148\u7269\u30d5\u30ed\u30fc.py",
       "source_location": "L1",
-      "community": 10,
+      "community": 11,
       "norm_label": "\u5148\u7269\u30d5\u30ed\u30fc\u5206\u6790\u30d8\u30fc\u30b7 \u65e5\u7d4c225\u5148\u7269 / topix\u5148\u7269 \u5207\u308a\u66ff\u3048\u30bf\u30d5 net(\u30ed\u30c3\u30c8)\u63a8\u79fb + net(\u5104\u5186)\u63a8\u79fb",
       "id": "pages_2_rationale_1"
     },
@@ -1503,61 +1503,70 @@
       "source_file": "scripts\\analyze_jpx.py",
       "source_location": "L1",
       "id": "scripts_analyze_jpx_py",
-      "community": 11,
+      "community": 9,
       "norm_label": "analyze_jpx.py"
+    },
+    {
+      "label": "_norm_futures_inv()",
+      "file_type": "code",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L31",
+      "id": "scripts_analyze_jpx_norm_futures_inv",
+      "community": 9,
+      "norm_label": "_norm_futures_inv()"
     },
     {
       "label": "calc_zscore()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L24",
+      "source_location": "L35",
       "id": "scripts_analyze_jpx_calc_zscore",
-      "community": 11,
+      "community": 9,
       "norm_label": "calc_zscore()"
     },
     {
       "label": "calc_ma()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L35",
+      "source_location": "L46",
       "id": "scripts_analyze_jpx_calc_ma",
-      "community": 11,
+      "community": 9,
       "norm_label": "calc_ma()"
     },
     {
       "label": "build_combined()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L44",
+      "source_location": "L55",
       "id": "scripts_analyze_jpx_build_combined",
-      "community": 11,
+      "community": 9,
       "norm_label": "build_combined()"
     },
     {
       "label": "build_stats()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L78",
+      "source_location": "L89",
       "id": "scripts_analyze_jpx_build_stats",
-      "community": 11,
+      "community": 9,
       "norm_label": "build_stats()"
     },
     {
       "label": "build_monthly()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L133",
+      "source_location": "L144",
       "id": "scripts_analyze_jpx_build_monthly",
-      "community": 11,
+      "community": 9,
       "norm_label": "build_monthly()"
     },
     {
       "label": "build_analysis_context()",
       "file_type": "code",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L192",
+      "source_location": "L203",
       "id": "scripts_analyze_jpx_build_analysis_context",
-      "community": 11,
+      "community": 9,
       "norm_label": "build_analysis_context()"
     },
     {
@@ -1565,7 +1574,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\analyze_jpx.py",
       "source_location": "L1",
-      "community": 11,
+      "community": 9,
       "norm_label": "scripts/analyze_jpx.py supabase\u84c4\u7a4d\u30c6\u30fc\u30bf\u304b\u3089z\u30b9\u30b3\u30a2\u30fb\u5408\u7b97\u30fb\u6708\u6b21\u96c6\u8a08\u3092\u8a08\u7b97\u3059\u308b",
       "id": "scripts_analyze_jpx_rationale_1"
     },
@@ -1573,28 +1582,28 @@
       "label": "Supabase\u306e\u84c4\u7a4d\u30c7\u30fc\u30bf\u304b\u3089Z\u30b9\u30b3\u30a2\u30fb\u524d\u9031\u6bd4\u30fb4\u9031MA\u3092\u8a08\u7b97     db: supabase_client \u30e2\u30b8\u30e5\u30fc\u30eb",
       "file_type": "rationale",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L79",
-      "community": 11,
+      "source_location": "L90",
+      "community": 9,
       "norm_label": "supabase\u306e\u84c4\u7a4d\u30c6\u30fc\u30bf\u304b\u3089z\u30b9\u30b3\u30a2\u30fb\u524d\u9031\u6bd4\u30fb4\u9031ma\u3092\u8a08\u7b97     db: supabase_client \u30e2\u30b7\u30e5\u30fc\u30eb",
-      "id": "scripts_analyze_jpx_rationale_79"
+      "id": "scripts_analyze_jpx_rationale_90"
     },
     {
       "label": "\u6307\u5b9a\u5e74\u6708\uff08YYYY-MM\uff09\u306e\u9031\u6b21\u30c7\u30fc\u30bf\u3092\u96c6\u8a08\u3057\u3066\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u3092\u751f\u6210",
       "file_type": "rationale",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L134",
-      "community": 11,
+      "source_location": "L145",
+      "community": 9,
       "norm_label": "\u6307\u5b9a\u5e74\u6708(yyyy-mm)\u306e\u9031\u6b21\u30c6\u30fc\u30bf\u3092\u96c6\u8a08\u3057\u3066\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u3092\u751f\u6210",
-      "id": "scripts_analyze_jpx_rationale_134"
+      "id": "scripts_analyze_jpx_rationale_145"
     },
     {
       "label": "\u30ec\u30dd\u30fc\u30c8\u751f\u6210AI\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306b\u6e21\u3059\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u3092\u69cb\u7bc9\u3059\u308b",
       "file_type": "rationale",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L193",
-      "community": 11,
+      "source_location": "L204",
+      "community": 9,
       "norm_label": "\u30ec\u30db\u30fc\u30c8\u751f\u6210ai\u30a8\u30fc\u30b7\u30a7\u30f3\u30c8\u306b\u6e21\u3059\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u3092\u69cb\u7bc9\u3059\u308b",
-      "id": "scripts_analyze_jpx_rationale_193"
+      "id": "scripts_analyze_jpx_rationale_204"
     },
     {
       "label": "audit_week_dates.py",
@@ -2736,7 +2745,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L1",
       "id": "scripts_normalize_report_format_py",
-      "community": 9,
+      "community": 10,
       "norm_label": "normalize_report_format.py"
     },
     {
@@ -2745,7 +2754,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L44",
       "id": "scripts_normalize_report_format_new_title",
-      "community": 9,
+      "community": 10,
       "norm_label": "_new_title()"
     },
     {
@@ -2754,7 +2763,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L53",
       "id": "scripts_normalize_report_format_new_filename",
-      "community": 9,
+      "community": 10,
       "norm_label": "_new_filename()"
     },
     {
@@ -2763,7 +2772,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L58",
       "id": "scripts_normalize_report_format_rewrite_content",
-      "community": 9,
+      "community": 10,
       "norm_label": "_rewrite_content()"
     },
     {
@@ -2772,7 +2781,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L83",
       "id": "scripts_normalize_report_format_normalize_files",
-      "community": 9,
+      "community": 10,
       "norm_label": "normalize_files()"
     },
     {
@@ -2781,7 +2790,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L130",
       "id": "scripts_normalize_report_format_normalize_db",
-      "community": 9,
+      "community": 10,
       "norm_label": "normalize_db()"
     },
     {
@@ -2790,7 +2799,7 @@
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L171",
       "id": "scripts_normalize_report_format_main",
-      "community": 9,
+      "community": 10,
       "norm_label": "main()"
     },
     {
@@ -2798,7 +2807,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L1",
-      "community": 9,
+      "community": 10,
       "norm_label": "scripts/normalize_report_format.py ================================== \u904e\u53bb\u30ec\u30db\u30fc\u30c8\u306e\u30d5\u30a1\u30a4",
       "id": "scripts_normalize_report_format_rationale_1"
     },
@@ -2807,7 +2816,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L45",
-      "community": 9,
+      "community": 10,
       "norm_label": "\u9031\u672b\u65e5(\u91d1)\u304b\u3089 '# jpx\u6295\u8cc7\u5bb6\u5225\u58f2\u8cb7\u52d5\u5411 yyyy\u5e74mm\u6708dd\u65e5\u301cmm\u6708dd\u65e5' \u3092\u751f\u6210",
       "id": "scripts_normalize_report_format_rationale_45"
     },
@@ -2816,7 +2825,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L59",
-      "community": 9,
+      "community": 10,
       "norm_label": "\u30bf\u30a4\u30c8\u30eb\u884c\u3092\u65b0\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306b\u7f6e\u63db\u3059\u308b\u3002     \u8ffd\u52a0\u3066\u300e> \u30c6\u30fc\u30bf\u30bd\u30fc\u30b9: ...\u300f\u76f4\u5f8c\u306b\u5bfe\u8c61\u671f\u9593\u884c\u3092\u633f\u5165(\u65e2\u306b\u3042\u308c\u306f\u89e6\u3089\u306a\u3044)\u3002",
       "id": "scripts_normalize_report_format_rationale_59"
     },
@@ -2825,7 +2834,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L84",
-      "community": 9,
+      "community": 10,
       "norm_label": "\u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u6b63\u898f\u5316\u3002\u8fd4\u308a\u5024: \u5909\u66f4\u30ed\u30af",
       "id": "scripts_normalize_report_format_rationale_84"
     },
@@ -2834,7 +2843,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L131",
-      "community": 9,
+      "community": 10,
       "norm_label": "supabase reports \u30c6\u30fc\u30d5\u30eb\u3092\u6b63\u898f\u5316",
       "id": "scripts_normalize_report_format_rationale_131"
     },
@@ -3292,8 +3301,197 @@
       "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L556",
+      "source_location": "L636",
       "community": 38,
+      "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "id": "agents_report_agent_rationale_636"
+    },
+    {
+      "label": "\u6708\u6b21\u9700\u7d66\u30ec\u30dd\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      Parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L689",
+      "community": 39,
+      "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "id": "agents_report_agent_rationale_689"
+    },
+    {
+      "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L634",
+      "community": 40,
+      "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "id": "agents_report_agent_rationale_634"
+    },
+    {
+      "label": "\u6708\u6b21\u9700\u7d66\u30ec\u30dd\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      Parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L687",
+      "community": 41,
+      "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "id": "agents_report_agent_rationale_687"
+    },
+    {
+      "label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L279",
+      "community": 42,
+      "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
+      "id": "agents_report_agent_rationale_279"
+    },
+    {
+      "label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d6\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L320",
+      "community": 43,
+      "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
+      "id": "agents_report_agent_rationale_320"
+    },
+    {
+      "label": "Claude API\u3092\u547c\u3073\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30dd\u30fc\u30c8\u306eMarkdown\u3092\u751f\u6210\u3059\u308b      Parameters     ----------     week_dat",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L385",
+      "community": 44,
+      "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
+      "id": "agents_report_agent_rationale_385"
+    },
+    {
+      "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L618",
+      "community": 45,
+      "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "id": "agents_report_agent_rationale_618"
+    },
+    {
+      "label": "\u6708\u6b21\u9700\u7d66\u30ec\u30dd\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      Parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L671",
+      "community": 46,
+      "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "id": "agents_report_agent_rationale_671"
+    },
+    {
+      "label": "AI \u306b\u6e21\u3059\u30c7\u30fc\u30bf\u30c6\u30fc\u30d6\u30eb\u7528: \u7b26\u53f7\u4ed8\u304d\u6570\u5024\uff08\u6b63=\u8cb7\u3044\u8d8a\u3057\u3001\u8ca0=\u58f2\u308a\u8d8a\u3057\uff09\u3002     \u25b2/\u25bc \u306f\u4f1a\u8a08\u4e0a\u300c\u30de\u30a4\u30ca\u30b9\u300d\u3092\u610f\u5473\u3059\u308b\u7528\u6cd5\u3082\u3042\u308a AI \u304c\u8aa4\u8aad\u3057\u3084\u3059\u3044\u305f\u3081",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L43",
+      "community": 47,
+      "norm_label": "ai \u306b\u6e21\u3059\u30c6\u30fc\u30bf\u30c6\u30fc\u30d5\u30eb\u7528: \u7b26\u53f7\u4ed8\u304d\u6570\u5024(\u6b63=\u8cb7\u3044\u8d8a\u3057\u3001\u8ca0=\u58f2\u308a\u8d8a\u3057)\u3002     \u25b2/\u25bc \u306f\u4f1a\u8a08\u4e0a\u300c\u30de\u30a4\u30ca\u30b9\u300d\u3092\u610f\u5473\u3059\u308b\u7528\u6cd5\u3082\u3042\u308a ai \u304b\u8aa4\u8aad\u3057\u3084\u3059\u3044\u305f\u3081",
+      "id": "agents_report_agent_rationale_43"
+    },
+    {
+      "label": "Anthropic API \u30ec\u30b9\u30dd\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30b0\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L59",
+      "community": 48,
+      "norm_label": "anthropic api \u30ec\u30b9\u30db\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30af\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
+      "id": "agents_report_agent_rationale_59"
+    },
+    {
+      "label": "\u30aa\u30d7\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c7\u30fc\u30bf\u304b\u3089 AI \u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u30c6\u30ad\u30b9\u30c8\u3092\u751f\u6210\u3002      \u6295\u8cc7\u5bb6\u00d7\u30b3\u30fc\u30eb/\u30d7\u30c3\u30c8\u00d7\u6a19\u6e96/\u30df\u30cb \u306e\u30af\u30ed\u30b9\u96c6\u8a08",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L127",
+      "community": 49,
+      "norm_label": "\u30aa\u30d5\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c6\u30fc\u30bf\u304b\u3089 ai \u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u30c6\u30ad\u30b9\u30c8\u3092\u751f\u6210\u3002      \u6295\u8cc7\u5bb6\u00d7\u30b3\u30fc\u30eb/\u30d5\u30c3\u30c8\u00d7\u6a19\u6e96/\u30df\u30cb \u306e\u30af\u30ed\u30b9\u96c6\u8a08",
+      "id": "agents_report_agent_rationale_127"
+    },
+    {
+      "label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d6\u30eb\uff08\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6\uff09\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L181",
+      "community": 50,
+      "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
+      "id": "agents_report_agent_rationale_181"
+    },
+    {
+      "label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L224",
+      "community": 51,
+      "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
+      "id": "agents_report_agent_rationale_224"
+    },
+    {
+      "label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d6\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L265",
+      "community": 52,
+      "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
+      "id": "agents_report_agent_rationale_265"
+    },
+    {
+      "label": "Claude API\u3092\u547c\u3073\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30dd\u30fc\u30c8\u306eMarkdown\u3092\u751f\u6210\u3059\u308b      Parameters     ----------     week_dat",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L326",
+      "community": 53,
+      "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
+      "id": "agents_report_agent_rationale_326"
+    },
+    {
+      "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L557",
+      "community": 54,
+      "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "id": "agents_report_agent_rationale_557"
+    },
+    {
+      "label": "\u6708\u6b21\u9700\u7d66\u30ec\u30dd\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      Parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L610",
+      "community": 55,
+      "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
+      "id": "agents_report_agent_rationale_610"
+    },
+    {
+      "label": "Supabase\u306e\u84c4\u7a4d\u30c7\u30fc\u30bf\u304b\u3089Z\u30b9\u30b3\u30a2\u30fb\u524d\u9031\u6bd4\u30fb4\u9031MA\u3092\u8a08\u7b97     db: supabase_client \u30e2\u30b8\u30e5\u30fc\u30eb",
+      "file_type": "rationale",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L79",
+      "community": 56,
+      "norm_label": "supabase\u306e\u84c4\u7a4d\u30c6\u30fc\u30bf\u304b\u3089z\u30b9\u30b3\u30a2\u30fb\u524d\u9031\u6bd4\u30fb4\u9031ma\u3092\u8a08\u7b97     db: supabase_client \u30e2\u30b7\u30e5\u30fc\u30eb",
+      "id": "scripts_analyze_jpx_rationale_79"
+    },
+    {
+      "label": "\u6307\u5b9a\u5e74\u6708\uff08YYYY-MM\uff09\u306e\u9031\u6b21\u30c7\u30fc\u30bf\u3092\u96c6\u8a08\u3057\u3066\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u3092\u751f\u6210",
+      "file_type": "rationale",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L134",
+      "community": 57,
+      "norm_label": "\u6307\u5b9a\u5e74\u6708(yyyy-mm)\u306e\u9031\u6b21\u30c6\u30fc\u30bf\u3092\u96c6\u8a08\u3057\u3066\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u3092\u751f\u6210",
+      "id": "scripts_analyze_jpx_rationale_134"
+    },
+    {
+      "label": "\u30ec\u30dd\u30fc\u30c8\u751f\u6210AI\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306b\u6e21\u3059\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u3092\u69cb\u7bc9\u3059\u308b",
+      "file_type": "rationale",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L193",
+      "community": 58,
+      "norm_label": "\u30ec\u30db\u30fc\u30c8\u751f\u6210ai\u30a8\u30fc\u30b7\u30a7\u30f3\u30c8\u306b\u6e21\u3059\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u3092\u69cb\u7bc9\u3059\u308b",
+      "id": "scripts_analyze_jpx_rationale_193"
+    },
+    {
+      "label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092AI\u30d7\u30ed\u30f3\u30d7\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d6\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
+      "file_type": "rationale",
+      "source_file": "agents\\report_agent.py",
+      "source_location": "L556",
+      "community": 59,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_556"
     },
@@ -3302,7 +3500,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L609",
-      "community": 39,
+      "community": 60,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_609"
     },
@@ -3311,7 +3509,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L555",
-      "community": 40,
+      "community": 61,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_555"
     },
@@ -3320,7 +3518,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L608",
-      "community": 41,
+      "community": 62,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_608"
     },
@@ -3329,7 +3527,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L55",
-      "community": 42,
+      "community": 63,
       "norm_label": "\u30d8\u30fc\u30b7\u30cd\u30fc\u30b7\u30e7\u30f3\u3066\u5168\u4ef6\u53d6\u5f97\u3002supabase\u306emax-rows=1000\u5236\u9650\u3092\u56de\u907f\u3059\u308b",
       "id": "components_data_loader_rationale_55"
     },
@@ -3338,7 +3536,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L127",
-      "community": 43,
+      "community": 64,
       "norm_label": "\u6295\u8cc7\u5bb6\u5225\u30aa\u30d5\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c6\u30fc\u30bf(\u65e5\u7d4c225 / \u30df\u30cb \u00d7 \u30b3\u30fc\u30eb/\u30d5\u30c3\u30c8)",
       "id": "components_data_loader_rationale_127"
     },
@@ -3347,7 +3545,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L146",
-      "community": 44,
+      "community": 65,
       "norm_label": "fetch_logs(\u9031\u6b21\u81ea\u52d5\u5b9f\u884c\u306e\u8a18\u9332)\u3092\u65b0\u3057\u3044\u9806\u306b\u53d6\u5f97",
       "id": "components_data_loader_rationale_146"
     },
@@ -3356,7 +3554,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L162",
-      "community": 45,
+      "community": 66,
       "norm_label": "supabase\u84c4\u7a4d\u30c6\u30fc\u30bf\u30921\u3064\u306eexcel\u30d5\u30c3\u30af(bytes)\u306b\u307e\u3068\u3081\u308b\u3002      \u30bf\u30c3\u30b7\u30e5\u30db\u30fc\u30c8\u306e\u30bf\u30a6\u30f3\u30ed\u30fc\u30c8\u30db\u30bf\u30f3\u7528\u3002ci\u3066\u751f\u6210\u3055\u308c\u308bexcel\u306f",
       "id": "components_data_loader_rationale_162"
     },
@@ -3365,7 +3563,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L226",
-      "community": 46,
+      "community": 67,
       "norm_label": "\u9031\u6b21\u306f yyyy-mm-dd\u3001\u6708\u6b21\u306f yyyy-mm \u5f62\u5f0f\u306b\u6b63\u898f\u5316",
       "id": "components_data_loader_rationale_226"
     },
@@ -3374,7 +3572,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L234",
-      "community": 47,
+      "community": 68,
       "norm_label": "\u5229\u7528\u53ef\u80fd\u306a\u30ec\u30db\u30fc\u30c8\u4e00\u89a7\u3092\u53d6\u5f97\u3002db + \u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u7d71\u5408\u3002      \u8fd4\u308a\u5024: [{\"id\": \"yyyy-mm-dd\" or \"yyyy-mm\", \"s",
       "id": "components_data_loader_rationale_234"
     },
@@ -3383,7 +3581,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L301",
-      "community": 48,
+      "community": 69,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_301"
     },
@@ -3392,7 +3590,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L339",
-      "community": 49,
+      "community": 70,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_339"
     },
@@ -3401,7 +3599,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L345",
-      "community": 50,
+      "community": 71,
       "norm_label": "## \u30ec\u30d8\u30eb\u898b\u51fa\u3057\u306b section_keyword \u3092\u542b\u3080\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3059\u308b\u3002      \u6b21\u306e ## \u898b\u51fa\u3057\u307e\u3066\u3092\u8fd4\u3059(\u9014\u4e2d\u306e `---` \u30bb\u30cf\u30ec\u30fc\u30bf\u306f\u7121\u8996",
       "id": "components_data_loader_rationale_345"
     },
@@ -3410,7 +3608,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L375",
-      "community": 51,
+      "community": 72,
       "norm_label": "\u6700\u65b0\u30ec\u30db\u30fc\u30c8\u304b\u3089\u6307\u5b9a\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3002\u8fd4\u308a\u5024: (report_id, section_text)",
       "id": "components_data_loader_rationale_375"
     },
@@ -3419,7 +3617,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L390",
-      "community": 52,
+      "community": 73,
       "norm_label": "\u5404\u30d8\u30fc\u30b7\u3066\u300c\u5bfe\u5fdc\u3059\u308bai\u30ec\u30db\u30fc\u30c8\u89e3\u91c8\u300d\u3092 expander \u8868\u793a\u3059\u308b\u5171\u901a\u95a2\u6570\u3002      section_keywords \u306f\u8907\u6570\u30ad\u30fc\u30ef\u30fc\u30c8\u3092\u9806\u306b\u8a66\u3057\u3001\u6700\u521d\u306b\u5f53",
       "id": "components_data_loader_rationale_390"
     },
@@ -3428,7 +3626,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L169",
-      "community": 53,
+      "community": 74,
       "norm_label": "\u9031\u6b21\u306f yyyy-mm-dd\u3001\u6708\u6b21\u306f yyyy-mm \u5f62\u5f0f\u306b\u6b63\u898f\u5316",
       "id": "components_data_loader_rationale_169"
     },
@@ -3437,7 +3635,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L177",
-      "community": 54,
+      "community": 75,
       "norm_label": "\u5229\u7528\u53ef\u80fd\u306a\u30ec\u30db\u30fc\u30c8\u4e00\u89a7\u3092\u53d6\u5f97\u3002db + \u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u7d71\u5408\u3002      \u8fd4\u308a\u5024: [{\"id\": \"yyyy-mm-dd\" or \"yyyy-mm\", \"s",
       "id": "components_data_loader_rationale_177"
     },
@@ -3446,7 +3644,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L244",
-      "community": 55,
+      "community": 76,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_244"
     },
@@ -3455,7 +3653,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L282",
-      "community": 56,
+      "community": 77,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_282"
     },
@@ -3464,7 +3662,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L288",
-      "community": 57,
+      "community": 78,
       "norm_label": "## \u30ec\u30d8\u30eb\u898b\u51fa\u3057\u306b section_keyword \u3092\u542b\u3080\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3059\u308b\u3002      \u6b21\u306e ## \u898b\u51fa\u3057\u307e\u3066\u3092\u8fd4\u3059(\u9014\u4e2d\u306e `---` \u30bb\u30cf\u30ec\u30fc\u30bf\u306f\u7121\u8996",
       "id": "components_data_loader_rationale_288"
     },
@@ -3473,7 +3671,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L318",
-      "community": 58,
+      "community": 79,
       "norm_label": "\u6700\u65b0\u30ec\u30db\u30fc\u30c8\u304b\u3089\u6307\u5b9a\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3002\u8fd4\u308a\u5024: (report_id, section_text)",
       "id": "components_data_loader_rationale_318"
     },
@@ -3482,7 +3680,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L333",
-      "community": 59,
+      "community": 80,
       "norm_label": "\u5404\u30d8\u30fc\u30b7\u3066\u300c\u5bfe\u5fdc\u3059\u308bai\u30ec\u30db\u30fc\u30c8\u89e3\u91c8\u300d\u3092 expander \u8868\u793a\u3059\u308b\u5171\u901a\u95a2\u6570\u3002      section_keywords \u306f\u8907\u6570\u30ad\u30fc\u30ef\u30fc\u30c8\u3092\u9806\u306b\u8a66\u3057\u3001\u6700\u521d\u306b\u5f53",
       "id": "components_data_loader_rationale_333"
     },
@@ -3491,7 +3689,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\send_summary_mail.py",
       "source_location": "L68",
-      "community": 60,
+      "community": 81,
       "norm_label": "supabase reports \u304b\u3089\u6700\u65b0\u306e\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u3092\u53d6\u5f97",
       "id": "scripts_send_summary_mail_rationale_68"
     },
@@ -3500,7 +3698,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\send_summary_mail.py",
       "source_location": "L83",
-      "community": 61,
+      "community": 82,
       "norm_label": "outputs/alerts/latest.json \u304b\u3042\u308c\u306f\u8aad\u307f\u8fbc\u3080",
       "id": "scripts_send_summary_mail_rationale_83"
     },
@@ -3509,7 +3707,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L553",
-      "community": 62,
+      "community": 83,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_553"
     },
@@ -3518,7 +3716,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L606",
-      "community": 63,
+      "community": 84,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_606"
     },
@@ -3527,7 +3725,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L242",
-      "community": 64,
+      "community": 85,
       "norm_label": "\u6307\u5b9a\u6708(yyyy-mm)\u306e\u6708\u6b21\u30ec\u30db\u30fc\u30c8\u304b reports \u30c6\u30fc\u30d5\u30eb\u306b\u5b58\u5728\u3059\u308b\u304b\u5224\u5b9a\u3059\u308b\u3002      week_date \u306f date \u578b\u306e\u305f\u3081 like \u306f\u4f7f\u3048",
       "id": "jpx_analysis_main_rationale_242"
     },
@@ -3536,7 +3734,7 @@
       "file_type": "rationale",
       "source_file": "main.py",
       "source_location": "L267",
-      "community": 65,
+      "community": 86,
       "norm_label": "\u524d\u6708\u306e\u6708\u6b21\u30ec\u30db\u30fc\u30c8\u304b\u672a\u751f\u6210\u306a\u3089\u81ea\u52d5\u751f\u6210\u3059\u308b(\u51aa\u7b49)\u3002      \u4eca\u9031\u306e week_date \u304b\u5c5e\u3059\u308b\u6708\u306e\u300c\u524d\u6708\u300d\u3092\u5bfe\u8c61\u3068\u3059\u308b\u3002     \u4f8b: 2026-05 \u306e",
       "id": "jpx_analysis_main_rationale_267"
     },
@@ -3545,7 +3743,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L605",
-      "community": 66,
+      "community": 87,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_605"
     },
@@ -3554,7 +3752,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\theme.py",
       "source_location": "L310",
-      "community": 67,
+      "community": 88,
       "norm_label": "plotly\u30af\u30e9\u30d5\u306elayout\u5171\u901a\u8a2d\u5b9a\u3092\u30c6\u30fc\u30de\u306b\u5408\u308f\u305b\u3066\u8fd4\u3059(\u30cd\u30b9\u30c8dict\u6df1\u5408\u6210)",
       "id": "components_theme_rationale_310"
     },
@@ -3563,7 +3761,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\pages\\7_\u30aa\u30d7\u30b7\u30e7\u30f3.py",
       "source_location": "L77",
-      "community": 68,
+      "community": 89,
       "norm_label": "option_type \u3092 call/put \u306b\u96c6\u7d04",
       "id": "pages_7_rationale_77"
     },
@@ -3572,7 +3770,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L277",
-      "community": 69,
+      "community": 90,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_277"
     },
@@ -3581,7 +3779,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L283",
-      "community": 70,
+      "community": 91,
       "norm_label": "## \u30ec\u30d8\u30eb\u898b\u51fa\u3057\u306b section_keyword \u3092\u542b\u3080\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3059\u308b\u3002      \u6b21\u306e ## \u898b\u51fa\u3057\u307e\u3066\u3092\u8fd4\u3059(\u9014\u4e2d\u306e `---` \u30bb\u30cf\u30ec\u30fc\u30bf\u306f\u7121\u8996",
       "id": "components_data_loader_rationale_283"
     },
@@ -3590,7 +3788,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L313",
-      "community": 71,
+      "community": 92,
       "norm_label": "\u6700\u65b0\u30ec\u30db\u30fc\u30c8\u304b\u3089\u6307\u5b9a\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3002\u8fd4\u308a\u5024: (report_id, section_text)",
       "id": "components_data_loader_rationale_313"
     },
@@ -3599,7 +3797,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L328",
-      "community": 72,
+      "community": 93,
       "norm_label": "\u5404\u30d8\u30fc\u30b7\u3066\u300c\u5bfe\u5fdc\u3059\u308bai\u30ec\u30db\u30fc\u30c8\u89e3\u91c8\u300d\u3092 expander \u8868\u793a\u3059\u308b\u5171\u901a\u95a2\u6570\u3002      section_keywords \u306f\u8907\u6570\u30ad\u30fc\u30ef\u30fc\u30c8\u3092\u9806\u306b\u8a66\u3057\u3001\u6700\u521d\u306b\u5f53",
       "id": "components_data_loader_rationale_328"
     },
@@ -3608,7 +3806,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L36",
-      "community": 73,
+      "community": 94,
       "norm_label": "\u30d8\u30fc\u30b7\u30cd\u30fc\u30b7\u30e7\u30f3\u3066\u5168\u4ef6\u53d6\u5f97\u3002supabase\u306emax-rows=1000\u5236\u9650\u3092\u56de\u907f\u3059\u308b",
       "id": "components_data_loader_rationale_36"
     },
@@ -3617,7 +3815,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L108",
-      "community": 74,
+      "community": 95,
       "norm_label": "\u6295\u8cc7\u5bb6\u5225\u30aa\u30d5\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c6\u30fc\u30bf(\u65e5\u7d4c225 / \u30df\u30cb \u00d7 \u30b3\u30fc\u30eb/\u30d5\u30c3\u30c8)",
       "id": "components_data_loader_rationale_108"
     },
@@ -3626,7 +3824,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L150",
-      "community": 75,
+      "community": 96,
       "norm_label": "\u9031\u6b21\u306f yyyy-mm-dd\u3001\u6708\u6b21\u306f yyyy-mm \u5f62\u5f0f\u306b\u6b63\u898f\u5316",
       "id": "components_data_loader_rationale_150"
     },
@@ -3635,7 +3833,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L158",
-      "community": 76,
+      "community": 97,
       "norm_label": "\u5229\u7528\u53ef\u80fd\u306a\u30ec\u30db\u30fc\u30c8\u4e00\u89a7\u3092\u53d6\u5f97\u3002db + \u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u7d71\u5408\u3002      \u8fd4\u308a\u5024: [{\"id\": \"yyyy-mm-dd\" or \"yyyy-mm\", \"s",
       "id": "components_data_loader_rationale_158"
     },
@@ -3644,7 +3842,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L225",
-      "community": 77,
+      "community": 98,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_225"
     },
@@ -3653,7 +3851,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L258",
-      "community": 78,
+      "community": 99,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_258"
     },
@@ -3662,7 +3860,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L264",
-      "community": 79,
+      "community": 100,
       "norm_label": "## \u30ec\u30d8\u30eb\u898b\u51fa\u3057\u306b section_keyword \u3092\u542b\u3080\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3059\u308b\u3002      \u6b21\u306e ## \u898b\u51fa\u3057\u307e\u3066(\u307e\u305f\u306f `---` \u30bb\u30cf\u30ec\u30fc\u30bf\u307e\u3066)\u3092\u8fd4\u3059",
       "id": "components_data_loader_rationale_264"
     },
@@ -3671,7 +3869,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L294",
-      "community": 80,
+      "community": 101,
       "norm_label": "\u6700\u65b0\u30ec\u30db\u30fc\u30c8\u304b\u3089\u6307\u5b9a\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3002\u8fd4\u308a\u5024: (report_id, section_text)",
       "id": "components_data_loader_rationale_294"
     },
@@ -3680,7 +3878,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L309",
-      "community": 81,
+      "community": 102,
       "norm_label": "\u5404\u30d8\u30fc\u30b7\u3066\u300c\u5bfe\u5fdc\u3059\u308bai\u30ec\u30db\u30fc\u30c8\u89e3\u91c8\u300d\u3092 expander \u8868\u793a\u3059\u308b\u5171\u901a\u95a2\u6570\u3002      section_keywords \u306f\u8907\u6570\u30ad\u30fc\u30ef\u30fc\u30c8\u3092\u9806\u306b\u8a66\u3057\u3001\u6700\u521d\u306b\u5f53",
       "id": "components_data_loader_rationale_309"
     },
@@ -3689,7 +3887,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L118",
-      "community": 82,
+      "community": 103,
       "norm_label": "\u30aa\u30d5\u30b7\u30e7\u30f3\u58f2\u8cb7\u30c6\u30fc\u30bf\u304b\u3089 ai \u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u30c6\u30ad\u30b9\u30c8\u3092\u751f\u6210\u3002      \u6295\u8cc7\u5bb6\u00d7\u30b3\u30fc\u30eb/\u30d5\u30c3\u30c8\u00d7\u6a19\u6e96/\u30df\u30cb \u306e\u30af\u30ed\u30b9\u96c6\u8a08",
       "id": "agents_report_agent_rationale_118"
     },
@@ -3698,7 +3896,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L172",
-      "community": 83,
+      "community": 104,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_172"
     },
@@ -3707,7 +3905,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L215",
-      "community": 84,
+      "community": 105,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_215"
     },
@@ -3716,7 +3914,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L256",
-      "community": 85,
+      "community": 106,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_256"
     },
@@ -3725,7 +3923,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L317",
-      "community": 86,
+      "community": 107,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_317"
     },
@@ -3734,7 +3932,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L544",
-      "community": 87,
+      "community": 108,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_544"
     },
@@ -3743,7 +3941,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L596",
-      "community": 88,
+      "community": 109,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_596"
     },
@@ -3752,7 +3950,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\parse_options_csv.py",
       "source_location": "L53",
-      "community": 89,
+      "community": 110,
       "norm_label": "jpx \u30aa\u30d5\u30b7\u30e7\u30f3csv(\u6295\u8cc7\u90e8\u9580\u5225)\u3092\u30cf\u30fc\u30b9\u3057\u3066\u6295\u8cc7\u5bb6\u5225\u30ec\u30b3\u30fc\u30c8\u3092\u8fd4\u3059\u3002      returns: list of dicts with keys matc",
       "id": "scripts_parse_options_csv_rationale_53"
     },
@@ -3761,7 +3959,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L292",
-      "community": 90,
+      "community": 111,
       "norm_label": "\u6700\u65b0\u30ec\u30db\u30fc\u30c8\u304b\u3089\u6307\u5b9a\u30bb\u30af\u30b7\u30e7\u30f3\u3092\u62bd\u51fa\u3002\u8fd4\u308a\u5024: (report_id, section_text)",
       "id": "components_data_loader_rationale_292"
     },
@@ -3770,7 +3968,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L307",
-      "community": 91,
+      "community": 112,
       "norm_label": "\u5404\u30d8\u30fc\u30b7\u3066\u300c\u5bfe\u5fdc\u3059\u308bai\u30ec\u30db\u30fc\u30c8\u89e3\u91c8\u300d\u3092 expander \u8868\u793a\u3059\u308b\u5171\u901a\u95a2\u6570\u3002      section_keywords \u306f\u8907\u6570\u30ad\u30fc\u30ef\u30fc\u30c8\u3092\u9806\u306b\u8a66\u3057\u3001\u6700\u521d\u306b\u5f53",
       "id": "components_data_loader_rationale_307"
     },
@@ -3779,7 +3977,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\pages\\7_\u30aa\u30d7\u30b7\u30e7\u30f3.py",
       "source_location": "L70",
-      "community": 92,
+      "community": 113,
       "norm_label": "option_type \u3092 call/put \u306b\u96c6\u7d04",
       "id": "pages_7_rationale_70"
     },
@@ -3788,7 +3986,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\pages\\4_Z\u30b9\u30b3\u30a2.py",
       "source_location": "L58",
-      "community": 93,
+      "community": 114,
       "norm_label": "\u9031\u6b21net\u30c6\u30fc\u30bf\u304b\u3089z\u30b9\u30b3\u30a2\u30fb\u79fb\u52d5\u5e73\u5747\u3092\u52d5\u7684\u8a08\u7b97",
       "id": "pages_4_z_rationale_58"
     },
@@ -3797,7 +3995,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L140",
-      "community": 94,
+      "community": 115,
       "norm_label": "\u9031\u6b21\u306f yyyy-mm-dd\u3001\u6708\u6b21\u306f yyyy-mm \u5f62\u5f0f\u306b\u6b63\u898f\u5316",
       "id": "components_data_loader_rationale_140"
     },
@@ -3806,7 +4004,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L148",
-      "community": 95,
+      "community": 116,
       "norm_label": "\u5229\u7528\u53ef\u80fd\u306a\u30ec\u30db\u30fc\u30c8\u4e00\u89a7\u3092\u53d6\u5f97\u3002db + \u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u7d71\u5408\u3002      \u8fd4\u308a\u5024: [{\"id\": \"yyyy-mm-dd\" or \"yyyy-mm\", \"s",
       "id": "components_data_loader_rationale_148"
     },
@@ -3815,7 +4013,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L215",
-      "community": 96,
+      "community": 117,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_215"
     },
@@ -3824,7 +4022,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L248",
-      "community": 97,
+      "community": 118,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_248"
     },
@@ -3833,7 +4031,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L536",
-      "community": 98,
+      "community": 119,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_536"
     },
@@ -3842,7 +4040,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L588",
-      "community": 99,
+      "community": 120,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_588"
     },
@@ -3851,7 +4049,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L517",
-      "community": 100,
+      "community": 121,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_517"
     },
@@ -3860,7 +4058,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L569",
-      "community": 101,
+      "community": 122,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_569"
     },
@@ -3869,7 +4067,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L311",
-      "community": 102,
+      "community": 123,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_311"
     },
@@ -3878,7 +4076,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L511",
-      "community": 103,
+      "community": 124,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_511"
     },
@@ -3887,7 +4085,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L563",
-      "community": 104,
+      "community": 125,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_563"
     },
@@ -3896,7 +4094,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L98",
-      "community": 105,
+      "community": 126,
       "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_98"
     },
@@ -3905,7 +4103,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L141",
-      "community": 106,
+      "community": 127,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_141"
     },
@@ -3914,7 +4112,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L182",
-      "community": 107,
+      "community": 128,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_182"
     },
@@ -3923,7 +4121,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L237",
-      "community": 108,
+      "community": 129,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_237"
     },
@@ -3932,7 +4130,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L437",
-      "community": 109,
+      "community": 130,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_437"
     },
@@ -3941,7 +4139,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L489",
-      "community": 110,
+      "community": 131,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_489"
     },
@@ -3950,7 +4148,7 @@
       "file_type": "rationale",
       "source_file": "db\\supabase_client.py",
       "source_location": "L141",
-      "community": 111,
+      "community": 132,
       "norm_label": "db\u306b\u84c4\u7a4d\u6e08\u307f\u306e\u6700\u65b0week_date\u3092\u8fd4\u3059",
       "id": "db_supabase_client_rationale_141"
     },
@@ -3959,7 +4157,7 @@
       "file_type": "rationale",
       "source_file": "db\\supabase_client.py",
       "source_location": "L185",
-      "community": 112,
+      "community": 133,
       "norm_label": "weekly_stats\u306e\u904e\u53bbn\u9031\u5206\u3092\u53d6\u5f97(z\u30b9\u30b3\u30a2\u30fbma\u542b\u3080)",
       "id": "db_supabase_client_rationale_185"
     },
@@ -3968,7 +4166,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L126",
-      "community": 113,
+      "community": 134,
       "norm_label": "supabase reports \u30c6\u30fc\u30d5\u30eb\u3092\u6b63\u898f\u5316",
       "id": "scripts_normalize_report_format_rationale_126"
     },
@@ -3977,7 +4175,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L39",
-      "community": 114,
+      "community": 135,
       "norm_label": "\u9031\u672b\u65e5(\u91d1)\u304b\u3089 '# jpx\u6295\u8cc7\u5bb6\u5225\u58f2\u8cb7\u52d5\u5411 yyyy\u5e74mm\u6708dd\u65e5\u301cmm\u6708dd\u65e5' \u3092\u751f\u6210",
       "id": "scripts_normalize_report_format_rationale_39"
     },
@@ -3986,7 +4184,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L53",
-      "community": 115,
+      "community": 136,
       "norm_label": "\u30bf\u30a4\u30c8\u30eb\u884c\u3092\u65b0\u30d5\u30a9\u30fc\u30de\u30c3\u30c8\u306b\u7f6e\u63db\u3059\u308b\u3002     \u8ffd\u52a0\u3066\u300e> \u30c6\u30fc\u30bf\u30bd\u30fc\u30b9: ...\u300f\u76f4\u5f8c\u306b\u5bfe\u8c61\u671f\u9593\u884c\u3092\u633f\u5165(\u65e2\u306b\u3042\u308c\u306f\u89e6\u3089\u306a\u3044)\u3002",
       "id": "scripts_normalize_report_format_rationale_53"
     },
@@ -3995,7 +4193,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L78",
-      "community": 116,
+      "community": 137,
       "norm_label": "\u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u6b63\u898f\u5316\u3002\u8fd4\u308a\u5024: \u5909\u66f4\u30ed\u30af",
       "id": "scripts_normalize_report_format_rationale_78"
     },
@@ -4004,7 +4202,7 @@
       "file_type": "rationale",
       "source_file": "scripts\\normalize_report_format.py",
       "source_location": "L120",
-      "community": 117,
+      "community": 138,
       "norm_label": "supabase reports \u30c6\u30fc\u30d5\u30eb\u3092\u6b63\u898f\u5316",
       "id": "scripts_normalize_report_format_rationale_120"
     },
@@ -4013,7 +4211,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L210",
-      "community": 118,
+      "community": 139,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_210"
     },
@@ -4022,7 +4220,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L136",
-      "community": 119,
+      "community": 140,
       "norm_label": "\u9031\u6b21\u306f yyyy-mm-dd\u3001\u6708\u6b21\u306f yyyy-mm \u5f62\u5f0f\u306b\u6b63\u898f\u5316",
       "id": "components_data_loader_rationale_136"
     },
@@ -4031,7 +4229,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L144",
-      "community": 120,
+      "community": 141,
       "norm_label": "\u5229\u7528\u53ef\u80fd\u306a\u30ec\u30db\u30fc\u30c8\u4e00\u89a7\u3092\u53d6\u5f97\u3002db + \u30d5\u30a1\u30a4\u30eb\u30b7\u30b9\u30c6\u30e0\u3092\u7d71\u5408\u3002      \u8fd4\u308a\u5024: [{\"id\": \"yyyy-mm-dd\" or \"yyyy-mm\", \"s",
       "id": "components_data_loader_rationale_144"
     },
@@ -4040,7 +4238,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L206",
-      "community": 121,
+      "community": 142,
       "norm_label": "\u6307\u5b9a\u30ec\u30db\u30fc\u30c8\u306e\u672c\u6587(markdown)\u3092\u8fd4\u3059\u3002db \u2192 \u30d5\u30a1\u30a4\u30eb\u306e\u9806\u306b\u30d5\u30a9\u30fc\u30eb\u30cf\u30c3\u30af\u3002      report_id: weekly \u306a\u3089 yyyy-mm-dd",
       "id": "components_data_loader_rationale_206"
     },
@@ -4049,7 +4247,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L239",
-      "community": 122,
+      "community": 143,
       "norm_label": "\u30ec\u30db\u30fc\u30c8markdown\u304b\u3089\u30a8\u30af\u30bb\u30af\u30c6\u30a3\u30d5\u30b5\u30de\u30ea\u30fc\u90e8\u5206\u306e\u307f\u62bd\u51fa",
       "id": "components_data_loader_rationale_239"
     },
@@ -4058,7 +4256,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L435",
-      "community": 123,
+      "community": 144,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_435"
     },
@@ -4067,7 +4265,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L487",
-      "community": 124,
+      "community": 145,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_487"
     },
@@ -4076,7 +4274,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L429",
-      "community": 125,
+      "community": 146,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_429"
     },
@@ -4085,7 +4283,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L481",
-      "community": 126,
+      "community": 147,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_481"
     },
@@ -4094,7 +4292,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L415",
-      "community": 127,
+      "community": 148,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_415"
     },
@@ -4103,7 +4301,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L467",
-      "community": 128,
+      "community": 149,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_467"
     },
@@ -4112,7 +4310,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L56",
-      "community": 129,
+      "community": 150,
       "norm_label": "anthropic api \u30ec\u30b9\u30db\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30af\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
       "id": "agents_report_agent_rationale_56"
     },
@@ -4121,7 +4319,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L95",
-      "community": 130,
+      "community": 151,
       "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_95"
     },
@@ -4130,7 +4328,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L138",
-      "community": 131,
+      "community": 152,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_138"
     },
@@ -4139,7 +4337,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L179",
-      "community": 132,
+      "community": 153,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_179"
     },
@@ -4148,7 +4346,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L234",
-      "community": 133,
+      "community": 154,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_234"
     },
@@ -4157,7 +4355,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L412",
-      "community": 134,
+      "community": 155,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_412"
     },
@@ -4166,7 +4364,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L464",
-      "community": 135,
+      "community": 156,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_464"
     },
@@ -4175,7 +4373,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L411",
-      "community": 136,
+      "community": 157,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_411"
     },
@@ -4184,7 +4382,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L463",
-      "community": 137,
+      "community": 158,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_463"
     },
@@ -4193,7 +4391,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L49",
-      "community": 138,
+      "community": 159,
       "norm_label": "anthropic api \u30ec\u30b9\u30db\u30f3\u30b9\u306e usage \u304b\u3089 cache hit/miss \u3092\u30ed\u30af\u51fa\u529b\u3059\u308b\u3002      cache_creation_input_",
       "id": "agents_report_agent_rationale_49"
     },
@@ -4202,7 +4400,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L88",
-      "community": 139,
+      "community": 160,
       "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_88"
     },
@@ -4211,7 +4409,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L131",
-      "community": 140,
+      "community": 161,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_131"
     },
@@ -4220,7 +4418,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L227",
-      "community": 141,
+      "community": 162,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_227"
     },
@@ -4229,7 +4427,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L404",
-      "community": 142,
+      "community": 163,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_404"
     },
@@ -4238,7 +4436,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L456",
-      "community": 143,
+      "community": 164,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_456"
     },
@@ -4247,7 +4445,7 @@
       "file_type": "rationale",
       "source_file": "db\\supabase_client.py",
       "source_location": "L31",
-      "community": 144,
+      "community": 165,
       "norm_label": "\u73fe\u7269\u9031\u6b21\u30c6\u30fc\u30bf\u3092upsert(week_date + investor_type + market \u3066\u30e6\u30cb\u30fc\u30af)",
       "id": "db_supabase_client_rationale_31"
     },
@@ -4256,7 +4454,7 @@
       "file_type": "rationale",
       "source_file": "db\\supabase_client.py",
       "source_location": "L133",
-      "community": 145,
+      "community": 166,
       "norm_label": "db\u306b\u84c4\u7a4d\u6e08\u307f\u306e\u6700\u65b0week_date\u3092\u8fd4\u3059",
       "id": "db_supabase_client_rationale_133"
     },
@@ -4265,7 +4463,7 @@
       "file_type": "rationale",
       "source_file": "db\\supabase_client.py",
       "source_location": "L177",
-      "community": 146,
+      "community": 167,
       "norm_label": "weekly_stats\u306e\u904e\u53bbn\u9031\u5206\u3092\u53d6\u5f97(z\u30b9\u30b3\u30a2\u30fbma\u542b\u3080)",
       "id": "db_supabase_client_rationale_177"
     },
@@ -4274,7 +4472,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L66",
-      "community": 147,
+      "community": 168,
       "norm_label": "\u5148\u7269\u5185\u8a33\u30c6\u30fc\u30d5\u30eb(\u5546\u54c1\u7a2e\u5225\u00d7\u6295\u8cc7\u5bb6)\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_66"
     },
@@ -4283,7 +4481,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L109",
-      "community": 148,
+      "community": 169,
       "norm_label": "\u6d77\u5916\u6295\u8cc7\u5bb6\u30fb\u4fe1\u8a17\u9280\u884c\u306e\u73fe\u7269\u30fb\u5148\u7269\u30af\u30ed\u30b9\u8a73\u7d30\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_109"
     },
@@ -4292,7 +4490,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L150",
-      "community": 149,
+      "community": 170,
       "norm_label": "\u5206\u6790\u30b3\u30f3\u30c6\u30ad\u30b9\u30c8\u304b\u3089\u7c21\u6613\u30c6\u30fc\u30d5\u30eb\u6587\u5b57\u5217\u3092\u751f\u6210",
       "id": "agents_report_agent_rationale_150"
     },
@@ -4301,7 +4499,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L205",
-      "community": 150,
+      "community": 171,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_205"
     },
@@ -4310,7 +4508,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L382",
-      "community": 151,
+      "community": 172,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_382"
     },
@@ -4319,7 +4517,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L434",
-      "community": 152,
+      "community": 173,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_434"
     },
@@ -4328,7 +4526,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L371",
-      "community": 153,
+      "community": 174,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_371"
     },
@@ -4337,7 +4535,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L423",
-      "community": 154,
+      "community": 175,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_423"
     },
@@ -4346,7 +4544,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L367",
-      "community": 155,
+      "community": 176,
       "norm_label": "\u6708\u6b21\u30b5\u30de\u30ea\u30fc\u884c\u3092ai\u30d5\u30ed\u30f3\u30d5\u30c8\u7528\u306e\u30c6\u30ad\u30b9\u30c8\u30c6\u30fc\u30d5\u30eb\u306b\u6574\u5f62\u3059\u308b\u3002      monthly_rows \u306f fetch_monthly_summary() \u306e\u8fd4\u308a\u5024",
       "id": "agents_report_agent_rationale_367"
     },
@@ -4355,7 +4553,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L419",
-      "community": 156,
+      "community": 177,
       "norm_label": "\u6708\u6b21\u9700\u7d66\u30ec\u30db\u30fc\u30c8\u3092\u751f\u6210\u3059\u308b\u3002      parameters     ----------     year_month : str         \u5bfe\u8c61\u5e74\u6708",
       "id": "agents_report_agent_rationale_419"
     },
@@ -4364,7 +4562,7 @@
       "file_type": "rationale",
       "source_file": "dashboard\\components\\data_loader.py",
       "source_location": "L32",
-      "community": 157,
+      "community": 178,
       "norm_label": "\u30d8\u30fc\u30b7\u30cd\u30fc\u30b7\u30e7\u30f3\u3066\u5168\u4ef6\u53d6\u5f97\u3002supabase\u306emax-rows=1000\u5236\u9650\u3092\u56de\u907f\u3059\u308b",
       "id": "components_data_loader_rationale_32"
     },
@@ -4373,7 +4571,7 @@
       "file_type": "rationale",
       "source_file": "agents\\report_agent.py",
       "source_location": "L204",
-      "community": 158,
+      "community": 179,
       "norm_label": "claude api\u3092\u547c\u3072\u51fa\u3057\u3066\u9031\u6b21\u30ec\u30db\u30fc\u30c8\u306emarkdown\u3092\u751f\u6210\u3059\u308b      parameters     ----------     week_dat",
       "id": "agents_report_agent_rationale_204"
     }
@@ -4863,7 +5061,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L42",
+      "source_location": "L75",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_fmt_net",
@@ -4875,7 +5073,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L52",
+      "source_location": "L85",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_fmt_diff",
@@ -4887,7 +5085,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L58",
+      "source_location": "L91",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_log_cache_usage",
@@ -4899,7 +5097,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L126",
+      "source_location": "L160",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_build_options_table",
@@ -4911,7 +5109,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L180",
+      "source_location": "L228",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_build_futures_breakdown",
@@ -4923,7 +5121,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L223",
+      "source_location": "L294",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_build_spot_futures_detail",
@@ -4935,7 +5133,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L264",
+      "source_location": "L335",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_build_data_table",
@@ -4947,7 +5145,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L323",
+      "source_location": "L398",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_generate_weekly_report",
@@ -4959,7 +5157,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L556",
+      "source_location": "L637",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_build_monthly_data_table",
@@ -4971,7 +5169,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L608",
+      "source_location": "L689",
       "weight": 1.0,
       "_src": "agents_report_agent_py",
       "_tgt": "agents_report_agent_generate_monthly_report",
@@ -4995,7 +5193,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L513",
+      "source_location": "L594",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_weekly_report",
       "_tgt": "agents_report_agent_get_model",
@@ -5007,7 +5205,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L741",
+      "source_location": "L824",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_monthly_report",
       "_tgt": "agents_report_agent_get_model",
@@ -5019,7 +5217,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L344",
+      "source_location": "L419",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_weekly_report",
       "_tgt": "agents_report_agent_load_reference",
@@ -5031,7 +5229,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L625",
+      "source_location": "L706",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_monthly_report",
       "_tgt": "agents_report_agent_load_reference",
@@ -5043,7 +5241,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L241",
+      "source_location": "L312",
       "weight": 1.0,
       "_src": "agents_report_agent_build_spot_futures_detail",
       "_tgt": "agents_report_agent_fmt_net",
@@ -5055,7 +5253,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L280",
+      "source_location": "L353",
       "weight": 1.0,
       "_src": "agents_report_agent_build_data_table",
       "_tgt": "agents_report_agent_fmt_net",
@@ -5067,19 +5265,19 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L43",
+      "source_location": "L76",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_43",
+      "_src": "agents_report_agent_rationale_76",
       "_tgt": "agents_report_agent_fmt_net",
       "source": "agents_report_agent_fmt_net",
-      "target": "agents_report_agent_rationale_43",
+      "target": "agents_report_agent_rationale_76",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L296",
+      "source_location": "L371",
       "weight": 1.0,
       "_src": "agents_report_agent_build_data_table",
       "_tgt": "agents_report_agent_fmt_diff",
@@ -5091,7 +5289,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L534",
+      "source_location": "L615",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_weekly_report",
       "_tgt": "agents_report_agent_log_cache_usage",
@@ -5103,7 +5301,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L762",
+      "source_location": "L845",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_monthly_report",
       "_tgt": "agents_report_agent_log_cache_usage",
@@ -5115,19 +5313,19 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L59",
+      "source_location": "L92",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_59",
+      "_src": "agents_report_agent_rationale_92",
       "_tgt": "agents_report_agent_log_cache_usage",
       "source": "agents_report_agent_log_cache_usage",
-      "target": "agents_report_agent_rationale_59",
+      "target": "agents_report_agent_rationale_92",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L318",
+      "source_location": "L393",
       "weight": 1.0,
       "_src": "agents_report_agent_build_data_table",
       "_tgt": "agents_report_agent_build_options_table",
@@ -5139,19 +5337,19 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L127",
+      "source_location": "L161",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_127",
+      "_src": "agents_report_agent_rationale_161",
       "_tgt": "agents_report_agent_build_options_table",
       "source": "agents_report_agent_build_options_table",
-      "target": "agents_report_agent_rationale_127",
+      "target": "agents_report_agent_rationale_161",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L310",
+      "source_location": "L385",
       "weight": 1.0,
       "_src": "agents_report_agent_build_data_table",
       "_tgt": "agents_report_agent_build_futures_breakdown",
@@ -5163,19 +5361,19 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L181",
+      "source_location": "L229",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_181",
+      "_src": "agents_report_agent_rationale_229",
       "_tgt": "agents_report_agent_build_futures_breakdown",
       "source": "agents_report_agent_build_futures_breakdown",
-      "target": "agents_report_agent_rationale_181",
+      "target": "agents_report_agent_rationale_229",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L312",
+      "source_location": "L387",
       "weight": 1.0,
       "_src": "agents_report_agent_build_data_table",
       "_tgt": "agents_report_agent_build_spot_futures_detail",
@@ -5187,19 +5385,19 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L224",
+      "source_location": "L295",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_224",
+      "_src": "agents_report_agent_rationale_295",
       "_tgt": "agents_report_agent_build_spot_futures_detail",
       "source": "agents_report_agent_build_spot_futures_detail",
-      "target": "agents_report_agent_rationale_224",
+      "target": "agents_report_agent_rationale_295",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L363",
+      "source_location": "L438",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_weekly_report",
       "_tgt": "agents_report_agent_build_data_table",
@@ -5211,31 +5409,31 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L265",
+      "source_location": "L336",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_265",
+      "_src": "agents_report_agent_rationale_336",
       "_tgt": "agents_report_agent_build_data_table",
       "source": "agents_report_agent_build_data_table",
-      "target": "agents_report_agent_rationale_265",
+      "target": "agents_report_agent_rationale_336",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L326",
+      "source_location": "L401",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_326",
+      "_src": "agents_report_agent_rationale_401",
       "_tgt": "agents_report_agent_generate_weekly_report",
       "source": "agents_report_agent_generate_weekly_report",
-      "target": "agents_report_agent_rationale_326",
+      "target": "agents_report_agent_rationale_401",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L629",
+      "source_location": "L710",
       "weight": 1.0,
       "_src": "agents_report_agent_generate_monthly_report",
       "_tgt": "agents_report_agent_build_monthly_data_table",
@@ -5247,24 +5445,24 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L557",
+      "source_location": "L638",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_557",
+      "_src": "agents_report_agent_rationale_638",
       "_tgt": "agents_report_agent_build_monthly_data_table",
       "source": "agents_report_agent_build_monthly_data_table",
-      "target": "agents_report_agent_rationale_557",
+      "target": "agents_report_agent_rationale_638",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agents\\report_agent.py",
-      "source_location": "L610",
+      "source_location": "L691",
       "weight": 1.0,
-      "_src": "agents_report_agent_rationale_610",
+      "_src": "agents_report_agent_rationale_691",
       "_tgt": "agents_report_agent_generate_monthly_report",
       "source": "agents_report_agent_generate_monthly_report",
-      "target": "agents_report_agent_rationale_610",
+      "target": "agents_report_agent_rationale_691",
       "confidence_score": 1.0
     },
     {
@@ -7071,7 +7269,19 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L24",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_src": "scripts_analyze_jpx_py",
+      "_tgt": "scripts_analyze_jpx_norm_futures_inv",
+      "source": "scripts_analyze_jpx_py",
+      "target": "scripts_analyze_jpx_norm_futures_inv",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L35",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_calc_zscore",
@@ -7083,7 +7293,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L35",
+      "source_location": "L46",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_calc_ma",
@@ -7095,7 +7305,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L44",
+      "source_location": "L55",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_build_combined",
@@ -7107,7 +7317,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L78",
+      "source_location": "L89",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_build_stats",
@@ -7119,7 +7329,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L133",
+      "source_location": "L144",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_build_monthly",
@@ -7131,7 +7341,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L192",
+      "source_location": "L203",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_py",
       "_tgt": "scripts_analyze_jpx_build_analysis_context",
@@ -7155,7 +7365,31 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L98",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_src": "scripts_analyze_jpx_build_combined",
+      "_tgt": "scripts_analyze_jpx_norm_futures_inv",
+      "source": "scripts_analyze_jpx_norm_futures_inv",
+      "target": "scripts_analyze_jpx_build_combined",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L218",
+      "weight": 1.0,
+      "_src": "scripts_analyze_jpx_build_analysis_context",
+      "_tgt": "scripts_analyze_jpx_norm_futures_inv",
+      "source": "scripts_analyze_jpx_norm_futures_inv",
+      "target": "scripts_analyze_jpx_build_analysis_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts\\analyze_jpx.py",
+      "source_location": "L109",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_build_stats",
       "_tgt": "scripts_analyze_jpx_calc_zscore",
@@ -7167,7 +7401,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L240",
+      "source_location": "L256",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_build_analysis_context",
       "_tgt": "scripts_analyze_jpx_calc_zscore",
@@ -7179,7 +7413,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L100",
+      "source_location": "L111",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_build_stats",
       "_tgt": "scripts_analyze_jpx_calc_ma",
@@ -7191,7 +7425,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L242",
+      "source_location": "L258",
       "weight": 1.0,
       "_src": "scripts_analyze_jpx_build_analysis_context",
       "_tgt": "scripts_analyze_jpx_calc_ma",
@@ -7203,36 +7437,36 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L79",
+      "source_location": "L90",
       "weight": 1.0,
-      "_src": "scripts_analyze_jpx_rationale_79",
+      "_src": "scripts_analyze_jpx_rationale_90",
       "_tgt": "scripts_analyze_jpx_build_stats",
       "source": "scripts_analyze_jpx_build_stats",
-      "target": "scripts_analyze_jpx_rationale_79",
+      "target": "scripts_analyze_jpx_rationale_90",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L134",
+      "source_location": "L145",
       "weight": 1.0,
-      "_src": "scripts_analyze_jpx_rationale_134",
+      "_src": "scripts_analyze_jpx_rationale_145",
       "_tgt": "scripts_analyze_jpx_build_monthly",
       "source": "scripts_analyze_jpx_build_monthly",
-      "target": "scripts_analyze_jpx_rationale_134",
+      "target": "scripts_analyze_jpx_rationale_145",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "scripts\\analyze_jpx.py",
-      "source_location": "L193",
+      "source_location": "L204",
       "weight": 1.0,
-      "_src": "scripts_analyze_jpx_rationale_193",
+      "_src": "scripts_analyze_jpx_rationale_204",
       "_tgt": "scripts_analyze_jpx_build_analysis_context",
       "source": "scripts_analyze_jpx_build_analysis_context",
-      "target": "scripts_analyze_jpx_rationale_193",
+      "target": "scripts_analyze_jpx_rationale_204",
       "confidence_score": 1.0
     },
     {
