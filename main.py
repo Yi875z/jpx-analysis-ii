@@ -68,6 +68,26 @@ def _get_week_date() -> date:
     return today if days_since_friday == 0 else today - timedelta(days=days_since_friday)
 
 
+def _generation_footer(data_label: str) -> str:
+    """生成情報フッター（軽量監査証跡）: どのモデル・コード版で生成したかをレポート自体に記録する"""
+    import subprocess
+    from agents.report_agent import _get_model
+    commit = (os.environ.get("GITHUB_SHA") or "")[:7]
+    if not commit:
+        try:
+            commit = subprocess.check_output(
+                ["git", "rev-parse", "--short", "HEAD"],
+                cwd=Path(__file__).parent, text=True, timeout=5,
+            ).strip()
+        except Exception:
+            commit = "unknown"
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M JST")
+    return (
+        f"\n\n---\n*生成情報: model={_get_model()} / code={commit} / "
+        f"data={data_label} / generated_at={ts}*\n"
+    )
+
+
 def _save_markdown(content: str, week_date: date) -> Path:
     dir_ = OUTPUT_DIR / "reports"
     dir_.mkdir(parents=True, exist_ok=True)
@@ -197,6 +217,7 @@ def run_weekly(week_date: date, spot_path: str = None,
 
     # ⑥ AIレポート生成
     report_md = report_agent.generate_weekly_report(week_date, context, market_data=market_data)
+    report_md += _generation_footer(f"week_{week_date}")
 
     # ⑦ ファイル保存
     md_path = _save_markdown(report_md, week_date)
@@ -323,6 +344,7 @@ def run_monthly(year_month: str):
 
     report_md = report_agent.generate_monthly_report(
         year_month, monthly_rows, index_data=index_data or None)
+    report_md += _generation_footer(f"month_{year_month}")
 
     # ③ ファイル保存
     md_path = _save_monthly_markdown(report_md, year_month)
@@ -340,6 +362,7 @@ def run_report_only(week_date: date, market_data: dict | None = None):
     logger.info(f"=== レポート再生成: {week_date} ===")
     context   = analyze_jpx.build_analysis_context(week_date, db)
     report_md = report_agent.generate_weekly_report(week_date, context, market_data=market_data)
+    report_md += _generation_footer(f"week_{week_date}")
     md_path   = _save_markdown(report_md, week_date)
     db.save_report(week_date, "weekly", "markdown", md_path.name, content_md=report_md)
     logger.info(f"[再生成] 完了: {md_path}")
