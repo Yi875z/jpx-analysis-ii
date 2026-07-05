@@ -1,7 +1,7 @@
 # Graph Report - jpx-analysis  (2026-07-05)
 
 ## Corpus Check
-- 48 files · ~83,344 words
+- 48 files · ~83,419 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
