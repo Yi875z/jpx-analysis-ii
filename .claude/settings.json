@@ -4,7 +4,16 @@
       "Bash(python -m py_compile \"dashboard/pages/6_AIレポート.py\" \"dashboard/pages/8_実行ログ.py\" dashboard/components/data_loader.py dashboard/app.py scripts/send_summary_mail.py scripts/backfill_index_close.py db/supabase_client.py)",
       "Bash(PYTHONIOENCODING=utf-8 python scripts/send_summary_mail.py --dry-run)",
       "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
-      "Bash(grep -v \"HTTP Request\\\\|WARNING\\\\|Warning\\\\|streamlit run\\\\|^$\")"
+      "Bash(grep -v \"HTTP Request\\\\|WARNING\\\\|Warning\\\\|streamlit run\\\\|^$\")",
+      "Bash(python -c ' *)",
+      "Bash(git config *)",
+      "Bash(gitleaks protect *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(python -m py_compile agents/report_agent.py)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(CLAUDE_MODEL=claude-opus-4-8 PYTHONIOENCODING=utf-8 python main.py --report-only --date 2026-06-26)",
+      "Bash(python -m py_compile main.py agents/report_agent.py)"
     ]
   },
   "hooks": {
