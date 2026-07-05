@@ -368,7 +368,12 @@ def run_excel_only(week_date: date | None = None):
         logger.error("[Excel] DBにデータがありません")
         return
     logger.info(f"=== Excel再生成: {wd}（{wd.year}年ブック） ===")
-    path = _save_excel(wd)
+    try:
+        path = _save_excel(wd)
+    except PermissionError:
+        print("\n[NG] Excelファイルが他のアプリで開かれているため保存できません。")
+        print("     Excel（jpx_investor_*.xlsx を開いているウィンドウ）を閉じてから再実行してください。")
+        sys.exit(1)
     print(f"\n[OK] Excel再生成完了: {path}")
 
 
