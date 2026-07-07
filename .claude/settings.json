@@ -13,7 +13,13 @@
       "Bash(python -m py_compile agents/report_agent.py)",
       "Bash(git commit -q -m ' *)",
       "Bash(CLAUDE_MODEL=claude-opus-4-8 PYTHONIOENCODING=utf-8 python main.py --report-only --date 2026-06-26)",
-      "Bash(python -m py_compile main.py agents/report_agent.py)"
+      "Bash(python -m py_compile main.py agents/report_agent.py)",
+      "PowerShell(Set-Location C:\\\\CarSol\\\\jpx-analysis; $before = \\(Get-Item outputs\\\\excel\\\\jpx_investor_2026.xlsx\\).LastWriteTime; cmd /c \"echo.| .\\\\update_excel.bat\" | Out-String -Stream | Select-Object -Last 5; $after = \\(Get-Item outputs\\\\excel\\\\jpx_investor_2026.xlsx\\).LastWriteTime; \"Excel mtime: $before -> $after\")",
+      "PowerShell(Get-Process excel -ErrorAction SilentlyContinue)",
+      "PowerShell(Set-Location C:\\\\CarSol\\\\jpx-analysis; cmd /c \"echo.| .\\\\update_excel.bat\" | Out-String -Stream | Select-Object -Last 4; \\(Get-Item outputs\\\\excel\\\\jpx_investor_2026.xlsx\\).LastWriteTime)",
+      "PowerShell($f = Get-Item C:\\\\CarSol\\\\jpx-analysis\\\\outputs\\\\excel\\\\jpx_investor_2026.xlsx; \"ReadOnly: $\\($f.IsReadOnly\\) / Attributes: $\\($f.Attributes\\)\"; try { $s = [System.IO.File]::Open\\($f.FullName, 'Open', 'ReadWrite', 'None'\\); $s.Close\\(\\); \"書き込みロックなし\" } catch { \"ロックあり: $\\($_.Exception.Message\\)\" }; Get-Process | Where-Object { $_.Name -match \"excel|et|soffice|wps|OfficeClickToRun\" } | Select-Object Name, Id)",
+      "Bash(CLAUDE_MODEL=claude-opus-4-8 PYTHONIOENCODING=utf-8 python main.py --monthly 2026-06)",
+      "Bash(PYTHONIOENCODING=utf-8 python main.py --excel-only)"
     ]
   },
   "hooks": {
