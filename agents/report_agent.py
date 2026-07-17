@@ -6,7 +6,7 @@ Claude APIを呼び出して解釈付き週次レポートを生成するエー�
 import json
 import logging
 import os
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 import anthropic
 
@@ -104,9 +104,123 @@ EXPRESSION_DISCIPLINE = """## 【重要】表現の規律（データから確�
   「建玉・IV・日経VI等でも確認された場合に値動き増幅リスクを高く評価」のような条件付きで書く。
   逆張りは全面禁止ではなく「確認前はポジションサイズを抑える」と表現する。
 - **単位の明記**: 先物の総合規模は必ず金額（億円）で表記する（「先物合計▼」のような単位なし表現は不可）。
+- **Scheduled Flow（予定された機械的フロー）の区別**: ETF分配金捻出売り・ETF設定/解約・
+  配当再投資・SQ/MSQロール・指数リバランス（MSCI/FTSE/日経225/TOPIX入替）・
+  月末/四半期末リバランス・自社株買い・大型公募/売出し等の「予定された機械的フロー」が
+  対象期間に存在し得る場合、投資主体のネット売買を投資家の方向性判断・リスク選好・
+  恒常的な資金流出入と同一視しない。ネット集計からは機械的フローと方向性売買を分解できないため、
+  「〜が一部含まれる可能性」までに留め、売買の全額を特定イベントに帰属させない。
+  イベントの事前推計額（グロス）とJPXネット値を機械的に差し引いた「調整後ネット」を作らない。
 - **丸め注記**: 数値テーブル群の最後に
   「※表示値は丸めのため、表示値同士の再計算と0.1〜1億円程度の差が生じる場合がある」を1行入れる。
 """
+
+
+def _second_friday(year: int, month: int) -> date:
+    """指定月の第2金曜（日経225オプション・先物のSQ算出日）を返す。"""
+    first = date(year, month, 1)
+    offset = (4 - first.weekday()) % 7  # 月曜=0 … 金曜=4
+    return first + timedelta(days=offset + 7)
+
+
+def _build_sq_facts(week_date: date) -> str:
+    """対象週・翌週のSQ日該当を機械計算した事実ブロックを返す（週次レポート用）。
+
+    生成AIが「対象週」と「翌週」のSQ該当を推測で書き分けて誤る事故
+    （対象週がSQ週なのに「来週のSQ週に留意」と書く等）を防ぐ。
+    """
+    week_start = week_date - timedelta(days=4)
+    next_start = week_date + timedelta(days=3)
+    next_end   = week_date + timedelta(days=7)
+
+    def _sq_in(start: date, end: date) -> date | None:
+        for y, m in {(start.year, start.month), (end.year, end.month)}:
+            sq = _second_friday(y, m)
+            if start <= sq <= end:
+                return sq
+        return None
+
+    def _label(sq: date | None) -> str:
+        if sq is None:
+            return "SQ日を含まない"
+        kind = "メジャーSQ" if sq.month in (3, 6, 9, 12) else "通常SQ"
+        return f"{sq.strftime('%m月%d日')}（第2金曜）が{kind}算出日"
+
+    return f"""
+## SQ日程（機械計算による事実。これ以外のSQ日を推測で書かないこと）
+
+- 対象週（{week_start.strftime('%m/%d')}〜{week_date.strftime('%m/%d')}）: {_label(_sq_in(week_start, week_date))}
+- 翌週（{next_start.strftime('%m/%d')}〜{next_end.strftime('%m/%d')}）: {_label(_sq_in(next_start, next_end))}
+
+対象週にSQ日が含まれる場合、SQは「対象週内に通過済みのイベント」として振り返りで扱うこと。
+翌週にSQ日が無いのに「来週はSQ週の水曜に留意」等と翌週の警戒事項に書いてはならない。
+"""
+
+
+# ── 年次Scheduled Flowカレンダー ──────────────────────────────────
+# 国内株ETF（日経225・TOPIX連動の主要ETF）の決算日は例年7月8日・10日に集中し、
+# 分配金捻出のための大規模な換金売り（現物・先物）が決算週とその前後に発生する。
+# 2026年は約1.5兆円規模の売り需要が事前推計された（2026-07-16生成レポートの
+# 外部査読で「投信売り越し-1.05兆円の解釈にこのScheduled Flowが欠落」と指摘）。
+_ETF_DIST_START = (7, 8)   # 決算集中日（開始）
+_ETF_DIST_END   = (7, 10)  # 決算集中日（終了）
+
+_ETF_DIST_NOTE_MAIN = """
+## 【Scheduled Flow】国内株ETFの決算・分配金捻出売り（毎年7月上旬の年次イベント）
+
+対象週は、国内株ETF（日経225・TOPIX連動の主要ETF）の決算日（例年7月8日・10日に集中）に
+近接している。ETFは分配金支払いの原資を捻出するため、決算日前後に大規模な換金売り
+（現物・先物）を機械的に執行する。売りは決算日当日に集中せず事前に分散執行されることが
+あるため、決算日を含む週やその前週の週次データに現れ得る。以下を厳守すること：
+
+- 投資信託（場合により信託銀行・自己の一部）の売り越しには、投資家の方向性判断ではなく
+  ETF分配金捻出を目的としたScheduled Flow（予定された機械的フロー）が相当程度含まれている
+  可能性がある。この可能性を、エグゼクティブサマリーと投資信託セクションの両方で、
+  売り越しの方向性解釈より先に明記する。
+- JPXの投資主体別ネット集計からは、分配金捻出売り・設定/解約・通常のリバランス・
+  方向性売買を分解できない。「一部含まれる可能性が高い」までは記載できるが、
+  「売り越しの全額がETF換金売り」とは断定しない。市場の事前推計額（グロス）と
+  ネット集計値を機械的に差し引いた「調整後」の数値も作らない。
+- 投資信託の大幅売り越しを「恒常的な資金流出」「継続的な弱気判断」「翌週以降も継続する
+  方向性売り」と断定しない。Zスコアの異常水準は事実として記載してよいが、
+  Scheduled Flowの可能性を必ず併記する。
+- 「国内勢の異常な売り 対 海外勢の強気買い」のような二項対立を過度に強調しない。
+  「予定された機械的供給を海外投資家の買いが吸収した可能性がある週」等の表現に留める
+  （ネット集計から相手方は特定できないため断定しない）。
+- 戦略示唆・反転確認チェックリストに「ETF分配金イベント通過後に投資信託の売り越しが
+  縮小するか」を含める。イベント通過後も大幅売り越しが継続した場合に初めて、
+  方向性の資金流出の可能性を引き上げて評価する。
+"""
+
+_ETF_DIST_NOTE_POST = """
+## 【Scheduled Flow】国内株ETF決算・分配金イベントの通過確認（毎年7月上旬の年次イベント）
+
+対象週は、国内株ETF（日経225・TOPIX連動の主要ETF）の決算日（例年7月8日・10日に集中）の
+直後に当たる。直前の週までの投資信託等の大幅売り越しには、ETF分配金捻出のための機械的な
+換金売り（Scheduled Flow）が含まれていた可能性がある。
+
+- イベント通過後に投資信託の売り越しが縮小したかを必ず評価する。縮小していれば
+  「直前の売りに機械的フローが含まれていた可能性と整合」、通過後も大幅売り越しが
+  継続していれば「方向性の資金流出の可能性を引き上げ」と段階的に評価する（断定はしない）。
+"""
+
+
+def _build_scheduled_flow_note(week_date: date) -> str:
+    """対象週が年次Scheduled Flowイベント（7月上旬のETF分配金捻出売り）に
+    近接する場合の注意ブロックを返す。該当しない週は空文字列。"""
+    week_start = week_date - timedelta(days=4)
+    etf_start = date(week_date.year, *_ETF_DIST_START)
+    etf_end   = date(week_date.year, *_ETF_DIST_END)
+
+    in_event_week = week_start <= etf_end and week_date >= etf_start
+    pre_window  = week_date < etf_start and (etf_start - week_date).days <= 14
+    post_window = week_start > etf_end and (week_start - etf_end).days <= 14
+
+    if in_event_week or pre_window:
+        return _ETF_DIST_NOTE_MAIN
+    if post_window:
+        return _ETF_DIST_NOTE_POST
+    return ""
 
 
 def _fmt_net(val: float | None) -> str:
@@ -543,11 +657,10 @@ GEX判定・季節性アノマリー・マクロ環境の解釈はすべてこ�
 過去の特定イベント（例：関税ショック、特定の戦争・政策等の固有名詞）を
 原因として断定的に言及しないこと。外部リスク要因は「地政学的不確実性」
 「外部ショック」等の一般表現を使うこと。{extra_market}
-"""
+{_build_sq_facts(week_date)}{_build_scheduled_flow_note(week_date)}"""
 
     # 週初日（月曜）と週末日（金曜）の表記を計算
-    from datetime import timedelta as _td
-    week_start = week_date - _td(days=4)
+    week_start = week_date - timedelta(days=4)
     period_label = f"{week_start.strftime('%Y年%m月%d日')}〜{week_date.strftime('%m月%d日')}"
 
     user_prompt = f"""以下のJPX需給データ（{period_label} の週）を分析し、
@@ -627,7 +740,8 @@ Markdownレポートを生成してください。
 - 「両輪買い（Twin-Buy）」が確認された場合は最強強気シグナルとして必ず明記する
 - 信託銀行の売り越しは「GPIFリバランス＝健全な上昇の証左」として解釈する
 - Zスコアが±2.0を超えている場合は統計的に異常な水準として言及する
-- 季節性アノマリー（SQ週・月末・4月効果・8月夏枯れ等）に該当する場合は必ず記載する
+- 季節性アノマリー（SQ週・月末・4月効果・7月上旬のETF分配金捻出売り・8月夏枯れ等）に該当する場合は必ず記載する。SQ日程はsystemの「SQ日程（機械計算による事実）」のみを根拠とすること
+- 投資家セグメント内で先物内訳（日経225ラージ/ミニ・TOPIXラージ/ミニ）を列挙した後の「先物合計」行は必ず**金額（億円）のみ**で記載し、商品をまたぐ合計枚数（例:「先物合計: -20,543枚」）は絶対に記載しない
 - 客観的・簡潔に。投資家が実際に使えるコメントを目指す
 - 「関税ショック」「○○戦争」等の特定イベント固有名詞は断定的に使わず「外部ショック」「地政学的不確実性」等の一般表現を使うこと
 """
@@ -795,11 +909,25 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
 見通しは需給フロー（買い越し/売り越しの方向と規模）のみで定性的に述べてください。
 """
 
+    # 7月は国内株ETFの決算・分配金捻出売り（例年7/8・7/10集中）を含む
+    scheduled_flow_note = ""
+    if year_month[5:7] == "07":
+        scheduled_flow_note = """
+## 【Scheduled Flow】国内株ETFの決算・分配金捻出売り（毎年7月上旬の年次イベント）
+
+対象月には国内株ETF（日経225・TOPIX連動の主要ETF）の決算日（例年7月8日・10日に集中）が
+含まれる。投資信託等の当月売り越しには、分配金支払いの原資を捻出するための機械的な
+換金売り（Scheduled Flow）が相当程度含まれている可能性がある。
+月次ネット集計からは機械的フローと方向性売買を分解できないため、
+「一部含まれる可能性が高い」までに留め、当月の売り越しを恒常的な資金流出・
+継続的な弱気判断と断定しないこと。前後月との比較でイベント要因の剥落を確認すること。
+"""
+
     dynamic_system = f"""## 重要：分析対象月
 
 **本レポートの対象月は {year_month} です。** すべての分析・季節性判定はこの月を基準にしてください。
 
-{price_block}"""
+{price_block}{scheduled_flow_note}"""
 
     user_prompt = f"""以下のJPX月次需給データ（{year_month}）を分析し、
 月次需給レポートをMarkdown形式で生成してください。
