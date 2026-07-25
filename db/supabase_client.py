@@ -3,6 +3,7 @@ db/supabase_client.py
 Supabaseへの全CRUD操作を集約したモジュール
 """
 
+import logging
 import os
 from datetime import date, datetime
 from pathlib import Path
@@ -13,6 +14,8 @@ from supabase import create_client, Client
 # プロジェクトルート固定の .env を参照（cwd 依存を排除）
 _PROJECT_ROOT = Path(__file__).parent.parent
 load_dotenv(_PROJECT_ROOT / "config" / ".env")
+
+logger = logging.getLogger(__name__)
 
 _client: Optional[Client] = None
 
@@ -123,6 +126,29 @@ def save_report(week_date: date, report_type: str, fmt: str,
         "content_md": content_md,
         "gdrive_url": gdrive_url,
     }, on_conflict="week_date,report_type,format").execute()
+
+
+def weekly_report_exists(week_date: date) -> bool:
+    """指定週の週次Markdownレポートが reports テーブルに存在するか判定する。
+
+    JPXが未公表の週に自動実行が走ると、スクレイパーは「サイト上の最新ファイル」＝
+    既に処理済みの前週を掴んでしまう。その取り違えを検知するために使う。
+    判定不能（接続エラー等）の場合は False を返し、処理を続行させる
+    （生成し直しは冪等なので、握りつぶすより実行する方が安全）。
+    """
+    try:
+        sb = get_client()
+        res = (sb.table("reports")
+               .select("week_date")
+               .eq("report_type", "weekly")
+               .eq("format", "markdown")
+               .eq("week_date", str(week_date))
+               .limit(1)
+               .execute())
+        return bool(res.data)
+    except Exception as e:
+        logger.warning(f"[週次レポート存在チェック失敗] {e} → 未生成扱いで続行")
+        return False
 
 
 def save_log(week_date: Optional[date], status: str, spot_rows: int = 0,

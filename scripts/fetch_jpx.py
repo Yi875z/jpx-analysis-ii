@@ -288,6 +288,7 @@ def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
         "spot": [], "futures": [], "options": [],
         "errors": [],
         "resolved_week_date": week_date,
+        "resolved_futures_week_date": None,
     }
 
     # ── 現物（XLS形式） ──────────────────────────────────────────────────
@@ -345,6 +346,7 @@ def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
                     )
             else:
                 fut_wd = result["resolved_week_date"]
+            result["resolved_futures_week_date"] = fut_wd
 
             tmp = _download_to_tempfile(target)
             try:

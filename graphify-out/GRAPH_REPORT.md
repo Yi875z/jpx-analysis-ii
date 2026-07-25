@@ -1,11 +1,11 @@
-# Graph Report - jpx-analysis  (2026-07-17)
+# Graph Report - jpx-analysis  (2026-07-26)
 
 ## Corpus Check
-- 48 files · ~86,213 words
+- 48 files · ~88,010 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 585 nodes · 529 edges · 236 communities detected
+- 633 nodes · 535 edges · 280 communities detected
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 25 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -246,18 +246,62 @@
 - [[_COMMUNITY_Community 241|Community 241]]
 - [[_COMMUNITY_Community 242|Community 242]]
 - [[_COMMUNITY_Community 243|Community 243]]
+- [[_COMMUNITY_Community 244|Community 244]]
+- [[_COMMUNITY_Community 245|Community 245]]
+- [[_COMMUNITY_Community 246|Community 246]]
+- [[_COMMUNITY_Community 247|Community 247]]
+- [[_COMMUNITY_Community 248|Community 248]]
+- [[_COMMUNITY_Community 249|Community 249]]
+- [[_COMMUNITY_Community 250|Community 250]]
+- [[_COMMUNITY_Community 251|Community 251]]
+- [[_COMMUNITY_Community 252|Community 252]]
+- [[_COMMUNITY_Community 253|Community 253]]
+- [[_COMMUNITY_Community 254|Community 254]]
+- [[_COMMUNITY_Community 255|Community 255]]
+- [[_COMMUNITY_Community 256|Community 256]]
+- [[_COMMUNITY_Community 257|Community 257]]
+- [[_COMMUNITY_Community 258|Community 258]]
+- [[_COMMUNITY_Community 259|Community 259]]
+- [[_COMMUNITY_Community 260|Community 260]]
+- [[_COMMUNITY_Community 261|Community 261]]
+- [[_COMMUNITY_Community 262|Community 262]]
+- [[_COMMUNITY_Community 263|Community 263]]
+- [[_COMMUNITY_Community 264|Community 264]]
+- [[_COMMUNITY_Community 265|Community 265]]
+- [[_COMMUNITY_Community 266|Community 266]]
+- [[_COMMUNITY_Community 267|Community 267]]
+- [[_COMMUNITY_Community 268|Community 268]]
+- [[_COMMUNITY_Community 269|Community 269]]
+- [[_COMMUNITY_Community 270|Community 270]]
+- [[_COMMUNITY_Community 271|Community 271]]
+- [[_COMMUNITY_Community 272|Community 272]]
+- [[_COMMUNITY_Community 273|Community 273]]
+- [[_COMMUNITY_Community 274|Community 274]]
+- [[_COMMUNITY_Community 275|Community 275]]
+- [[_COMMUNITY_Community 276|Community 276]]
+- [[_COMMUNITY_Community 277|Community 277]]
+- [[_COMMUNITY_Community 278|Community 278]]
+- [[_COMMUNITY_Community 279|Community 279]]
+- [[_COMMUNITY_Community 280|Community 280]]
+- [[_COMMUNITY_Community 281|Community 281]]
+- [[_COMMUNITY_Community 282|Community 282]]
+- [[_COMMUNITY_Community 283|Community 283]]
+- [[_COMMUNITY_Community 284|Community 284]]
+- [[_COMMUNITY_Community 285|Community 285]]
+- [[_COMMUNITY_Community 286|Community 286]]
+- [[_COMMUNITY_Community 287|Community 287]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `get_client()` - 22 edges
+1. `get_client()` - 23 edges
 2. `fetch_all()` - 10 edges
 3. `_fetch()` - 9 edges
 4. `_build_data_table()` - 8 edges
 5. `generate_weekly_report()` - 8 edges
 6. `build_excel()` - 8 edges
-7. `build_excel_export()` - 7 edges
-8. `LinkParser` - 7 edges
-9. `_write_spot_sheet()` - 7 edges
-10. `Handler` - 6 edges
+7. `run_weekly()` - 7 edges
+8. `build_excel_export()` - 7 edges
+9. `LinkParser` - 7 edges
+10. `_write_spot_sheet()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `_generation_footer()` --calls--> `_get_model()`  [INFERRED]
@@ -290,16 +334,16 @@ Cohesion: 0.09
 Nodes (29): audit(), fetch_source_urls(), main(), scripts/audit_week_dates.py =========================== DB の weekly_spot / weekl, {week_date: set(source_url)} を weekly_spot から取得, download_csv(), fetch_csv_list(), main() (+21 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.13
-Nodes (25): fetch_combined_history(), fetch_futures_history(), fetch_latest_week(), fetch_monthly_summary(), fetch_options_history(), fetch_spot_history(), fetch_stats_history(), fetch_week_futures() (+17 more)
+Cohesion: 0.12
+Nodes (27): fetch_combined_history(), fetch_futures_history(), fetch_latest_week(), fetch_monthly_summary(), fetch_options_history(), fetch_spot_history(), fetch_stats_history(), fetch_week_futures() (+19 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.13
 Nodes (23): _aggregate_futures_weekly(), build_all_years(), build_excel(), _calc_rolling_zscores(), _header_style(), _make_chart_image(), _make_comparison_image(), _make_zscore_image() (+15 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.2
-Nodes (18): _generation_footer(), _get_week_date(), main(), _maybe_generate_previous_month(), _monthly_report_exists(), main.py JPX投資主体別売買動向 自動分析システム メインエントリーポイント（手動実行・n8nから呼び出し共通）  使い方:   python main, 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え, 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の (+10 more)
+Cohesion: 0.18
+Nodes (20): _generation_footer(), _get_week_date(), main(), _maybe_generate_previous_month(), _monthly_report_exists(), main.py JPX投資主体別売買動向 自動分析システム メインエントリーポイント（手動実行・n8nから呼び出し共通）  使い方:   python main, 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え, 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の (+12 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.16
@@ -391,467 +435,467 @@ Nodes (1): Supabase スキーマ確認スクリプト information_schema から�
 
 ### Community 37 - "Community 37"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 集計基準日（週末の金曜日）を返す。     JPXは木曜日に前週（月〜金）のデータを公開するため、     木曜実行時は翌日（金曜）を基準日とする。
 
 ### Community 38 - "Community 38"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 生成情報フッター（軽量監査証跡）: どのモデル・コード版で生成したかをレポート自体に記録する
 
 ### Community 39 - "Community 39"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 実行結果を outputs/last_run_status.txt に書き出す。      GitHub Actions が「新規レポートを生成したか」を判定し
 
 ### Community 40 - "Community 40"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 41 - "Community 41"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 42 - "Community 42"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 43 - "Community 43"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 44 - "Community 44"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 45 - "Community 45"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 46 - "Community 46"
 Cohesion: 1.0
-Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 47 - "Community 47"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 48 - "Community 48"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 49 - "Community 49"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 50 - "Community 50"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 51 - "Community 51"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 52 - "Community 52"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 53 - "Community 53"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 54 - "Community 54"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 55 - "Community 55"
 Cohesion: 1.0
-Nodes (1): 現物週次シートを書き込む（ネット額＋Zスコアカラム付き）     zscore_history: Zスコア計算用の全履歴（年をまたいだ52週窓のため spot_
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 56 - "Community 56"
 Cohesion: 1.0
-Nodes (1): matplotlibで棒グラフ（買い越し=青/売り越し=赤）＋4週MA線を生成してBytesIOで返す
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 57 - "Community 57"
 Cohesion: 1.0
-Nodes (1): 全投資家ネット比較ラインチャートをBytesIOで返す
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 58 - "Community 58"
 Cohesion: 1.0
-Nodes (1): 外国人ネット推移チャートシート（matplotlib画像を埋め込み）
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 59 - "Community 59"
 Cohesion: 1.0
-Nodes (1): 海外投資家のZスコア推移チャート（52週ローリング）をBytesIOで返す     上段：現物Zスコア / 下段：先物Zスコア（futures_history
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 60 - "Community 60"
 Cohesion: 1.0
-Nodes (1): 全年分のExcelを年ごとに再生成する（スタンドアロン実行用）
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 61 - "Community 61"
 Cohesion: 1.0
-Nodes (1): Excelファイルを生成して保存     spot_history: 当該年のみのデータ（行表示用）     all_spot_history: 全年データ（Z
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 62 - "Community 62"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 63 - "Community 63"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 64 - "Community 64"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 65 - "Community 65"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 66 - "Community 66"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）
 
 ### Community 67 - "Community 67"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 現物週次データをupsert（week_date + investor_type + market でユニーク）
 
 ### Community 68 - "Community 68"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): オプションの過去N週データを取得（全 option_type 横断）
 
 ### Community 69 - "Community 69"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 指定週のオプションデータを全投資家・全 option_type で取得
 
 ### Community 70 - "Community 70"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 指定週の週次Markdownレポートが reports テーブルに存在するか判定する。      JPXが未公表の週に自動実行が走ると、スクレイパーは「サイト上
 
 ### Community 71 - "Community 71"
 Cohesion: 1.0
-Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
+Nodes (1): DBに蓄積済みの最新week_dateを返す
 
 ### Community 72 - "Community 72"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
 
 ### Community 73 - "Community 73"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 現物週次データをupsert（week_date + investor_type + market でユニーク）
 
 ### Community 74 - "Community 74"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): オプションの過去N週データを取得（全 option_type 横断）
 
 ### Community 75 - "Community 75"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 指定週のオプションデータを全投資家・全 option_type で取得
 
 ### Community 76 - "Community 76"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 指定週の週次Markdownレポートが reports テーブルに存在するか判定する。      JPXが未公表の週に自動実行が走ると、スクレイパーは「サイト上
 
 ### Community 77 - "Community 77"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): DBに蓄積済みの最新week_dateを返す
 
 ### Community 78 - "Community 78"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
 
 ### Community 79 - "Community 79"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): DBに蓄積済みの最新week_dateを返す
 
 ### Community 80 - "Community 80"
 Cohesion: 1.0
-Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
+Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
 
 ### Community 81 - "Community 81"
 Cohesion: 1.0
-Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 82 - "Community 82"
 Cohesion: 1.0
-Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 83 - "Community 83"
 Cohesion: 1.0
-Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 84 - "Community 84"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 85 - "Community 85"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 86 - "Community 86"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 87 - "Community 87"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 88 - "Community 88"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 89 - "Community 89"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 90 - "Community 90"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
 
 ### Community 91 - "Community 91"
 Cohesion: 1.0
-Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 92 - "Community 92"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 93 - "Community 93"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 94 - "Community 94"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 95 - "Community 95"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 96 - "Community 96"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 97 - "Community 97"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 98 - "Community 98"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 99 - "Community 99"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 現物週次シートを書き込む（ネット額＋Zスコアカラム付き）     zscore_history: Zスコア計算用の全履歴（年をまたいだ52週窓のため spot_
 
 ### Community 100 - "Community 100"
 Cohesion: 1.0
-Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
+Nodes (1): matplotlibで棒グラフ（買い越し=青/売り越し=赤）＋4週MA線を生成してBytesIOで返す
 
 ### Community 101 - "Community 101"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 全投資家ネット比較ラインチャートをBytesIOで返す
 
 ### Community 102 - "Community 102"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 外国人ネット推移チャートシート（matplotlib画像を埋め込み）
 
 ### Community 103 - "Community 103"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 海外投資家のZスコア推移チャート（52週ローリング）をBytesIOで返す     上段：現物Zスコア / 下段：先物Zスコア（futures_history
 
 ### Community 104 - "Community 104"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 全年分のExcelを年ごとに再生成する（スタンドアロン実行用）
 
 ### Community 105 - "Community 105"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): Excelファイルを生成して保存     spot_history: 当該年のみのデータ（行表示用）     all_spot_history: 全年データ（Z
 
 ### Community 106 - "Community 106"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 107 - "Community 107"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 108 - "Community 108"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 109 - "Community 109"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 110 - "Community 110"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 111 - "Community 111"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 112 - "Community 112"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 113 - "Community 113"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 114 - "Community 114"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 115 - "Community 115"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
 
 ### Community 116 - "Community 116"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 117 - "Community 117"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 118 - "Community 118"
 Cohesion: 1.0
-Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 119 - "Community 119"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 120 - "Community 120"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 121 - "Community 121"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 122 - "Community 122"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 123 - "Community 123"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 124 - "Community 124"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 125 - "Community 125"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 126 - "Community 126"
 Cohesion: 1.0
-Nodes (1): Supabaseの蓄積データからZスコア・前週比・4週MAを計算     db: supabase_client モジュール
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 127 - "Community 127"
 Cohesion: 1.0
-Nodes (1): 指定年月（YYYY-MM）の週次データを集計して月次サマリーを生成
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 128 - "Community 128"
 Cohesion: 1.0
-Nodes (1): レポート生成AIエージェントに渡す分析コンテキストを構築する
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 129 - "Community 129"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 130 - "Community 130"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 131 - "Community 131"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 132 - "Community 132"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 133 - "Community 133"
 Cohesion: 1.0
-Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 134 - "Community 134"
 Cohesion: 1.0
-Nodes (1): 投資家別オプション売買データ（日経225 / ミニ × コール/プット）
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 135 - "Community 135"
 Cohesion: 1.0
-Nodes (1): fetch_logs（週次自動実行の記録）を新しい順に取得
+Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
 
 ### Community 136 - "Community 136"
 Cohesion: 1.0
-Nodes (1): Supabase蓄積データを1つのExcelブック（bytes）にまとめる。      ダッシュボードのダウンロードボタン用。CIで生成されるExcelは
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 137 - "Community 137"
 Cohesion: 1.0
-Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 138 - "Community 138"
 Cohesion: 1.0
-Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 139 - "Community 139"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 140 - "Community 140"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 141 - "Community 141"
 Cohesion: 1.0
-Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 142 - "Community 142"
 Cohesion: 1.0
-Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 143 - "Community 143"
 Cohesion: 1.0
-Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 144 - "Community 144"
 Cohesion: 1.0
-Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
 
 ### Community 145 - "Community 145"
 Cohesion: 1.0
-Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 146 - "Community 146"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 147 - "Community 147"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 148 - "Community 148"
 Cohesion: 1.0
-Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 149 - "Community 149"
 Cohesion: 1.0
-Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 150 - "Community 150"
 Cohesion: 1.0
-Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 151 - "Community 151"
 Cohesion: 1.0
-Nodes (1): Supabase reports から最新の週次レポートを取得
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 152 - "Community 152"
 Cohesion: 1.0
-Nodes (1): outputs/alerts/latest.json があれば読み込む
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 153 - "Community 153"
 Cohesion: 1.0
@@ -863,335 +907,335 @@ Nodes (1): 月次需給レポートを生成する。      Parameters     ------
 
 ### Community 155 - "Community 155"
 Cohesion: 1.0
-Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 156 - "Community 156"
 Cohesion: 1.0
-Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 157 - "Community 157"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 158 - "Community 158"
 Cohesion: 1.0
-Nodes (1): Plotlyグラフのlayout共通設定をテーマに合わせて返す（ネストdict深合成）
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 159 - "Community 159"
 Cohesion: 1.0
-Nodes (1): option_type を call/put に集約
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 160 - "Community 160"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 161 - "Community 161"
 Cohesion: 1.0
-Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 162 - "Community 162"
 Cohesion: 1.0
-Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
+Nodes (1): AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため
 
 ### Community 163 - "Community 163"
 Cohesion: 1.0
-Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
 
 ### Community 164 - "Community 164"
 Cohesion: 1.0
-Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 165 - "Community 165"
 Cohesion: 1.0
-Nodes (1): 投資家別オプション売買データ（日経225 / ミニ × コール/プット）
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 166 - "Community 166"
 Cohesion: 1.0
-Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 167 - "Community 167"
 Cohesion: 1.0
-Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 168 - "Community 168"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 169 - "Community 169"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 170 - "Community 170"
 Cohesion: 1.0
-Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまで（または `---` セパレータまで）を返す
+Nodes (1): Supabaseの蓄積データからZスコア・前週比・4週MAを計算     db: supabase_client モジュール
 
 ### Community 171 - "Community 171"
 Cohesion: 1.0
-Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
+Nodes (1): 指定年月（YYYY-MM）の週次データを集計して月次サマリーを生成
 
 ### Community 172 - "Community 172"
 Cohesion: 1.0
-Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
+Nodes (1): レポート生成AIエージェントに渡す分析コンテキストを構築する
 
 ### Community 173 - "Community 173"
 Cohesion: 1.0
-Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 174 - "Community 174"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 175 - "Community 175"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 176 - "Community 176"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 177 - "Community 177"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
 
 ### Community 178 - "Community 178"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 投資家別オプション売買データ（日経225 / ミニ × コール/プット）
 
 ### Community 179 - "Community 179"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): fetch_logs（週次自動実行の記録）を新しい順に取得
 
 ### Community 180 - "Community 180"
 Cohesion: 1.0
-Nodes (1): JPX オプションCSV（投資部門別）をパースして投資家別レコードを返す。      Returns: list of dicts with keys matc
+Nodes (1): Supabase蓄積データを1つのExcelブック（bytes）にまとめる。      ダッシュボードのダウンロードボタン用。CIで生成されるExcelは
 
 ### Community 181 - "Community 181"
 Cohesion: 1.0
-Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
+Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
 
 ### Community 182 - "Community 182"
 Cohesion: 1.0
-Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
+Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
 
 ### Community 183 - "Community 183"
 Cohesion: 1.0
-Nodes (1): option_type を call/put に集約
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
 
 ### Community 184 - "Community 184"
 Cohesion: 1.0
-Nodes (1): 週次NETデータからZスコア・移動平均を動的計算
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
 
 ### Community 185 - "Community 185"
 Cohesion: 1.0
-Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
 
 ### Community 186 - "Community 186"
 Cohesion: 1.0
-Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
 
 ### Community 187 - "Community 187"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
 
 ### Community 188 - "Community 188"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
 
 ### Community 189 - "Community 189"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
 
 ### Community 190 - "Community 190"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
 
 ### Community 191 - "Community 191"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
 
 ### Community 192 - "Community 192"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
 
 ### Community 193 - "Community 193"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
 
 ### Community 194 - "Community 194"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
 
 ### Community 195 - "Community 195"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): Supabase reports から最新の週次レポートを取得
 
 ### Community 196 - "Community 196"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): outputs/alerts/latest.json があれば読み込む
 
 ### Community 197 - "Community 197"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 198 - "Community 198"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 199 - "Community 199"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え
 
 ### Community 200 - "Community 200"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の
 
 ### Community 201 - "Community 201"
 Cohesion: 1.0
-Nodes (1): DBに蓄積済みの最新week_dateを返す
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 202 - "Community 202"
 Cohesion: 1.0
-Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
+Nodes (1): Plotlyグラフのlayout共通設定をテーマに合わせて返す（ネストdict深合成）
 
 ### Community 203 - "Community 203"
 Cohesion: 1.0
-Nodes (1): Supabase reports テーブルを正規化
+Nodes (1): option_type を call/put に集約
 
 ### Community 204 - "Community 204"
 Cohesion: 1.0
-Nodes (1): 週末日（金）から '# JPX投資家別売買動向 YYYY年MM月DD日〜MM月DD日' を生成
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
 
 ### Community 205 - "Community 205"
 Cohesion: 1.0
-Nodes (1): タイトル行を新フォーマットに置換する。     追加で『> データソース: ...』直後に対象期間行を挿入（既にあれば触らない）。
+Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視
 
 ### Community 206 - "Community 206"
 Cohesion: 1.0
-Nodes (1): ファイルシステムを正規化。返り値: 変更ログ
+Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
 
 ### Community 207 - "Community 207"
 Cohesion: 1.0
-Nodes (1): Supabase reports テーブルを正規化
+Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
 
 ### Community 208 - "Community 208"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
 
 ### Community 209 - "Community 209"
 Cohesion: 1.0
-Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+Nodes (1): 投資家別オプション売買データ（日経225 / ミニ × コール/プット）
 
 ### Community 210 - "Community 210"
 Cohesion: 1.0
-Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
 
 ### Community 211 - "Community 211"
 Cohesion: 1.0
-Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
 
 ### Community 212 - "Community 212"
 Cohesion: 1.0
-Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
 
 ### Community 213 - "Community 213"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
 
 ### Community 214 - "Community 214"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): ## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまで（または `---` セパレータまで）を返す
 
 ### Community 215 - "Community 215"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
 
 ### Community 216 - "Community 216"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
 
 ### Community 217 - "Community 217"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計
 
 ### Community 218 - "Community 218"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 219 - "Community 219"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 220 - "Community 220"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 221 - "Community 221"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 222 - "Community 222"
 Cohesion: 1.0
-Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 223 - "Community 223"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 224 - "Community 224"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): JPX オプションCSV（投資部門別）をパースして投資家別レコードを返す。      Returns: list of dicts with keys matc
 
 ### Community 225 - "Community 225"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 最新レポートから指定セクションを抽出。返り値: (report_id, section_text)
 
 ### Community 226 - "Community 226"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当
 
 ### Community 227 - "Community 227"
 Cohesion: 1.0
-Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+Nodes (1): option_type を call/put に集約
 
 ### Community 228 - "Community 228"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 週次NETデータからZスコア・移動平均を動的計算
 
 ### Community 229 - "Community 229"
 Cohesion: 1.0
-Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
 
 ### Community 230 - "Community 230"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
 
 ### Community 231 - "Community 231"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
 
 ### Community 232 - "Community 232"
 Cohesion: 1.0
-Nodes (1): 現物週次データをupsert（week_date + investor_type + market でユニーク）
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
 
 ### Community 233 - "Community 233"
 Cohesion: 1.0
-Nodes (1): DBに蓄積済みの最新week_dateを返す
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 234 - "Community 234"
 Cohesion: 1.0
-Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 235 - "Community 235"
 Cohesion: 1.0
-Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
 
 ### Community 236 - "Community 236"
 Cohesion: 1.0
-Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
 
 ### Community 237 - "Community 237"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
 ### Community 238 - "Community 238"
 Cohesion: 1.0
@@ -1203,22 +1247,198 @@ Nodes (1): 月次需給レポートを生成する。      Parameters     ------
 
 ### Community 240 - "Community 240"
 Cohesion: 1.0
-Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
 
 ### Community 241 - "Community 241"
 Cohesion: 1.0
-Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
 
 ### Community 242 - "Community 242"
 Cohesion: 1.0
-Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
 
 ### Community 243 - "Community 243"
 Cohesion: 1.0
 Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
 
+### Community 244 - "Community 244"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 245 - "Community 245"
+Cohesion: 1.0
+Nodes (1): DBに蓄積済みの最新week_dateを返す
+
+### Community 246 - "Community 246"
+Cohesion: 1.0
+Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
+
+### Community 247 - "Community 247"
+Cohesion: 1.0
+Nodes (1): Supabase reports テーブルを正規化
+
+### Community 248 - "Community 248"
+Cohesion: 1.0
+Nodes (1): 週末日（金）から '# JPX投資家別売買動向 YYYY年MM月DD日〜MM月DD日' を生成
+
+### Community 249 - "Community 249"
+Cohesion: 1.0
+Nodes (1): タイトル行を新フォーマットに置換する。     追加で『> データソース: ...』直後に対象期間行を挿入（既にあれば触らない）。
+
+### Community 250 - "Community 250"
+Cohesion: 1.0
+Nodes (1): ファイルシステムを正規化。返り値: 変更ログ
+
+### Community 251 - "Community 251"
+Cohesion: 1.0
+Nodes (1): Supabase reports テーブルを正規化
+
+### Community 252 - "Community 252"
+Cohesion: 1.0
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+
+### Community 253 - "Community 253"
+Cohesion: 1.0
+Nodes (1): 週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化
+
+### Community 254 - "Community 254"
+Cohesion: 1.0
+Nodes (1): 利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s
+
+### Community 255 - "Community 255"
+Cohesion: 1.0
+Nodes (1): 指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD
+
+### Community 256 - "Community 256"
+Cohesion: 1.0
+Nodes (1): レポートMarkdownからエグゼクティブサマリー部分のみ抽出
+
+### Community 257 - "Community 257"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 258 - "Community 258"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 259 - "Community 259"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 260 - "Community 260"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 261 - "Community 261"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 262 - "Community 262"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 263 - "Community 263"
+Cohesion: 1.0
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+
+### Community 264 - "Community 264"
+Cohesion: 1.0
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+
+### Community 265 - "Community 265"
+Cohesion: 1.0
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+
+### Community 266 - "Community 266"
+Cohesion: 1.0
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+
+### Community 267 - "Community 267"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 268 - "Community 268"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 269 - "Community 269"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 270 - "Community 270"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 271 - "Community 271"
+Cohesion: 1.0
+Nodes (1): Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_
+
+### Community 272 - "Community 272"
+Cohesion: 1.0
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+
+### Community 273 - "Community 273"
+Cohesion: 1.0
+Nodes (1): 海外投資家・信託銀行の現物・先物クロス詳細を生成
+
+### Community 274 - "Community 274"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 275 - "Community 275"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 276 - "Community 276"
+Cohesion: 1.0
+Nodes (1): 現物週次データをupsert（week_date + investor_type + market でユニーク）
+
+### Community 277 - "Community 277"
+Cohesion: 1.0
+Nodes (1): DBに蓄積済みの最新week_dateを返す
+
+### Community 278 - "Community 278"
+Cohesion: 1.0
+Nodes (1): weekly_statsの過去N週分を取得（Zスコア・MA含む）
+
+### Community 279 - "Community 279"
+Cohesion: 1.0
+Nodes (1): 先物内訳テーブル（商品種別×投資家）を生成
+
+### Community 280 - "Community 280"
+Cohesion: 1.0
+Nodes (1): 分析コンテキストから簡易テーブル文字列を生成
+
+### Community 281 - "Community 281"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 282 - "Community 282"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 283 - "Community 283"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 284 - "Community 284"
+Cohesion: 1.0
+Nodes (1): 月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値
+
+### Community 285 - "Community 285"
+Cohesion: 1.0
+Nodes (1): 月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月
+
+### Community 286 - "Community 286"
+Cohesion: 1.0
+Nodes (1): ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する
+
+### Community 287 - "Community 287"
+Cohesion: 1.0
+Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat
+
 ## Knowledge Gaps
-- **332 isolated node(s):** `api_server.py n8n(Docker)からWindows上のPythonスクリプトを実行するためのHTTPサーバー。 ポート8765で待ち受け、n8`, `main.py JPX投資主体別売買動向 自動分析システム メインエントリーポイント（手動実行・n8nから呼び出し共通）  使い方:   python main`, `集計基準日（週末の金曜日）を返す。     JPXは木曜日に前週（月〜金）のデータを公開するため、     木曜実行時は翌日（金曜）を基準日とする。`, `生成情報フッター（軽量監査証跡）: どのモデル・コード版で生成したかをレポート自体に記録する`, `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え` (+327 more)
+- **378 isolated node(s):** `api_server.py n8n(Docker)からWindows上のPythonスクリプトを実行するためのHTTPサーバー。 ポート8765で待ち受け、n8`, `main.py JPX投資主体別売買動向 自動分析システム メインエントリーポイント（手動実行・n8nから呼び出し共通）  使い方:   python main`, `集計基準日（週末の金曜日）を返す。     JPXは木曜日に前週（月〜金）のデータを公開するため、     木曜実行時は翌日（金曜）を基準日とする。`, `生成情報フッター（軽量監査証跡）: どのモデル・コード版で生成したかをレポート自体に記録する`, `実行結果を outputs/last_run_status.txt に書き出す。      GitHub Actions が「新規レポートを生成したか」を判定し` (+373 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 19`** (6 nodes): `format_oku()`, `latest_net()`, `prev_net()`, `億円表示フォーマット（例: +1,234億）`, `wow_delta()`, `metrics.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -1236,435 +1456,523 @@ Nodes (1): Claude APIを呼び出して週次レポートのMarkdownを生成す
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 28`** (2 nodes): `show_schema.py`, `Supabase スキーマ確認スクリプト information_schema からテーブル名・カラム名・型を一覧表示する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 37`** (1 nodes): `集計基準日（週末の金曜日）を返す。     JPXは木曜日に前週（月〜金）のデータを公開するため、     木曜実行時は翌日（金曜）を基準日とする。`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 38`** (1 nodes): `生成情報フッター（軽量監査証跡）: どのモデル・コード版で生成したかをレポート自体に記録する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 39`** (1 nodes): `実行結果を outputs/last_run_status.txt に書き出す。      GitHub Actions が「新規レポートを生成したか」を判定し`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 40`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 41`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 42`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 43`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 44`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 45`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
+- **Thin community `Community 46`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 47`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 48`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 49`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 50`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 51`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 52`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 53`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 54`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (1 nodes): `現物週次シートを書き込む（ネット額＋Zスコアカラム付き）     zscore_history: Zスコア計算用の全履歴（年をまたいだ52週窓のため spot_`
+- **Thin community `Community 55`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (1 nodes): `matplotlibで棒グラフ（買い越し=青/売り越し=赤）＋4週MA線を生成してBytesIOで返す`
+- **Thin community `Community 56`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (1 nodes): `全投資家ネット比較ラインチャートをBytesIOで返す`
+- **Thin community `Community 57`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (1 nodes): `外国人ネット推移チャートシート（matplotlib画像を埋め込み）`
+- **Thin community `Community 58`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (1 nodes): `海外投資家のZスコア推移チャート（52週ローリング）をBytesIOで返す     上段：現物Zスコア / 下段：先物Zスコア（futures_history`
+- **Thin community `Community 59`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (1 nodes): `全年分のExcelを年ごとに再生成する（スタンドアロン実行用）`
+- **Thin community `Community 60`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (1 nodes): `Excelファイルを生成して保存     spot_history: 当該年のみのデータ（行表示用）     all_spot_history: 全年データ（Z`
+- **Thin community `Community 61`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 62`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 62`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 63`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 63`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 64`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 65`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 66`** (1 nodes): `取得済みデータでExcel累積ファイルのみ再生成。      Excelは通常 run_weekly（木曜のGitHub Actions実行＝クラウド上で破棄）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 67`** (1 nodes): `現物週次データをupsert（week_date + investor_type + market でユニーク）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 68`** (1 nodes): `オプションの過去N週データを取得（全 option_type 横断）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 69`** (1 nodes): `指定週のオプションデータを全投資家・全 option_type で取得`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 70`** (1 nodes): `指定週の週次Markdownレポートが reports テーブルに存在するか判定する。      JPXが未公表の週に自動実行が走ると、スクレイパーは「サイト上`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 71`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
+- **Thin community `Community 71`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 72`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 72`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 73`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 73`** (1 nodes): `現物週次データをupsert（week_date + investor_type + market でユニーク）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 74`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 74`** (1 nodes): `オプションの過去N週データを取得（全 option_type 横断）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 75`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 75`** (1 nodes): `指定週のオプションデータを全投資家・全 option_type で取得`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 76`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 76`** (1 nodes): `指定週の週次Markdownレポートが reports テーブルに存在するか判定する。      JPXが未公表の週に自動実行が走ると、スクレイパーは「サイト上`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 77`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 77`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 78`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 78`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 79`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 79`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 80`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
+- **Thin community `Community 80`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 81`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
+- **Thin community `Community 81`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 82`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
+- **Thin community `Community 82`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 83`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
+- **Thin community `Community 83`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 84`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 84`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 85`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 85`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 86`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 86`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 87`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 87`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 88`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 88`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 89`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 89`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 90`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 90`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 91`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
+- **Thin community `Community 91`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 92`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 92`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 93`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 93`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 94`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 94`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 95`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 95`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 96`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 96`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 97`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 97`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 98`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 98`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 99`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 99`** (1 nodes): `現物週次シートを書き込む（ネット額＋Zスコアカラム付き）     zscore_history: Zスコア計算用の全履歴（年をまたいだ52週窓のため spot_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 100`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
+- **Thin community `Community 100`** (1 nodes): `matplotlibで棒グラフ（買い越し=青/売り越し=赤）＋4週MA線を生成してBytesIOで返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 101`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 101`** (1 nodes): `全投資家ネット比較ラインチャートをBytesIOで返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 102`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 102`** (1 nodes): `外国人ネット推移チャートシート（matplotlib画像を埋め込み）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 103`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 103`** (1 nodes): `海外投資家のZスコア推移チャート（52週ローリング）をBytesIOで返す     上段：現物Zスコア / 下段：先物Zスコア（futures_history`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 104`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 104`** (1 nodes): `全年分のExcelを年ごとに再生成する（スタンドアロン実行用）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 105`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 105`** (1 nodes): `Excelファイルを生成して保存     spot_history: 当該年のみのデータ（行表示用）     all_spot_history: 全年データ（Z`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 106`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 106`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 107`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 107`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 108`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 108`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 109`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 109`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 110`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 110`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 111`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 111`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 112`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 112`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 113`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 113`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 114`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 114`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 115`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 115`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 116`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 116`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 117`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 117`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 118`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
+- **Thin community `Community 118`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 119`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 119`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 120`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 120`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 121`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 121`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 122`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 122`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 123`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 123`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 124`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 124`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 125`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 125`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 126`** (1 nodes): `Supabaseの蓄積データからZスコア・前週比・4週MAを計算     db: supabase_client モジュール`
+- **Thin community `Community 126`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 127`** (1 nodes): `指定年月（YYYY-MM）の週次データを集計して月次サマリーを生成`
+- **Thin community `Community 127`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 128`** (1 nodes): `レポート生成AIエージェントに渡す分析コンテキストを構築する`
+- **Thin community `Community 128`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 129`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 129`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 130`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 130`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 131`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 131`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 132`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 132`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 133`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
+- **Thin community `Community 133`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 134`** (1 nodes): `投資家別オプション売買データ（日経225 / ミニ × コール/プット）`
+- **Thin community `Community 134`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 135`** (1 nodes): `fetch_logs（週次自動実行の記録）を新しい順に取得`
+- **Thin community `Community 135`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 136`** (1 nodes): `Supabase蓄積データを1つのExcelブック（bytes）にまとめる。      ダッシュボードのダウンロードボタン用。CIで生成されるExcelは`
+- **Thin community `Community 136`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 137`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+- **Thin community `Community 137`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 138`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+- **Thin community `Community 138`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 139`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 139`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 140`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 140`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 141`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
+- **Thin community `Community 141`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 142`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
+- **Thin community `Community 142`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 143`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
+- **Thin community `Community 143`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 144`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+- **Thin community `Community 144`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 145`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+- **Thin community `Community 145`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 146`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 146`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 147`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 147`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 148`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
+- **Thin community `Community 148`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 149`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
+- **Thin community `Community 149`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 150`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
+- **Thin community `Community 150`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 151`** (1 nodes): `Supabase reports から最新の週次レポートを取得`
+- **Thin community `Community 151`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 152`** (1 nodes): `outputs/alerts/latest.json があれば読み込む`
+- **Thin community `Community 152`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 153`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 154`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 155`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
+- **Thin community `Community 155`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 156`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
+- **Thin community `Community 156`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 157`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 157`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 158`** (1 nodes): `Plotlyグラフのlayout共通設定をテーマに合わせて返す（ネストdict深合成）`
+- **Thin community `Community 158`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 159`** (1 nodes): `option_type を call/put に集約`
+- **Thin community `Community 159`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 160`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 160`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 161`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
+- **Thin community `Community 161`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 162`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
+- **Thin community `Community 162`** (1 nodes): `AI に渡すデータテーブル用: 符号付き数値（正=買い越し、負=売り越し）。     ▲/▼ は会計上「マイナス」を意味する用法もあり AI が誤読しやすいため`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 163`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
+- **Thin community `Community 163`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 164`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
+- **Thin community `Community 164`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 165`** (1 nodes): `投資家別オプション売買データ（日経225 / ミニ × コール/プット）`
+- **Thin community `Community 165`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 166`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+- **Thin community `Community 166`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 167`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+- **Thin community `Community 167`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 168`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 168`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 169`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 169`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 170`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまで（または `---` セパレータまで）を返す`
+- **Thin community `Community 170`** (1 nodes): `Supabaseの蓄積データからZスコア・前週比・4週MAを計算     db: supabase_client モジュール`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 171`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
+- **Thin community `Community 171`** (1 nodes): `指定年月（YYYY-MM）の週次データを集計して月次サマリーを生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 172`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
+- **Thin community `Community 172`** (1 nodes): `レポート生成AIエージェントに渡す分析コンテキストを構築する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 173`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
+- **Thin community `Community 173`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 174`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 174`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 175`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 175`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 176`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 176`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 177`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 177`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 178`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 178`** (1 nodes): `投資家別オプション売買データ（日経225 / ミニ × コール/プット）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 179`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 179`** (1 nodes): `fetch_logs（週次自動実行の記録）を新しい順に取得`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 180`** (1 nodes): `JPX オプションCSV（投資部門別）をパースして投資家別レコードを返す。      Returns: list of dicts with keys matc`
+- **Thin community `Community 180`** (1 nodes): `Supabase蓄積データを1つのExcelブック（bytes）にまとめる。      ダッシュボードのダウンロードボタン用。CIで生成されるExcelは`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 181`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
+- **Thin community `Community 181`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 182`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
+- **Thin community `Community 182`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 183`** (1 nodes): `option_type を call/put に集約`
+- **Thin community `Community 183`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 184`** (1 nodes): `週次NETデータからZスコア・移動平均を動的計算`
+- **Thin community `Community 184`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 185`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+- **Thin community `Community 185`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 186`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+- **Thin community `Community 186`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 187`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 187`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 188`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 188`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 189`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 189`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 190`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 190`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 191`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 191`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 192`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 192`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 193`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 193`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 194`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 194`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 195`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 195`** (1 nodes): `Supabase reports から最新の週次レポートを取得`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 196`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 196`** (1 nodes): `outputs/alerts/latest.json があれば読み込む`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 197`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 197`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 198`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 198`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 199`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 199`** (1 nodes): `指定月(YYYY-MM)の月次レポートが reports テーブルに存在するか判定する。      week_date は date 型のため LIKE は使え`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 200`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 200`** (1 nodes): `前月の月次レポートが未生成なら自動生成する（冪等）。      今週の week_date が属する月の「前月」を対象とする。     例: 2026-05 の`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 201`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
+- **Thin community `Community 201`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 202`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
+- **Thin community `Community 202`** (1 nodes): `Plotlyグラフのlayout共通設定をテーマに合わせて返す（ネストdict深合成）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 203`** (1 nodes): `Supabase reports テーブルを正規化`
+- **Thin community `Community 203`** (1 nodes): `option_type を call/put に集約`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 204`** (1 nodes): `週末日（金）から '# JPX投資家別売買動向 YYYY年MM月DD日〜MM月DD日' を生成`
+- **Thin community `Community 204`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 205`** (1 nodes): `タイトル行を新フォーマットに置換する。     追加で『> データソース: ...』直後に対象期間行を挿入（既にあれば触らない）。`
+- **Thin community `Community 205`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまでを返す（途中の `---` セパレータは無視`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 206`** (1 nodes): `ファイルシステムを正規化。返り値: 変更ログ`
+- **Thin community `Community 206`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 207`** (1 nodes): `Supabase reports テーブルを正規化`
+- **Thin community `Community 207`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 208`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 208`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 209`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+- **Thin community `Community 209`** (1 nodes): `投資家別オプション売買データ（日経225 / ミニ × コール/プット）`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 210`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+- **Thin community `Community 210`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 211`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+- **Thin community `Community 211`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 212`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+- **Thin community `Community 212`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 213`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 213`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 214`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 214`** (1 nodes): `## レベル見出しに section_keyword を含むセクションを抽出する。      次の ## 見出しまで（または `---` セパレータまで）を返す`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 215`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 215`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 216`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 216`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 217`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 217`** (1 nodes): `オプション売買データから AI プロンプト用テキストを生成。      投資家×コール/プット×標準/ミニ のクロス集計`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 218`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 218`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 219`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 219`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 220`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 220`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 221`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 221`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 222`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+- **Thin community `Community 222`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 223`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 223`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 224`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 224`** (1 nodes): `JPX オプションCSV（投資部門別）をパースして投資家別レコードを返す。      Returns: list of dicts with keys matc`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 225`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 225`** (1 nodes): `最新レポートから指定セクションを抽出。返り値: (report_id, section_text)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 226`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 226`** (1 nodes): `各ページで「対応するAIレポート解釈」を expander 表示する共通関数。      section_keywords は複数キーワードを順に試し、最初に当`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 227`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+- **Thin community `Community 227`** (1 nodes): `option_type を call/put に集約`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 228`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 228`** (1 nodes): `週次NETデータからZスコア・移動平均を動的計算`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 229`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+- **Thin community `Community 229`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 230`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 230`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 231`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 231`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 232`** (1 nodes): `現物週次データをupsert（week_date + investor_type + market でユニーク）`
+- **Thin community `Community 232`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 233`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
+- **Thin community `Community 233`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 234`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
+- **Thin community `Community 234`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 235`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+- **Thin community `Community 235`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 236`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+- **Thin community `Community 236`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 237`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 237`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 238`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 239`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 240`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+- **Thin community `Community 240`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 241`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+- **Thin community `Community 241`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 242`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
+- **Thin community `Community 242`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 243`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 244`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 245`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 246`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 247`** (1 nodes): `Supabase reports テーブルを正規化`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 248`** (1 nodes): `週末日（金）から '# JPX投資家別売買動向 YYYY年MM月DD日〜MM月DD日' を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 249`** (1 nodes): `タイトル行を新フォーマットに置換する。     追加で『> データソース: ...』直後に対象期間行を挿入（既にあれば触らない）。`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 250`** (1 nodes): `ファイルシステムを正規化。返り値: 変更ログ`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 251`** (1 nodes): `Supabase reports テーブルを正規化`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 252`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 253`** (1 nodes): `週次は YYYY-MM-DD、月次は YYYY-MM 形式に正規化`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 254`** (1 nodes): `利用可能なレポート一覧を取得。DB + ファイルシステムを統合。      返り値: [{"id": "YYYY-MM-DD" or "YYYY-MM", "s`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 255`** (1 nodes): `指定レポートの本文（Markdown）を返す。DB → ファイルの順にフォールバック。      report_id: weekly なら YYYY-MM-DD`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 256`** (1 nodes): `レポートMarkdownからエグゼクティブサマリー部分のみ抽出`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 257`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 258`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 259`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 260`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 261`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 262`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 263`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 264`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 265`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 266`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 267`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 268`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 269`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 270`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 271`** (1 nodes): `Anthropic API レスポンスの usage から cache hit/miss をログ出力する。      cache_creation_input_`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 272`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 273`** (1 nodes): `海外投資家・信託銀行の現物・先物クロス詳細を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 274`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 275`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 276`** (1 nodes): `現物週次データをupsert（week_date + investor_type + market でユニーク）`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 277`** (1 nodes): `DBに蓄積済みの最新week_dateを返す`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 278`** (1 nodes): `weekly_statsの過去N週分を取得（Zスコア・MA含む）`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 279`** (1 nodes): `先物内訳テーブル（商品種別×投資家）を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 280`** (1 nodes): `分析コンテキストから簡易テーブル文字列を生成`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 281`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 282`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 283`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 284`** (1 nodes): `月次サマリー行をAIプロンプト用のテキストテーブルに整形する。      monthly_rows は fetch_monthly_summary() の返り値`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 285`** (1 nodes): `月次需給レポートを生成する。      Parameters     ----------     year_month : str         対象年月`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 286`** (1 nodes): `ページネーションで全件取得。Supabaseのmax-rows=1000制限を回避する`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 287`** (1 nodes): `Claude APIを呼び出して週次レポートのMarkdownを生成する      Parameters     ----------     week_dat`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `get_client()` connect `Community 4` to `Community 10`, `Community 18`, `Community 3`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
 - **Why does `audit()` connect `Community 3` to `Community 4`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Why does `_resolve_actual_week_end()` connect `Community 1` to `Community 3`?**
   _High betweenness centrality (0.022) - this node is a cross-community bridge._
+- **Why does `_resolve_actual_week_end()` connect `Community 1` to `Community 3`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `get_client()` (e.g. with `audit()` and `fix_reports_db()`) actually correct?**
   _`get_client()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `fetch_all()` (e.g. with `parse_spot_xls()` and `parse_futures_csv()`) actually correct?**
   _`fetch_all()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `api_server.py n8n(Docker)からWindows上のPythonスクリプトを実行するためのHTTPサーバー。 ポート8765で待ち受け、n8`, `main.py JPX投資主体別売買動向 自動分析システム メインエントリーポイント（手動実行・n8nから呼び出し共通）  使い方:   python main`, `集計基準日（週末の金曜日）を返す。     JPXは木曜日に前週（月〜金）のデータを公開するため、     木曜実行時は翌日（金曜）を基準日とする。` to the rest of the system?**
-  _332 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _378 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.09 - nodes in this community are weakly interconnected._

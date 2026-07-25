@@ -1,15 +1,21 @@
 name: JPX 週次データ取得・AIレポート生成
 
 # トリガー:
-#   1. 毎週木曜 09:17 UTC（= 木曜 18:17 JST）の自動実行
+#   1. 毎週 木・金・月 の 09:17 UTC（= 18:17 JST）の自動実行
 #   2. GitHub の Actions タブからの手動実行（workflow_dispatch）
+#
+# 木曜以外にも走らせる理由（2026-07-23 の取りこぼし）:
+# JPXの投資部門別売買状況は通常なら木曜公表だが、祝日があると1営業日ずれる。
+# 2026-07-20（海の日）の週は金曜公表となり、木曜のみの実行では取り逃した。
+# main.py 側に「掴んだ週が生成済みなら何もせず終了」のガードがあるため、
+# 公表済みの週を重複実行しても即スキップされAPIコストも発生しない。
 #
 # 注意: 分は意図的に 00 を避け 17 にしている。
 # GitHub Actions の schedule は共有キューで処理され、毎時00分は全世界のジョブが
 # 集中して数十分〜数時間の遅延・取りこぼしが起きる。00分以外（例:17分）にずらすと改善する。
 on:
   schedule:
-    - cron: '17 9 * * 4'
+    - cron: '17 9 * * 1,4,5'
   workflow_dispatch:
     inputs:
       date:
@@ -25,6 +31,11 @@ on:
           - weekly        # 通常の週次取得＋AIレポート
           - report-only   # 既存DBデータからAIレポートのみ再生成
           - monthly       # 月次レポート（input.date を YYYY-MM として解釈）
+      force:
+        description: '生成済みの週でも強制的に再取得・再生成する'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   fetch:
@@ -73,18 +84,23 @@ jobs:
           set -e
           MODE="${{ inputs.mode || 'weekly' }}"
           DATE_ARG="${{ inputs.date }}"
+          FORCE_ARG=""
+          if [ "${{ inputs.force }}" = "true" ]; then FORCE_ARG="--force"; fi
 
           echo "Mode: $MODE"
           echo "Date: ${DATE_ARG:-(auto)}"
+          echo "Force: ${FORCE_ARG:-(no)}"
           echo "TZ:   $TZ"
           date
+
+          rm -f outputs/last_run_status.txt
 
           case "$MODE" in
             weekly)
               if [ -n "$DATE_ARG" ]; then
-                python main.py --date "$DATE_ARG"
+                python main.py --date "$DATE_ARG" $FORCE_ARG
               else
-                python main.py
+                python main.py $FORCE_ARG
               fi
               ;;
             report-only)
@@ -99,9 +115,25 @@ jobs:
               ;;
           esac
 
-      - name: Send summary mail (on success)
+      - name: Detect whether a new report was generated
+        id: status
         if: success()
+        run: |
+          # weekly モード以外は last_run_status.txt を書かないので generated 扱いにする。
+          STATUS=$(cut -d' ' -f1 outputs/last_run_status.txt 2>/dev/null || echo generated)
+          echo "Run status: $STATUS"
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+      # 新規レポートを生成した時だけ送る。
+      # スキップ時に送ると「前週のレポート」が今週分として届いてしまうため。
+      - name: Send summary mail (on success)
+        if: success() && steps.status.outputs.status == 'generated'
         run: python scripts/send_summary_mail.py
+
+      - name: Note skipped run
+        if: success() && steps.status.outputs.status != 'generated'
+        run: |
+          echo "::notice::JPX未公表のため新規レポートなし（status=${{ steps.status.outputs.status }}）。メール送信はスキップしました。"
 
       - name: Show logs on failure
         if: failure()

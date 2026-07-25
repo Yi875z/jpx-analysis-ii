@@ -9,6 +9,11 @@ JPX投資主体別売買動向 自動分析システム
   python main.py --spot x.csv --futures y.csv --date 2025-01-10
   python main.py --monthly 2025-01      # 月次サマリー再集計
   python main.py --report-only          # 取得済みデータでレポートのみ再生成
+  python main.py --date 2025-01-10 --force  # 生成済みの週を強制的に再取得・再生成
+
+自動実行では「JPXがまだ次の週を公表していない」場合、スクレイパーがサイト上の
+最新＝処理済みの前週を掴む。その週のレポートが既にあれば何もせず終了する
+（--force で無効化）。
 """
 
 import argparse
@@ -88,6 +93,21 @@ def _generation_footer(data_label: str) -> str:
     )
 
 
+def _write_run_status(status: str, week_date: date | None = None) -> None:
+    """実行結果を outputs/last_run_status.txt に書き出す。
+
+    GitHub Actions が「新規レポートを生成したか」を判定してサマリーメール送信の
+    可否を決めるために読む。生成していない週にメールを送ると、前週のレポートが
+    「今週分」として届いてしまうため。
+    """
+    try:
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        line = status if week_date is None else f"{status} {week_date}"
+        (OUTPUT_DIR / "last_run_status.txt").write_text(line, encoding="utf-8")
+    except Exception as e:
+        logger.warning(f"[実行ステータス書き出し失敗] {e}")
+
+
 def _save_markdown(content: str, week_date: date) -> Path:
     dir_ = OUTPUT_DIR / "reports"
     dir_.mkdir(parents=True, exist_ok=True)
@@ -137,9 +157,15 @@ def _save_excel(week_date: date) -> Path:
 # ─────────────────────────────────────────
 # メインフロー
 # ─────────────────────────────────────────
+# 「JPX最新公表週」がこの日数より古ければ公表遅延ではなく異常とみなす。
+# 通常は週末金曜の6日後（翌木曜）に公表。祝日で1営業日ずれても10日程度に収まる。
+# 年末年始の長期休場を誤検知しないよう16日と広めに取る。
+STALE_ALARM_DAYS = 16
+
+
 def run_weekly(week_date: date, spot_path: str = None,
                futures_path: str = None, index_close: float = 0.0,
-               market_data: dict | None = None):
+               market_data: dict | None = None, force: bool = False):
     """週次分析の全フロー"""
     t0 = time.time()
     logger.info(f"=== 週次分析開始: {week_date} ===")
@@ -162,6 +188,7 @@ def run_weekly(week_date: date, spot_path: str = None,
     options_rows = fetch_result.get("options", [])
     errors       = fetch_result.get("errors", [])
     resolved_wd  = fetch_result.get("resolved_week_date")
+    resolved_fut = fetch_result.get("resolved_futures_week_date")
 
     # JPX 記載の対象期間が呼び出し側の指定と異なる場合は実態を採用
     if resolved_wd and resolved_wd != week_date:
@@ -170,6 +197,40 @@ def run_weekly(week_date: date, spot_path: str = None,
         )
         week_date = resolved_wd
 
+    # ①-a 未公表ガード
+    #   JPXスクレイパーは常に「サイト上の最新ファイル」を掴む。目的の週がまだ
+    #   未公表だと、既に処理済みの前週を掴んで黙って再生成してしまう
+    #   （2026-07-23: 7/20海の日で公表が金曜にずれ、7/10週を再生成して成功扱い）。
+    #   既にレポートがある週を掴んだ＝新規データ無し、と判定して何もせず抜ける。
+    if not (spot_path or futures_path) and not force and db.weekly_report_exists(week_date):
+        age_days = (date.today() - week_date).days
+        logger.warning(
+            f"[未公表スキップ] JPX最新公表週 {week_date} は既にレポート生成済み"
+            f"（週末から{age_days}日経過）。新規データが無いため何もせず終了します。"
+        )
+        _write_run_status("no_new_data", week_date)
+        if age_days > STALE_ALARM_DAYS:
+            logger.error(
+                f"[異常] JPXの公表が{age_days}日分停滞しています（閾値{STALE_ALARM_DAYS}日）。"
+                " JPXのURL構成変更・スクレイパー故障を疑ってください。"
+            )
+            db.save_log(week_date, "error",
+                        error_message=f"JPX公表停滞 {age_days}日")
+            sys.exit(1)
+        return {"status": "no_new_data", "week_date": week_date}
+
+    # ①-b 部分公表ガード
+    #   現物(.xls)と先物(.csv)はJPXの別ページで、片方だけ先に公表されることがある。
+    #   そのまま進むと現物だけの週次レポートが確定してしまうため、揃うまで見送る。
+    if (not (spot_path or futures_path) and not force
+            and resolved_fut is not None and resolved_fut != week_date):
+        logger.warning(
+            f"[部分公表スキップ] 現物={week_date} / 先物={resolved_fut} で対象週が不一致。"
+            " 両方が揃ってから生成するため、今回は何もせず終了します。"
+        )
+        _write_run_status("partial_data", week_date)
+        return {"status": "partial_data", "week_date": week_date}
+
     if errors:
         for e in errors:
             logger.warning(f"[警告] {e}")
@@ -177,7 +238,8 @@ def run_weekly(week_date: date, spot_path: str = None,
     if not spot_rows and not futures_rows:
         logger.error("[エラー] データが取得できませんでした")
         db.save_log(week_date, "error", error_message="データ取得失敗")
-        return
+        _write_run_status("fetch_failed", week_date)
+        sys.exit(1)
 
     # ①-b 指数終値を補完（CLI で明示指定が無ければ実勢を取得）
     #     先物CSVに現物指数は含まれないため、外部取得して index_close を埋める。
@@ -246,6 +308,8 @@ def run_weekly(week_date: date, spot_path: str = None,
                 spot_rows=n_spot, futures_rows=n_futures,
                 duration_sec=duration)
 
+    _write_run_status("generated", week_date)
+
     logger.info(f"=== 完了: {duration:.1f}秒 ===")
     logger.info(f"  Markdown: {md_path}")
     logger.info(f"  Excel:    {xlsx_path}")
@@ -271,7 +335,8 @@ def run_weekly(week_date: date, spot_path: str = None,
                 print(line.encode(sys.stdout.encoding, errors="replace").decode(sys.stdout.encoding))
     print("="*60)
 
-    return {"md_path": md_path, "xlsx_path": xlsx_path, "report_md": report_md}
+    return {"status": "generated", "md_path": md_path,
+            "xlsx_path": xlsx_path, "report_md": report_md}
 
 
 def _monthly_report_exists(year_month: str) -> bool:
@@ -401,6 +466,8 @@ def main():
     parser.add_argument("--monthly",     help="月次サマリー集計 YYYY-MM")
     parser.add_argument("--report-only", action="store_true", help="レポートのみ再生成")
     parser.add_argument("--excel-only",  action="store_true", help="取得済みデータでExcelのみ再生成")
+    parser.add_argument("--force",       action="store_true",
+                        help="生成済みの週でも再取得・再生成する（未公表スキップを無効化）")
     parser.add_argument("--vix",        type=float, help="VIX現在値（例: 18.5）")
     parser.add_argument("--nikkei-vi",  type=float, help="日経VI現在値（例: 22.0）")
     parser.add_argument("--usdjpy",     type=float, help="USD/JPYレート（例: 143.50）")
@@ -437,6 +504,7 @@ def main():
             futures_path=args.futures,
             index_close=args.index_close,
             market_data=market_data,
+            force=args.force,
         )
 
 
