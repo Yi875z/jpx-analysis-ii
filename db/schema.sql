@@ -110,12 +110,24 @@ CREATE INDEX IF NOT EXISTS idx_monthly_ym           ON monthly_summary(year_mont
 CREATE INDEX IF NOT EXISTS idx_reports_date         ON reports(week_date DESC);
 
 -- ============================================================
--- RLS（Row Level Security）は無効化 - サービスキーで全操作
+-- RLS（Row Level Security）は有効化する
 -- ============================================================
-ALTER TABLE weekly_spot      DISABLE ROW LEVEL SECURITY;
-ALTER TABLE weekly_futures   DISABLE ROW LEVEL SECURITY;
-ALTER TABLE weekly_combined  DISABLE ROW LEVEL SECURITY;
-ALTER TABLE weekly_stats     DISABLE ROW LEVEL SECURITY;
-ALTER TABLE monthly_summary  DISABLE ROW LEVEL SECURITY;
-ALTER TABLE reports          DISABLE ROW LEVEL SECURITY;
-ALTER TABLE fetch_logs       DISABLE ROW LEVEL SECURITY;
+-- 【重要】ここは 2026-05-27 まで DISABLE だった。このファイルは
+-- CREATE TABLE IF NOT EXISTS で再実行できる作りなので、DISABLE のまま
+-- 再実行すると 2026-05-27 の RLS 有効化が黙って巻き戻り、weekly_* 等が
+-- anon キー経由の PostgREST（https://<ref>.supabase.co/rest/v1/）から
+-- 誰でも読み書き・削除できる状態に戻ってしまう。2026-07-26 に ENABLE へ修正。
+--
+-- アプリが壊れない理由:
+--   テーブル所有者と service_role は RLS をバイパスするため、
+--   SUPABASE_SERVICE_KEY で接続している本アプリの動作は一切変わらない。
+--   ポリシーは意図的に追加しない（anon 経由の REST を遮断するのが狙い）。
+--   FORCE ROW LEVEL SECURITY は絶対に付けないこと（所有者接続まで止まる）。
+-- ============================================================
+ALTER TABLE weekly_spot      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE weekly_futures   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE weekly_combined  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE weekly_stats     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE monthly_summary  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE reports          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fetch_logs       ENABLE ROW LEVEL SECURITY;
