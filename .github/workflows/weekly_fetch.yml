@@ -56,10 +56,13 @@ jobs:
       SMTP_APP_PASSWORD: ${{ secrets.SMTP_APP_PASSWORD }}
       NOTIFY_EMAIL:      ${{ secrets.NOTIFY_EMAIL }}
       # オプション設定
-      # 2026-07-05 A/Bテスト（6/26週3モデル比較）の結果 Opus 4.8 に切替。
+      # 2026-07-27 A/Bテスト（7/17週で Opus 4.8 と3構成比較）の結果 Opus 5 に切替。
+      # 正確性は互角、個人のプット売り越しを捕捉する等で分析の鋭さが上回った。
+      # Opus 5 は適応思考が既定で有効なため report_agent.py 側で
+      # max_tokens=32000 + streaming が前提になっている（切断防止）。
       # バージョンは固定指定＝新モデルが出ても自動では変わらない（意図的）。
       # 新Opusが出たら outputs/ab_test/ の手順でA/B比較してからここを変更する。
-      CLAUDE_MODEL: claude-opus-4-8
+      CLAUDE_MODEL: claude-opus-5
       OUTPUT_DIR: ./outputs
       LOG_DIR:    ./logs
 

@@ -14,8 +14,16 @@ logger = logging.getLogger(__name__)
 
 SKILL_REFS_DIR = Path(__file__).parent.parent / "skills" / "jpx-investor-data" / "references"
 
-# 使用モデルは .env の CLAUDE_MODEL で切替可能（未設定時は Sonnet 4.6）
-DEFAULT_MODEL = "claude-sonnet-4-6"
+# 使用モデルは .env / GitHub Secrets の CLAUDE_MODEL で切替可能。
+# 2026-07-27 A/B比較（7/17週）の結果 Opus 5 へ移行。フォールバックも Opus 5 に揃える
+# （以前は Sonnet 4.6 で、CLAUDE_MODEL 未設定のローカル実行が黙って別モデルになっていた）。
+DEFAULT_MODEL = "claude-opus-5"
+
+# Opus 5 は thinking 未指定でも適応思考が有効になり、思考トークンが max_tokens 枠を消費する。
+# 実測では思考オフでも16,384枠の82%を使ったため上限を引き上げる。
+# 16k超の非ストリーミングはSDKのHTTPタイムアウトに当たるため streaming が必須。
+MAX_TOKENS = 32000
+THINKING = {"type": "adaptive"}
 
 
 def _get_model() -> str:
@@ -748,9 +756,10 @@ Markdownレポートを生成してください。
 
     model = _get_model()
     logger.info(f"[AIエージェント] レポート生成開始 (model={model})...")
-    message = client.messages.create(
+    with client.messages.stream(
         model=model,
-        max_tokens=16384,
+        max_tokens=MAX_TOKENS,
+        thinking=THINKING,
         system=[
             {
                 "type": "text",
@@ -763,9 +772,10 @@ Markdownレポートを生成してください。
             },
         ],
         messages=[{"role": "user", "content": user_prompt}],
-    )
+    ) as stream:
+        message = stream.get_final_message()
 
-    # thinkingブロックが先頭に付くモデル（Sonnet 5等）でも動くようtextブロックのみ抽出
+    # thinkingブロックが先頭に付くモデル（Opus 5・Sonnet 5等）でも動くようtextブロックのみ抽出
     report_md = "\n".join(b.text for b in message.content if b.type == "text")
     _log_cache_usage(message, label="週次")
     if message.stop_reason == "max_tokens":
@@ -992,9 +1002,10 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
 
     model = _get_model()
     logger.info(f"[AIエージェント] 月次レポート生成開始: {year_month} (model={model})")
-    message = client.messages.create(
+    with client.messages.stream(
         model=model,
-        max_tokens=16384,
+        max_tokens=MAX_TOKENS,
+        thinking=THINKING,
         system=[
             {
                 "type": "text",
@@ -1007,9 +1018,10 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
             },
         ],
         messages=[{"role": "user", "content": user_prompt}],
-    )
+    ) as stream:
+        message = stream.get_final_message()
 
-    # thinkingブロックが先頭に付くモデル（Sonnet 5等）でも動くようtextブロックのみ抽出
+    # thinkingブロックが先頭に付くモデル（Opus 5・Sonnet 5等）でも動くようtextブロックのみ抽出
     report_md = "\n".join(b.text for b in message.content if b.type == "text")
     _log_cache_usage(message, label="月次")
     if message.stop_reason == "max_tokens":

@@ -69,6 +69,20 @@ def _extract_section(md: str, keyword: str) -> str:
 _COMPLETE_TAILS = tuple("。」）)*|！？!?％%円")
 
 
+def _output_cap_chars() -> tuple[int, int]:
+    """「上限接近」を警告する文字数と、その根拠の max_tokens を返す。
+
+    以前は 15,000字 / 16,384トークンをハードコードしていたため、
+    max_tokens を引き上げた後も古い上限で警告していた。実設定から導出する。
+    日本語レポートの実測は約0.87トークン/字なので、上限の75%相当を閾値とする。
+    """
+    try:
+        from agents.report_agent import MAX_TOKENS
+    except Exception:
+        return 0, 0
+    return int(MAX_TOKENS * 0.75 / 0.87), MAX_TOKENS
+
+
 def report_health(content: str) -> tuple[bool, str]:
     """レポート末尾の完結性を簡易判定し、(正常か, 説明文) を返す"""
     text = (content or "").rstrip()
@@ -78,8 +92,9 @@ def report_health(content: str) -> tuple[bool, str]:
     n = len(text)
     if not last_line.endswith(_COMPLETE_TAILS):
         return False, f"途中切断の疑い（{n:,}字・末尾「…{last_line[-12:]}」）"
-    if n > 15000:
-        return True, f"全文生成OK（{n:,}字）※出力上限16,384トークンに接近中"
+    cap_chars, cap_tokens = _output_cap_chars()
+    if cap_chars and n > cap_chars:
+        return True, f"全文生成OK（{n:,}字）※出力上限{cap_tokens:,}トークンに接近中"
     return True, f"全文生成OK（{n:,}字）"
 
 
@@ -109,6 +124,24 @@ def fetch_latest_alerts() -> list[dict]:
         return data.get("alerts", [])
     except Exception:
         return []
+
+
+def _model_label() -> str:
+    """メール本文に出す生成モデル名。
+
+    以前は "Claude Sonnet 4.6" をハードコードしており、本番が Opus に切り替わった後も
+    古い名前を送り続けていた。実際に使われる設定値から組み立てて食い違いを防ぐ。
+    """
+    raw = os.environ.get("CLAUDE_MODEL", "")
+    if not raw:
+        try:
+            from agents.report_agent import DEFAULT_MODEL
+            raw = DEFAULT_MODEL
+        except Exception:
+            return "Claude"
+    pretty = {"claude-opus-5": "Claude Opus 5", "claude-opus-4-8": "Claude Opus 4.8",
+              "claude-sonnet-5": "Claude Sonnet 5", "claude-sonnet-4-6": "Claude Sonnet 4.6"}
+    return pretty.get(raw, raw)
 
 
 def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
@@ -155,7 +188,7 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
 {DASHBOARD_URL}
 
 ⚙ 取得処理: GitHub Actions による自動実行
-🤖 AIレポート生成: Claude Sonnet 4.6
+🤖 AIレポート生成: {_model_label()}
 """
     subject = f"[JPX需給] {period_label} レポート完成 ({len(alerts)} アラート)" if alerts \
               else f"[JPX需給] {period_label} レポート完成"
