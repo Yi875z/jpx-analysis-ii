@@ -6,7 +6,7 @@ scripts/check_alerts.py
 判定ルール:
   1. 海外現物 Zスコア（52w）| > 2.0  → 統計的異常
   2. 海外先物 Zスコア（52w）| > 2.0  → 統計的異常
-  3. 海外 PCR > 1.8 または < 0.6     → ヘッジ姿勢の極端化
+  3. 海外 PCR（グロス出来高）の |Z| > 2.0 → ヘッジ姿勢の極端化
   4. ツインエンジン点灯/解除（前週比較） → トレンド転換
   5. MM ガンマ判定が +GEX ↔ -GEX に切替 → ボラ環境変化
   6. 海外 mini プット net > 20,000枚 → 大規模下方ヘッジ
@@ -29,6 +29,7 @@ import json
 import logging
 import os
 import smtplib
+import statistics
 import sys
 from collections import defaultdict
 from datetime import date
@@ -57,9 +58,14 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # 閾値（.env で上書き可能）
 # ─────────────────────────────────────────
 ZSCORE_THRESHOLD = float(os.environ.get("ALERT_ZSCORE_THRESHOLD", 2.0))
-PCR_HIGH         = float(os.environ.get("ALERT_PCR_HIGH", 1.8))
-PCR_LOW          = float(os.environ.get("ALERT_PCR_LOW", 0.6))
 MINI_PUT_LARGE   = int(os.environ.get("ALERT_MINI_PUT_LARGE", 20000))
+# PCR は絶対水準の閾値を置かず、PCR自身の過去分布に対するZスコアで判定する。
+# グロスPCRの中心値は銘柄構成で決まり（2026-07時点の実績は中央値1.67）、
+# 「1.8以上なら異常」のような固定値は市場構造が変われば意味を失うため。
+PCR_ZSCORE_THRESHOLD = float(os.environ.get("ALERT_PCR_ZSCORE", 2.0))
+PCR_MIN_HISTORY      = int(os.environ.get("ALERT_PCR_MIN_HISTORY", 8))
+# グロスのコール出来高がこの枚数未満の週は比率が不安定なため評価しない
+PCR_MIN_CALL_LOTS    = int(os.environ.get("ALERT_PCR_MIN_CALL_LOTS", 1000))
 
 
 def _latest_week_in_db() -> date | None:
@@ -71,6 +77,44 @@ def _latest_week_in_db() -> date | None:
         return None
     s = res.data[0]["week_date"]
     return date.fromisoformat(s)
+
+
+def _foreign_pcr_history(week_date: date) -> list[float]:
+    """対象週より前の海外PCR（グロス出来高ベース）を古い順に返す。
+
+    閾値をハードコードせず、PCR自身の過去分布に対するZスコアで異常判定するために使う。
+    """
+    sb = db.get_client()
+    res = (sb.table("weekly_options")
+           .select("week_date,option_type,long_lots,short_lots")
+           .eq("investor_type", "foreign")
+           .lt("week_date", str(week_date))
+           .execute())
+    per_week: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for r in res.data or []:
+        per_week[r["week_date"]][r["option_type"]] += (
+            (r.get("long_lots") or 0) + (r.get("short_lots") or 0)
+        )
+    out = []
+    for wd in sorted(per_week):
+        pcr = _gross_pcr(per_week[wd])
+        if pcr is not None:
+            out.append(pcr)
+    return out
+
+
+def _gross_pcr(gross: dict[str, int]) -> float | None:
+    """グロス出来高（買建+売建）でプット/コール比を求める。
+
+    ネット枚数の比は分母がゼロ近傍になると発散する（2026-07-17週で
+    ネットコール7枚に対しPCR=3175という無意味な値が出た）。売買両建てを
+    合算したグロスなら分母が安定し、PCRの一般的な定義とも一致する。
+    """
+    call = gross.get("nikkei225_call", 0) + gross.get("nikkei225_mini_call", 0)
+    put  = gross.get("nikkei225_put", 0)  + gross.get("nikkei225_mini_put", 0)
+    if call < PCR_MIN_CALL_LOTS:
+        return None
+    return put / call
 
 
 def _prev_week_combined(week_date: date) -> dict:
@@ -119,32 +163,52 @@ def evaluate(week_date: date) -> dict:
                 "value": z, "threshold": ZSCORE_THRESHOLD,
             })
 
-    # ── 3. 海外 PCR ───────────────────────────────────────
-    fopt = defaultdict(int)
+    # ── 3. 海外 PCR（グロス出来高ベース × 過去分布Zスコア） ──
+    f_gross = defaultdict(int)
+    f_net   = defaultdict(int)
     for r in options_rows:
         if r["investor_type"] == "foreign":
-            fopt[r["option_type"]] += r.get("net_lots", 0) or 0
-    f_call = fopt.get("nikkei225_call", 0) + fopt.get("nikkei225_mini_call", 0)
-    f_put  = fopt.get("nikkei225_put", 0)  + fopt.get("nikkei225_mini_put", 0)
-    pcr = None
-    if f_call > 0:
-        pcr = f_put / f_call
-        if pcr > PCR_HIGH:
-            alerts.append({
-                "level": "high",
-                "type": "pcr_high",
-                "title": f"海外 PCR が異常高水準: {pcr:.2f}",
-                "message": f"プット買い偏重 = 下方ヘッジ姿勢が極端に強い。リスクオフ警戒。",
-                "value": round(pcr, 2), "threshold": PCR_HIGH,
-            })
-        elif pcr < PCR_LOW:
-            alerts.append({
-                "level": "medium",
-                "type": "pcr_low",
-                "title": f"海外 PCR が異常低水準: {pcr:.2f}",
-                "message": f"コール買い偏重 = 上方期待が極端に強い。短期過熱に注意。",
-                "value": round(pcr, 2), "threshold": PCR_LOW,
-            })
+            f_gross[r["option_type"]] += (r.get("long_lots") or 0) + (r.get("short_lots") or 0)
+            f_net[r["option_type"]]   += r.get("net_lots", 0) or 0
+    f_call = f_net.get("nikkei225_call", 0) + f_net.get("nikkei225_mini_call", 0)
+    f_put  = f_net.get("nikkei225_put", 0)  + f_net.get("nikkei225_mini_put", 0)
+
+    pcr = _gross_pcr(f_gross)
+    pcr_z = None
+    if pcr is None:
+        logger.info("[alerts] 海外コール出来高が僅少のためPCR評価をスキップ")
+    else:
+        hist = _foreign_pcr_history(week_date)
+        if len(hist) < PCR_MIN_HISTORY:
+            logger.info(
+                f"[alerts] PCR履歴が{len(hist)}週しかないためZ判定をスキップ"
+                f"（{PCR_MIN_HISTORY}週以上必要）。今週のPCR={pcr:.2f}"
+            )
+        else:
+            mean = statistics.mean(hist)
+            sd   = statistics.pstdev(hist)
+            if sd <= 0:
+                logger.info("[alerts] PCR履歴の分散がゼロのためZ判定をスキップ")
+            else:
+                pcr_z = (pcr - mean) / sd
+                if pcr_z > PCR_ZSCORE_THRESHOLD:
+                    alerts.append({
+                        "level": "high",
+                        "type": "pcr_high",
+                        "title": f"海外 PCR が異常高水準: {pcr:.2f}（Z={pcr_z:+.2f}）",
+                        "message": (f"過去{len(hist)}週平均{mean:.2f}に対しプット偏重。"
+                                    " 下方ヘッジ姿勢が強い。リスクオフ警戒。"),
+                        "value": round(pcr, 2), "threshold": round(mean + PCR_ZSCORE_THRESHOLD * sd, 2),
+                    })
+                elif pcr_z < -PCR_ZSCORE_THRESHOLD:
+                    alerts.append({
+                        "level": "medium",
+                        "type": "pcr_low",
+                        "title": f"海外 PCR が異常低水準: {pcr:.2f}（Z={pcr_z:+.2f}）",
+                        "message": (f"過去{len(hist)}週平均{mean:.2f}に対しコール偏重。"
+                                    " 上方期待が強い。短期過熱に注意。"),
+                        "value": round(pcr, 2), "threshold": round(mean - PCR_ZSCORE_THRESHOLD * sd, 2),
+                    })
 
     # ── 4. ツインエンジン点灯/解除 ───────────────────────
     prev_map = _prev_week_combined(week_date)
@@ -207,7 +271,7 @@ def evaluate(week_date: date) -> dict:
                 })
 
     # ── 6. 海外 mini プット 大量買い越し ───────────────
-    f_mini_put = fopt.get("nikkei225_mini_put", 0)
+    f_mini_put = f_net.get("nikkei225_mini_put", 0)
     if f_mini_put > MINI_PUT_LARGE:
         alerts.append({
             "level": "medium",
@@ -225,14 +289,15 @@ def evaluate(week_date: date) -> dict:
             "foreign_spot_zscore_52w":    foreign and foreign.get("zscore_52w"),
             "foreign_futures_zscore_52w": foreign and foreign.get("futures_zscore_52w"),
             "foreign_pcr": round(pcr, 2) if pcr is not None else None,
+            "foreign_pcr_zscore": round(pcr_z, 2) if pcr_z is not None else None,
             "twin_engine": cur_twin,
             "gex": gex,
             "foreign_mini_put_net": f_mini_put,
         },
         "thresholds": {
             "zscore": ZSCORE_THRESHOLD,
-            "pcr_high": PCR_HIGH,
-            "pcr_low":  PCR_LOW,
+            "pcr_zscore": PCR_ZSCORE_THRESHOLD,
+            "pcr_min_history": PCR_MIN_HISTORY,
             "mini_put_large": MINI_PUT_LARGE,
         },
     }

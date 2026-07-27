@@ -14,6 +14,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from components.data_loader import (
+    ensure_fresh,
     get_latest_week_date, get_weekly_options, render_report_section_panel,
 )
 from components.charts import COLORS
@@ -26,6 +27,7 @@ st.set_page_config(
 )
 
 # ─── ヘッダー ─────────────────────────────────────────────────
+ensure_fresh()
 st.title("🎯 日経225オプション フロー")
 st.caption("投資家別 コール/プット 売買差引（標準＋ミニ）と GEX 推定")
 

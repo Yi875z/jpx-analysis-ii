@@ -51,6 +51,7 @@ from components.data_loader import (
     get_weekly_spot,
     get_weekly_combined,
     get_latest_week_date,
+    ensure_fresh,
     get_report_list,
     get_report_content,
     extract_executive_summary,
@@ -66,6 +67,8 @@ st.set_page_config(
 )
 
 # ─── ヘッダー ─────────────────────────────────────────────────
+# 新しい週がDBに入っていればキャッシュを自動失効させる（手動更新不要にする）
+ensure_fresh()
 latest_week = get_latest_week_date()
 try:
     latest_dt = pd.to_datetime(latest_week)

@@ -10,7 +10,7 @@ import pandas as pd
 import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from components.data_loader import get_fetch_logs
+from components.data_loader import ensure_fresh, get_fetch_logs
 from components.theme import render_theme_toggle
 
 st.set_page_config(
@@ -19,6 +19,7 @@ st.set_page_config(
     layout="wide",
 )
 
+ensure_fresh()
 st.title("🗂 実行ログ")
 st.caption("週次自動実行（GitHub Actions 木曜18:17 JST）のデータ取得・レポート生成履歴")
 

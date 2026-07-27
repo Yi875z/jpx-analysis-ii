@@ -207,6 +207,35 @@ def is_report_complete(md: str) -> bool:
     return text.split("\n")[-1].strip().endswith(_COMPLETE_TAILS)
 
 
+@st.cache_data(ttl=60)
+def _data_version() -> str:
+    """DB上の最新週を短TTLで問い合わせる（キャッシュ自動失効の判定用）。"""
+    try:
+        client = _client()
+        resp = (client.table("weekly_spot").select("week_date")
+                .order("week_date", desc=True).limit(1).execute())
+        return resp.data[0]["week_date"] if resp.data else ""
+    except Exception:
+        return ""
+
+
+def ensure_fresh() -> None:
+    """新しい週がDBに入っていたらキャッシュを丸ごと捨てる。
+
+    重いクエリは ttl=3600 でキャッシュしているため、木曜の自動更新直後に
+    ダッシュボードを開くと最大1時間、前週のレポートが表示され続ける。
+    サイドバーの「キャッシュ更新」を押さないと直らないのは運用上わかりにくいので、
+    最新週の変化を検知して自動で失効させる。
+    """
+    version = _data_version()
+    if not version:
+        return
+    if st.session_state.get("_data_version") != version:
+        if "_data_version" in st.session_state:
+            st.cache_data.clear()
+        st.session_state["_data_version"] = version
+
+
 @st.cache_data(ttl=3600)
 def get_latest_week_date() -> str:
     try:
@@ -403,6 +432,7 @@ def render_report_section_panel(section_keywords: list[str], panel_title: str,
     fallback_summary=True なら、該当セクションが空のときは
     エグゼクティブサマリーをフォールバックとして表示。
     """
+    ensure_fresh()
     rid, section_md = "", ""
     for kw in section_keywords:
         rid, section_md = get_latest_section(kw, report_type=report_type, include_heading=False)

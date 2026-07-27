@@ -11,6 +11,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from components.data_loader import (
+    ensure_fresh,
     get_report_list,
     get_report_content,
     is_report_complete,
@@ -24,6 +25,7 @@ st.set_page_config(
     layout="wide",
 )
 
+ensure_fresh()
 st.title("📋 AI需給分析レポート")
 st.caption("Claude APIが生成した週次・月次の需給解釈レポート")
 
