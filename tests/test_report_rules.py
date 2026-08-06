@@ -221,6 +221,27 @@ def test_lint_uniqueness_scope():
     assert "uniqueness-scope" not in _rules(report_lint.lint_weekly_report(ok))
 
 
+@pytest.mark.parametrize(
+    "line",
+    [
+        # 2026-08-07 再生成レポートの実文。規律に従った免責文を違反として拾わないこと
+        "- **両指数とも買い越し（金額ベースでTOPIX優位）**。これは**スプレッド取引ではなく、"
+        "NTロング／NTショートの語は適用しない**。",
+        "両指数とも買い越しのためスプレッド取引ではなく、NTロング/NTショートの語は使わない。",
+        "- なお、**ネット集計から相対取引の相手方は特定できない**ため、"
+        "「誰が誰の反対側に立った」とは断定しない。",
+        "- 相対取引の相手方（カウンターパーティ）は投資部門別ネット集計から**特定不能**。",
+        "- ただし、既存ロングのヘッジ／新規の弱気ポジション／スプレッドの一部のいずれであるかは、"
+        "**限月・行使価格・建玉増減が無いため確認不能**。「ヘッジを行った」と目的で断定しない。",
+    ],
+)
+def test_lint_ignores_disclaimer_lines(line):
+    """レポートが規律どおり書いた免責文でP0が誤検出されないこと。"""
+    findings = report_lint.lint_weekly_report(
+        line, nt_classifications={"foreign": "BOTH_BUY"}, next_week_state="IN_PROGRESS")
+    assert findings == []
+
+
 def test_lint_clean_report_has_no_findings():
     md = (
         "海外投資家は日経225先物、TOPIX先物をともに買い越した。\n"

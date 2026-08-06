@@ -19,10 +19,20 @@ SEVERITY_P0 = "P0"
 SEVERITY_P1 = "P1"
 
 
+# レポートは規律に従って「〜とは断定しない」「NTロングの語は使わない」「確認不能」等の
+# 免責文を本文に書く。これを違反として拾うと毎回P0が誤検出され、警告が形骸化する。
+# 否定・留保の手がかりを含む行は違反とみなさない（再現率より適合率を優先する。
+# 深い検証は外部査読で行う前提）。
+_NEGATION_CUES = re.compile(
+    r"ではな|しない|しません|せず|できな|不能|不可|わない|かない|らない|禁止|留保|べきでな"
+)
+
+
 def _hit(pattern: str, text: str) -> list[str]:
-    """パターンに一致した行を返す（行単位で報告して修正箇所を特定しやすくする）。"""
+    """パターンに一致した行を返す（否定・留保の文脈は除外する）。"""
     rx = re.compile(pattern)
-    return [ln.strip() for ln in text.splitlines() if rx.search(ln)]
+    return [ln.strip() for ln in text.splitlines()
+            if rx.search(ln) and not _NEGATION_CUES.search(ln)]
 
 
 def lint_weekly_report(report_md: str,
