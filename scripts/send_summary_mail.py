@@ -144,6 +144,27 @@ def _model_label() -> str:
     return pretty.get(raw, raw)
 
 
+def _lint_block() -> str:
+    """公開前チェック（agents/report_lint.py）の結果をメール本文用に整形する。
+
+    report_agent が outputs/last_lint.txt に書き出したものを読む。
+    ファイルが無い場合（旧レポートの再送・レポートのみ再生成前）は何も表示しない。
+    """
+    path = Path(os.environ.get("OUTPUT_DIR", "./outputs")) / "last_lint.txt"
+    try:
+        text = path.read_text(encoding="utf-8").strip()
+    except Exception:
+        return ""
+    if not text or text == "OK":
+        return ""
+    lines = text.splitlines()
+    n_p0 = sum(1 for ln in lines if ln.startswith("[P0]"))
+    head = f"🔍 公開前チェック: {len(lines)} 件検出（P0={n_p0} 件）"
+    if n_p0:
+        head += "\n   ※P0はレポートの結論が反転し得る違反です。本文を確認してください。"
+    return head + "\n\n" + "\n".join(f"  {ln}" for ln in lines) + "\n\n"
+
+
 def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
     """件名と本文を構築"""
     wd = report["week_date"]
@@ -164,6 +185,8 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
     healthy, health_note = report_health(content)
     status_line = ("✅ " if healthy else "⚠️ ") + health_note
 
+    lint_block = _lint_block()
+
     # アラート部分
     alert_block = ""
     if alerts:
@@ -179,7 +202,7 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
 【対象期間】 {period_label}
 【生成ステータス】 {status_line}
 
-{alert_block}【エグゼクティブサマリー】
+{alert_block}{lint_block}【エグゼクティブサマリー】
 
 {summary}
 
@@ -194,6 +217,8 @@ def build_mail_body(report: dict, alerts: list[dict]) -> tuple[str, str]:
               else f"[JPX需給] {period_label} レポート完成"
     if not healthy:
         subject = f"[JPX需給] ⚠️ {period_label} レポート生成に問題あり"
+    elif "[P0]" in lint_block:
+        subject = f"[JPX需給] ⚠️ {period_label} 公開前チェックP0検出"
     return subject, body
 
 

@@ -6,7 +6,7 @@ Claude APIを呼び出して解釈付き週次レポートを生成するエー�
 import json
 import logging
 import os
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 import anthropic
 
@@ -56,9 +56,15 @@ EXPRESSION_DISCIPLINE = """## 【重要】表現の規律（データから確�
 - **相対取引の相手方**: ネット集計から取引の相手方は特定できない。
   「カウンターパーティ」「〜の反対側」「〜の買いを受ける形」「受け皿」等と断定せず、
   「集計上、Aの買い越しに対しBが売り越し」とのみ表現する。
-- **異種商品の生枚数合算の禁止（表・本文とも）**: 乗数・原資産が異なる商品をまたぐ枚数合計
+- **異種商品の枚数の合算・規模比較の禁止（表・本文とも）**: 乗数・原資産が異なる商品をまたぐ枚数合計
   （例:「先物合計 -39,781枚」）は参考値としても記載しない。
-  商品別の説明は生枚数、投資主体の総合方向はラージ換算/標準換算、総合規模は実約定金額ネットで表現する。
+  さらに**ラージ換算・標準換算した後であっても、日経225とTOPIXの枚数を「どちらが大きいか」の
+  規模比較に使ってはならない**（例:「TOPIXは8,689.2枚で日経225の2,826.5枚の約3倍」は禁止）。
+  指数水準も1枚あたりの契約金額も異なるため、枚数比は経済規模の比にならない。
+  **原資産をまたぐ規模比較は実約定金額ネット（億円）だけで行う**。
+  ラージ換算/標準換算は「同一原資産内でラージとミニを統合する」ためだけに使う値である。
+  商品別の説明は生枚数、同一原資産内の総合方向はラージ換算/標準換算、
+  原資産をまたぐ総合規模・優劣は実約定金額ネットで表現する。
 - **投資家の内訳・意図の断定禁止**:
   - 信託銀行をGPIFと同一視しない。「GPIF等の年金リバランスを含む可能性がある信託銀行フロー」等と表現する。
   - 海外投資家をCTA・マクロHFと断定しない（ロングオンリー・パッシブ・ETF等も含まれる）。
@@ -90,8 +96,21 @@ EXPRESSION_DISCIPLINE = """## 【重要】表現の規律（データから確�
 - **戦略名の断定回避**: 組成（同一限月・行使価格・同時性）が確認できないため、
   「ベア・コンビネーション」等の戦略名で確定させず「コール売り＋プット買いの弱気方向フロー」
   「〜型の方向性を示すフロー」と表現する。
-- **スタイル・セクター解釈**: 日経売り・TOPIX買いの確認事実は「NTショート型フロー」まで。
-  「グロース売り・バリュー選好」「セクターローテーション」は業種別データが無い限り「可能性」に留める。
+- **NT（日経225 vs TOPIX）方向の判定**: NT倍率＝日経225÷TOPIX。したがってTOPIX優位は
+  NT倍率の**低下**方向であり、「NTロング」ではない。以下を厳守する。
+  - 「NTロング」「NTショート」の語は、**日経225とTOPIXのネット金額の符号が逆のときだけ**使ってよい。
+    日経225買い越し・TOPIX売り越し → NTロング方向。日経225売り越し・TOPIX買い越し → NTショート方向。
+  - **両方買い越し／両方売り越しはスプレッド取引ではない**。「両指数とも買い越しで、
+    金額ではTOPIX側が大きい（TOPIX優位）」のように、符号が同方向である事実と規模の優劣だけを述べる。
+    TOPIX優位の両建て買いを「NTロング型フロー」と書くのは方向が逆であり、結論を反転させる重大な誤りとなる。
+    相対バイアスに触れる場合も「NT倍率低下方向のバイアスを示唆し得るが、両指数とも買い越しのため
+    純粋なNTショート取引とは確認できない」と留保を必ず添える。
+  - 符号が逆の場合も、同一主体による純粋なNTスプレッド取引かはネット集計から確認できないため、
+    「〜方向の組み合わせ（純粋なスプレッド取引かは確認不能）」と書く。
+  - 判定はデータ末尾の「NT方向（機械判定による事実）」ブロックの分類のみを根拠とし、推測で書き換えない。
+    NTの優劣判定は金額で行い、ラージ換算枚数の大小をNT方向の根拠にしない。
+- **スタイル・セクター解釈**: 「グロース売り・バリュー選好」「セクターローテーション」は
+  業種別データが無い限り「可能性」に留める。
 - **オプション戦略の優劣**: IV水準・スキュー・残存日数の情報が無いため、
   特定戦略を「優位」と断定せず「検討候補」に留める。ネイキッド売り回避等のリスク警告は可。
 - **方向性乖離の明示**: 現物と先物の符号が逆の投資家は、合算の符号にかかわらず
@@ -106,7 +125,7 @@ EXPRESSION_DISCIPLINE = """## 【重要】表現の規律（データから確�
   「機械的リバランス・バイ」と断定せず、「暴落底」「歴史的規模」等の価格・規模描写を根拠なしに使わない。
 - **事業法人と自社株買い**: 直接結び付けない。本文・チェックリストとも「現物の買い支えの有無」
   「売り越しの縮小/買い越し転換」で書き、自社株買いの実行状況は「企業開示で別途確認」と添える。
-- **Proxy GEXの混在明記**: オプション全体net（標準換算）が一方向でも、標準/miniやコール/プットで
+- **Proxy GEXの混在明記**: 日経225オプション計net（標準換算）が一方向でも、標準/miniやコール/プットで
   方向が割れる場合は「-GEXバイアスを伴う混在環境」のように混在を明記する。
 - **Proxy判定に基づく戦略の条件付き表現**: 「順張り優位が定石」等と断定せず、
   「建玉・IV・日経VI等でも確認された場合に値動き増幅リスクを高く評価」のような条件付きで書く。
@@ -119,6 +138,39 @@ EXPRESSION_DISCIPLINE = """## 【重要】表現の規律（データから確�
   恒常的な資金流出入と同一視しない。ネット集計からは機械的フローと方向性売買を分解できないため、
   「〜が一部含まれる可能性」までに留め、売買の全額を特定イベントに帰属させない。
   イベントの事前推計額（グロス）とJPXネット値を機械的に差し引いた「調整後ネット」を作らない。
+- **オプションフローと取引目的の分離（3段階）**: 確認できるのは①フローの向きと規模
+  （コール/プットの買い越し・売り越し）まで。②「下方向の保護需要または弱気方向のフローを示唆」は解釈。
+  ③「既存ロングのヘッジ」「新規の弱気ポジション」「スプレッドの一部」「手仕舞い」の別は、
+  限月・行使価格・新規/転売区分・建玉増減が無いため**確認不能**。
+  「プット買い越し＝下方ヘッジ姿勢」「ヘッジを行った」「保険を掛けている」と目的で断定せず、
+  「プットを買い越した。下方向の保護または弱気方向のフローを示唆するが、目的は確認不能」と書く。
+  エグゼクティブサマリーでも同じ規律を適用し、「ヘッジ姿勢」を確定事実として要約しない。
+- **オプションは原資産別に集計・表示する**: 標準換算（標準＋mini÷10）は日経225オプション専用の換算。
+  表題は必ず「日経225オプション標準換算net」と原資産を明記する。
+  TOPIXオプション・JPX日経400オプションは原資産・乗数が異なるため、同じ表・同じ合計に混ぜず
+  別項目として扱う。「日経225・TOPIX・JPX400 合計」のような見出し・数値を作らない。
+- **自己部門とMMを同一視しない（見出しも含む）**: 「自己（MM）のガンマ・ポジション」のような
+  見出し・小見出しを使わない。「自己部門を用いたProxy GEX判定」と書き、
+  自己部門にはMMのほか在庫・顧客注文の反対売買等が含まれること、
+  週間フローは建玉在庫ではないことを本文に明記する。
+- **規模の区分語の根拠**: 「ノイズ」「小〜中」「大」「超大」等の区分語を使う場合は、
+  参照知識の「需給規模の量的感覚スケール」に基づく**本レポート規定の区分**であることを明記する
+  （例:「本レポート規定の区分では『大』（±3,000〜10,000億円）に相当」）。
+  根拠を示さずに「大ゾーン」「異例の規模」「歴史的」と書かない。区分を示せない場合は
+  「4,921.6億円の売り越し」のように数値だけを記載する。
+- **唯一性の範囲限定**: 本データの対象は6主体のみで全投資部門を網羅していない。
+  「唯一の主体」と断定せず「表示対象6主体の中で唯一」と範囲を明示する。
+- **資金管理ルールは分析の結論ではない**: 「1トレードの許容損失は総資金の2%以内」等は
+  参照知識に置かれた一般的な運用ルールであり、今回のJPXデータから導かれた結論ではない。
+  記載する場合は「別途定めた資金管理ルール」と明示する。口座資金・損切り幅・ボラティリティの
+  入力が無いため、具体的な建玉枚数・投入金額は算出しない。
+- **参照知識と本規律の優先順位**: 後述の「参照知識」は解釈フレームワークであり、
+  そのままの断定文言（「ディーラーは〜する」「-GEXでは徹底した順張り」「CTAが売った」
+  「2%ルール」等）を本文へ転記してはならない。参照知識と本規律が食い違う場合は**本規律を優先**し、
+  参照知識の記述は必ず本規律の留保表現（Proxy判定・可能性・条件付き）に落として使う。
+- **事実区分の意識**: 各記述が「データから確認できる事実」「入力値から再計算した値」「解釈」
+  「確認不能」のどれに当たるかを書き手として区別する。解釈には「示唆」「可能性」を付け、
+  確認不能な事項をエグゼクティブサマリーの断定文に混ぜない。
 - **丸め注記**: 数値テーブル群の最後に
   「※表示値は丸めのため、表示値同士の再計算と0.1〜1億円程度の差が生じる場合がある」を1行入れる。
 """
@@ -162,6 +214,112 @@ def _build_sq_facts(week_date: date) -> str:
 
 対象週にSQ日が含まれる場合、SQは「対象週内に通過済みのイベント」として振り返りで扱うこと。
 翌週にSQ日が無いのに「来週はSQ週の水曜に留意」等と翌週の警戒事項に書いてはならない。
+"""
+
+
+# ── 時間軸（レポート作成日時と対象期間の整合） ─────────────────────
+# JPXの公表遅延・祝日ずれ・手動再生成により、対象週から見た「翌週」が
+# レポート作成時点では既に経過していることがある。経過済みの週を
+# 「来週の注目点」として書くと時制が破綻するため、機械判定して見出しを固定する。
+# （2026-08-06 外部査読: 8/6作成のレポートが 8/03〜8/07 を「来週」と表記した指摘）
+JST = timezone(timedelta(hours=9))
+TSE_CLOSE = time(15, 30)  # 東証の大引け。これ以降ならその日は「経過済み」とみなす
+
+
+def classify_period(as_of: date, period_start: date, period_end: date) -> str:
+    """対象期間が作成日から見て PAST / IN_PROGRESS / FUTURE のどれかを返す。"""
+    if period_end < as_of:
+        return "PAST"
+    if period_start <= as_of <= period_end:
+        return "IN_PROGRESS"
+    return "FUTURE"
+
+
+_PERIOD_HEADINGS = {
+    "PAST":        "対象週の翌週（{s}〜{e}）の事後検証項目",
+    "IN_PROGRESS": "進行中の週（{s}〜{e}）の残存監視項目",
+    "FUTURE":      "次週（{s}〜{e}）の注目点",
+}
+_PERIOD_NOTES = {
+    "PAST":        "作成時点で既に終了した週である。「来週」「今後の警戒事項」としては書かない。",
+    "IN_PROGRESS": "作成時点で進行中の週である。「来週」とは書かない。経過済みの日と未経過の日を分けて書く。",
+    "FUTURE":      "作成時点で未到来の週である。「次週の注目点」「今後の監視項目」として書いてよい。",
+}
+
+
+def _build_time_axis_facts(week_date: date, as_of: datetime) -> str:
+    """レポート作成日時と対象週・翌週の時制関係を機械判定した事実ブロックを返す。"""
+    as_of_date = as_of.date()
+    week_start = week_date - timedelta(days=4)
+    next_start = week_date + timedelta(days=3)
+    next_end   = week_date + timedelta(days=7)
+
+    state = classify_period(as_of_date, next_start, next_end)
+    fmt = {"s": next_start.strftime("%m/%d"), "e": next_end.strftime("%m/%d")}
+
+    lines = [
+        "",
+        "## 時間軸（機械判定による事実。これ以外の時制表現をしないこと）",
+        "",
+        f"- レポート作成日時: {as_of.strftime('%Y年%m月%d日 %H:%M')} JST",
+        f"- 対象週: {week_start.strftime('%m/%d')}〜{week_date.strftime('%m/%d')}（集計対象。既に終了）",
+        f"- 対象週の翌週: {next_start.strftime('%m/%d')}〜{next_end.strftime('%m/%d')} → 判定: {state}",
+        f"- この期間に使ってよい見出し: 「{_PERIOD_HEADINGS[state].format(**fmt)}」",
+        f"- {_PERIOD_NOTES[state]}",
+    ]
+
+    if state != "FUTURE":
+        last_done = as_of_date if as_of.time() >= TSE_CLOSE else as_of_date - timedelta(days=1)
+        done_end = min(last_done, next_end)
+        if done_end >= next_start:
+            lines.append(
+                f"- 経過済み: {next_start.strftime('%m/%d')}〜{done_end.strftime('%m/%d')}"
+                "（東京市場は引け後。事後検証の対象であり、今後の警戒事項として書かない）"
+            )
+        if done_end < next_end:
+            remain_start = max(done_end + timedelta(days=1), next_start)
+            lines.append(
+                f"- 未経過: {remain_start.strftime('%m/%d')}〜{next_end.strftime('%m/%d')}"
+                "（監視対象として書いてよい）"
+            )
+        lines.append(
+            "- 禁止: この期間を「来週」と表記すること、既に経過した日を「今後の注目点」に含めること。"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def _last_weekday_of_month(d: date) -> date:
+    """d が属する月の最終平日（月〜金）を返す。祝日は考慮しない。"""
+    import calendar
+    last = date(d.year, d.month, calendar.monthrange(d.year, d.month)[1])
+    while last.weekday() > 4:  # 土=5, 日=6
+        last -= timedelta(days=1)
+    return last
+
+
+def _build_calendar_facts(week_date: date) -> str:
+    """月末・四半期末の該当を機械判定した事実ブロックを返す。
+
+    「月末である」ことはConfirmedだが、「月末リバランスが実行された」「その寄与額」は
+    ネット集計から分解できないため Unconfirmed として扱わせる。
+    """
+    week_start = week_date - timedelta(days=4)
+    month_end = _last_weekday_of_month(week_date)
+    has_month_end = week_start <= month_end <= week_date
+    is_quarter_end = has_month_end and month_end.month in (3, 6, 9, 12)
+
+    hit = (f"{month_end.strftime('%m月%d日')}（月末最終平日・暦ベース）を含む"
+           if has_month_end else "含まない")
+    return f"""
+## カレンダー事実（機械計算。該当＝確認できる事実、フローの発生・寄与額＝確認不能）
+
+- 対象週（{week_start.strftime('%m/%d')}〜{week_date.strftime('%m/%d')}）に月末最終平日: {hit}
+- 四半期末（3/6/9/12月末）: {"該当" if is_quarter_end else "非該当"}
+
+「月末である」ことは確認できる事実だが、「月末リバランスが実行された」「その寄与額」は
+投資部門別ネット集計から分解できないため確認不能として扱うこと。
+月末であることを根拠に売り越し・買い越しの原因を断定しない。
 """
 
 
@@ -212,6 +370,24 @@ _ETF_DIST_NOTE_POST = """
   継続していれば「方向性の資金流出の可能性を引き上げ」と段階的に評価する（断定はしない）。
 """
 
+# 年次カレンダー（7月上旬のETF分配金）に該当しない週は、Scheduled Flow の
+# イベント入力が無い状態である。無入力を「イベント無し」と読み替えて季節性を
+# 事実のように書くことを防ぐため、確認不能の定型文を明示的に渡す。
+_SCHEDULED_FLOW_NO_INPUT = """
+## 【Scheduled Flow】イベントカレンダー未入力（確認不能事項として明記すること）
+
+本レポートには Scheduled Flow（予定された機械的フロー）のイベント入力が与えられていない。
+したがって、ETF分配金捻出売り・ETF設定/解約・配当再投資・指数リバランス（MSCI/FTSE/日経225/TOPIX入替）・
+月末/四半期末リバランス・自社株買い・大型公募等が投資主体別数値に与えた影響は**確認不能**である。
+
+- 「Scheduled Flowカレンダーが入力されていないため、ETF分配金捻出売り・指数リバランス・
+  配当再投資等が投資主体別数値に与えた影響は確認不能」と一度明記すること。
+- 「月初の新規資金流入」「欧米勢の夏季休暇による流動性低下」等の一般的な季節性仮説は、
+  今回の入力からは確認できない。記載する場合は「一般的な季節性仮説であり今回の数値からは
+  確認不能」と明示し、確認された数値と混ぜて断定しない。
+- 特定のイベントを、ある主体の売り越し・買い越しの原因として断定しない。
+"""
+
 
 def _build_scheduled_flow_note(week_date: date) -> str:
     """対象週が年次Scheduled Flowイベント（7月上旬のETF分配金捻出売り）に
@@ -228,7 +404,7 @@ def _build_scheduled_flow_note(week_date: date) -> str:
         return _ETF_DIST_NOTE_MAIN
     if post_window:
         return _ETF_DIST_NOTE_POST
-    return ""
+    return _SCHEDULED_FLOW_NO_INPUT
 
 
 def _fmt_net(val: float | None) -> str:
@@ -334,8 +510,9 @@ def _build_options_table(options_rows: list[dict]) -> str:
         data[inv][ot]["net_oku"]  += r.get("net_amount_oku", 0.0) or 0.0
 
     lines = [
-        "=== 日経225オプション 投資家別 売買差引（net、正=買い越し / 負=売り越し）===",
+        "=== 株価指数オプション 投資家別 売買差引（原資産別。net、正=買い越し / 負=売り越し）===",
         "  表記: 枚数 / 億円 (プレミアム金額換算、負=プレミアム支払超過、正=プレミアム受取超過)",
+        "  ※日経225 / TOPIX / JPX400 は原資産・乗数が異なる。合算せず原資産別に評価すること。",
         "",
     ]
     # ヘッダー
@@ -363,7 +540,10 @@ def _build_options_table(options_rows: list[dict]) -> str:
         )
 
     lines.append("")
-    lines.append("--- 標準換算枚数（= 標準 + mini÷10）。規模の比較・合算は必ずこの値で行うこと ---")
+    lines.append("--- 日経225オプション 標準換算枚数（= 日経225標準 + 日経225mini÷10）---")
+    lines.append("  ※これは日経225オプション専用の換算。TOPIX・JPX400オプションは原資産・乗数が")
+    lines.append("    異なるため、この換算・この合計に含めない（別項目として扱うこと）。")
+    lines.append("  ※日経225オプション内での規模の比較・合算は必ずこの値で行うこと。")
     for inv in OPTION_INVESTORS:
         if inv not in data:
             continue
@@ -371,7 +551,7 @@ def _build_options_table(options_rows: list[dict]) -> str:
         lines.append(
             f"  {OPTION_INVESTOR_JP.get(inv, inv):<10}: "
             f"コール net {c_std:+,.1f}枚 / プット net {p_std:+,.1f}枚 / "
-            f"オプション全体 net {c_std + p_std:+,.1f}枚"
+            f"日経225オプション計 net {c_std + p_std:+,.1f}枚"
         )
 
     if "foreign" in data:
@@ -379,8 +559,16 @@ def _build_options_table(options_rows: list[dict]) -> str:
         fc_std = _std_eq("foreign", "call")
         lines.append("")
         lines.append(
-            f"※ 海外投資家のヘッジ姿勢（標準換算）: プット net {fp_std:+,.1f}枚、コール net {fc_std:+,.1f}枚 "
-            f"(プット買い越し優位 = 下方ヘッジ姿勢、コール買い越し優位 = 上方期待)"
+            f"※ 海外投資家の日経225オプション（標準換算）: "
+            f"プット net {fp_std:+,.1f}枚、コール net {fc_std:+,.1f}枚。"
+        )
+        lines.append(
+            "   確認できるのは向きと規模まで。プット買い越し優位は下方向の保護需要または"
+            "弱気方向のフローを示唆するが、"
+        )
+        lines.append(
+            "   既存ロングのヘッジ／新規の弱気ポジション／スプレッドの一部／手仕舞いの別は"
+            "限月・行使価格・建玉増減が無いため確認不能。"
         )
 
     return "\n".join(lines)
@@ -404,8 +592,10 @@ def _build_futures_breakdown(futures_rows: list[dict]) -> str:
         "    丸め前の値で計算する合計と±1億円程度ずれることがある。",
         "  ※枚数はラージ/ミニで乗数が、日経/TOPIXで原資産が異なるため、",
         "    商品をまたぐ生枚数の合算は経済的に無意味。合計は金額のみ。",
-        "  ※経済量としての枚数比較は「ラージ換算」行（= ラージ + ミニ÷10）を使うこと。",
-        "    日経225とTOPIXは原資産が異なるため、ラージ換算同士でも合算しない。",
+        "  ※「ラージ換算」行（= ラージ + ミニ÷10）は同一原資産内でラージとミニを統合するための値。",
+        "    日経225とTOPIXは原資産・指数水準・1枚あたりの契約金額が異なるため、ラージ換算同士でも",
+        "    合算してはならず、「どちらが大きいか」の規模比較にも使ってはならない。",
+        "    原資産をまたぐ規模比較・優劣判定は実約定金額ネット（億円）のみで行うこと。",
         "",
     ]
     header = f"{'商品':<18}" + "".join(f" {BREAKDOWN_LABELS[i]:>{col_w}}" for i in BREAKDOWN_INVESTORS)
@@ -452,6 +642,91 @@ def _build_futures_breakdown(futures_rows: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# ── NT方向（日経225 vs TOPIX）の機械判定 ──────────────────────────
+# NT倍率 = 日経225 ÷ TOPIX。TOPIX優位はNT倍率の「低下」方向であり NTロングではない。
+# 生成AIが「TOPIXを強く買い越す＝NTロング」と逆方向に書く事故を防ぐため、
+# 分類をPython側で確定させてデータに埋め込む。
+# （2026-08-06 外部査読で「結論を反転させる最大の問題」と指摘された箇所）
+def classify_nt_bias(nikkei_net_amount: float, topix_net_amount: float) -> dict:
+    """日経225先物とTOPIX先物のネット金額（億円・正=買い越し）からNT方向を分類する。
+
+    枚数ではなく金額で判定する（原資産が異なるため枚数の大小は経済規模の大小ではない）。
+    """
+    n, t = nikkei_net_amount, topix_net_amount
+    if n > 0 and t < 0:
+        return {
+            "classification": "NT_LONG_CANDIDATE",
+            "label": "日経225買い越し・TOPIX売り越し → NTロング方向の組み合わせ",
+            "note": "同一主体による純粋なNTスプレッド取引かはネット集計から確認不能",
+        }
+    if n < 0 and t > 0:
+        return {
+            "classification": "NT_SHORT_CANDIDATE",
+            "label": "日経225売り越し・TOPIX買い越し → NTショート方向の組み合わせ（NT倍率低下方向）",
+            "note": "同一主体による純粋なNTスプレッド取引かはネット集計から確認不能",
+        }
+    if n > 0 and t > 0:
+        leader = "TOPIX優位" if t > n else ("日経225優位" if n > t else "同程度")
+        return {
+            "classification": "BOTH_BUY",
+            "label": f"両指数とも買い越し（金額ベースで{leader}）",
+            "note": "スプレッド取引ではない。NTロング/NTショートの語を使わない",
+        }
+    if n < 0 and t < 0:
+        leader = ("TOPIX側の売りが優位" if abs(t) > abs(n)
+                  else ("日経225側の売りが優位" if abs(n) > abs(t) else "同程度"))
+        return {
+            "classification": "BOTH_SELL",
+            "label": f"両指数とも売り越し（金額ベースで{leader}）",
+            "note": "スプレッド取引ではない。NTロング/NTショートの語を使わない",
+        }
+    return {
+        "classification": "ONE_SIDE_ZERO_OR_NEUTRAL",
+        "label": "片側が中立（ゼロ）",
+        "note": "NTロング/NTショートの語を使わない。方向は指数ごとに個別に記載する",
+    }
+
+
+def nt_amounts_by_investor(futures_rows: list[dict]) -> dict:
+    """投資家別に日経225先物・TOPIX先物のネット金額（億円）を合算して返す。"""
+    from collections import defaultdict
+
+    amt: dict = defaultdict(lambda: {"nikkei": 0.0, "topix": 0.0})
+    for r in futures_rows:
+        ft  = r.get("futures_type", "")
+        inv = r.get("investor_type", "")
+        oku = r.get("net_amount_oku", 0.0) or 0.0
+        if ft.startswith("nikkei225"):
+            amt[inv]["nikkei"] += oku
+        elif ft.startswith("topix"):
+            amt[inv]["topix"] += oku
+    return dict(amt)
+
+
+def _build_nt_bias_facts(futures_rows: list[dict]) -> str:
+    """投資家別のNT方向分類（機械判定）をテキストブロックとして返す。"""
+    amt = nt_amounts_by_investor(futures_rows)
+
+    lines = [
+        "=== NT方向（機械判定による事実。この分類以外のNT表現をしないこと）===",
+        "  NT倍率 = 日経225 ÷ TOPIX。判定は実約定金額ネット（億円）で行う（枚数では判定しない）。",
+        "  「NTロング」「NTショート」は日経225とTOPIXの符号が逆のときだけ使用可。",
+        "  両方買い越し／両方売り越しはスプレッド取引ではないため、規模の優劣のみを述べること。",
+        "",
+    ]
+    for inv in BREAKDOWN_INVESTORS:
+        if inv not in amt:
+            continue
+        n, t = amt[inv]["nikkei"], amt[inv]["topix"]
+        c = classify_nt_bias(n, t)
+        lines.append(
+            f"  {BREAKDOWN_LABELS.get(inv, inv):<6}: "
+            f"日経225 {n:+,.1f}億円 / TOPIX {t:+,.1f}億円 → {c['label']}"
+        )
+        lines.append(f"          ※{c['note']}")
+    return "\n".join(lines)
+
+
 def _build_spot_futures_detail(context: dict, futures_rows: list[dict]) -> str:
     """海外投資家・信託銀行の現物・先物クロス詳細を生成"""
     from collections import defaultdict
@@ -481,9 +756,10 @@ def _build_spot_futures_detail(context: dict, futures_rows: list[dict]) -> str:
                 f"  {FUTURES_TYPE_JP.get(ft, ft):<16}: "
                 f"{d['net_lots']:+,}枚 / {d['net_oku']:+.1f}億円"
             )
-        total_lots = sum(data[ft][inv_key]["net_lots"] for ft in data)
-        total_oku  = sum(data[ft][inv_key]["net_oku"]  for ft in data)
-        lines.append(f"  先物合計      : {total_lots:+,}枚 / {_fmt_net(total_oku)}")
+        # 商品をまたぐ生枚数の合計は経済量として無意味なため、合計は金額のみを渡す
+        # （枚数合計を渡すとレポート本文に転記される事故が起きる）
+        total_oku = sum(data[ft][inv_key]["net_oku"] for ft in data)
+        lines.append(f"  先物合計（金額のみ）: {_fmt_net(total_oku)}")
         combined = inv.get("combined_net", 0) or 0
         lines.append(f"  現物＋先物合算: {_fmt_net(combined)}")
         spot_z    = f"{inv['zscore_52w']:+.2f}"         if inv.get("zscore_52w")         is not None else "―"
@@ -502,7 +778,7 @@ def _build_data_table(context: dict) -> str:
     for inv in context["investors"]:
         tag = ""
         if inv.get("key") == "dealer":
-            tag = "[自己:MM・在庫フロー(方向性判定対象外)]"
+            tag = "[自己:MM・在庫・顧客反対売買を含む(方向性判定対象外・MMと同一視しない)]"
         elif inv.get("is_twin_buy"):
             tag = "[両輪買い:Twin-Buy]"
         elif inv.get("is_twin_sell"):
@@ -522,7 +798,7 @@ def _build_data_table(context: dict) -> str:
     for inv in context["investors"]:
         tag = ""
         if inv.get("key") == "dealer":
-            tag = "[自己:MM・在庫フロー(方向性判定対象外)]"
+            tag = "[自己:MM・在庫・顧客反対売買を含む(方向性判定対象外・MMと同一視しない)]"
         elif inv.get("is_twin_buy"):
             tag = "[両輪買い:Twin-Buy]"
         elif inv.get("is_twin_sell"):
@@ -545,6 +821,8 @@ def _build_data_table(context: dict) -> str:
         lines.append("")
         lines.append(_build_futures_breakdown(futures_rows))
         lines.append("")
+        lines.append(_build_nt_bias_facts(futures_rows))
+        lines.append("")
         lines.append(_build_spot_futures_detail(context, futures_rows))
 
     # オプション集計（存在する場合のみ追加）
@@ -558,7 +836,8 @@ def _build_data_table(context: dict) -> str:
 
 def generate_weekly_report(week_date: date, context: dict,
                            mode: str = "weekly",
-                           market_data: dict | None = None) -> str:
+                           market_data: dict | None = None,
+                           generated_at: datetime | None = None) -> str:
     """
     Claude APIを呼び出して週次レポートのMarkdownを生成する
 
@@ -573,8 +852,13 @@ def generate_weekly_report(week_date: date, context: dict,
     market_data : dict | None
         CLIから渡す市場数値。例: {"vix": 18.5, "nikkei_vi": 22.0, "usdjpy": 143.5}
         指定した項目はファイルの記述より優先される。
+    generated_at : datetime | None
+        レポート作成日時（JST）。省略時は現在時刻。
+        対象週の翌週が作成時点で「未到来 / 進行中 / 経過済み」のどれかを判定し、
+        経過済みの期間を「来週の注目点」として書かせないために使う。
     """
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    as_of = generated_at or datetime.now(JST)
 
     # 知識ファイルを読み込み
     micro_flows    = _load_reference("jpx_micro_flows.md")
@@ -620,28 +904,47 @@ def generate_weekly_report(week_date: date, context: dict,
 
 {EXPRESSION_DISCIPLINE}
 
-## 【新規】オプションフローの解釈ルール
+## オプションフローの解釈ルール（3段階を必ず区別する）
 
 データには日経225オプション（標準・ミニ）の投資家別 net 枚数が含まれる場合があります。
-解釈の基本：
-- **規模の比較・合算は必ず「標準換算枚数（= 標準 + mini÷10）」で行うこと**。
-  miniの乗数は標準の1/10であり、生枚数の単純合算は経済量として無意味（データに標準換算値を併記済み）
-- **プット買い越し（net_lots > 0）= 下方ヘッジ・ボラ上昇期待・弱気バイアス**
-- **プット売り越し（net_lots < 0）= プットライト/プレミアム獲得・横ばい〜強気想定**
-- **コール買い越し = 上方期待・ロングガンマ取得（ボラ上昇期待）**
-- **コール売り越し = カバードコール／レンジ想定／上方抑制要因**
-- **海外投資家のプット買いが継続的・大規模** = 現物先物のヘッジ目的が明確（=リスクオン姿勢でも保険を掛けている）
-- **コール売り＋プット買い（ベア・コンビネーション）** = リスクオフ志向
-- **コール買い＋プット売り（ブル・コンビネーション）** = リスクオン志向
+TOPIXオプション・JPX日経400オプションは原資産・乗数が異なるため、日経225とは別項目として扱い、
+同じ表・同じ合計に混ぜないこと。
 
-GEX 環境判定への寄与：
-- **証券会社（dealer）のオプションネット** はマーケットメーカーのデルタヘッジ需要を映す
-- **海外プット買い＋自己プット売り** が同時発生 → 自己（MM）がショートガンマを背負う = **-GEX（ボラ拡大環境）リスク**
-- **海外プット売り＋自己プット買い** = 自己がロングガンマ = **+GEX（Pinning安定環境）**
-- 上記はいずれも**週間フローの標準換算枚数からのProxy判定**。建玉・行使価格・限月のデータは無いため、
-  「-GEX環境」と断定せず「-GEXバイアス（Proxy判定）」等と表現する
+### 第1段階: 確認できるフロー（事実）
+- **規模の比較・合算は同一原資産内で「標準換算枚数（= 標準 + mini÷10）」で行う**。
+  miniの乗数は標準の1/10であり、生枚数の単純合算は経済量として無意味（データに標準換算値を併記済み）。
+- 確認できるのは「コール net の買い越し／売り越し」「プット net の買い越し／売り越し」の
+  向きと規模まで。ここまでが事実である。
 
-「現物先物の方向性乖離」とオプションフローを必ずセットで分析し、海外勢のリスク管理姿勢を立体的に解釈すること。
+### 第2段階: 解釈（必ず「示唆」「可能性」を付ける）
+- プット買い越し優位 → 下方向の保護需要または弱気方向のフローを示唆
+- プット売り越し優位 → プレミアム受取または横ばい〜強気想定のフローを示唆
+- コール買い越し優位 → 上方向の参加需要またはロングガンマ取得を示唆
+- コール売り越し優位 → 上方向の抑制要因またはプレミアム受取のフローを示唆
+
+### 第3段階: 取引目的（確認不能。断定禁止）
+既存ロングのヘッジ / 新規の弱気ポジション / スプレッドの一部 / 既存ポジションの手仕舞い の
+いずれであるかは、限月・行使価格・新規/転売区分・建玉増減が無いため分解できません。
+「ヘッジを行った」「保険を掛けている」「リスクオフ志向」等と目的・姿勢で断定せず、
+「目的は確認不能」と明記してください。「ベア・コンビネーション」「ブル・コンビネーション」等の
+戦略名も、同一限月・同一行使価格・同時性が確認できないため使いません。
+エグゼクティブサマリーでも同じ規律を適用し、「下方ヘッジ姿勢」を確定事実として要約しないこと。
+
+### Proxy GEX 環境判定への寄与
+- 判定の基礎は**自己部門のコール＋プット合計（標準換算）のネット方向**とする。
+  オプションの買い手＝ロングガンマ、売り手＝ショートガンマ。合計が売り越し方向なら
+  -GEX方向のバイアス、買い越し方向なら +GEX方向のバイアスが示唆される。
+  コール/プットや標準/miniで方向が割れる場合は「混在」と明記する。
+- **自己部門＝MMではない**。自己部門にはMMのほか在庫・顧客注文の反対売買等が含まれ、
+  週間フローは建玉在庫ではない。「自己（MM）のガンマ・ポジション」という見出しを使わず、
+  「自己部門を用いたProxy GEX判定」と書き、この留保を本文に明記すること。
+- 行使価格別建玉・限月・Gamma・原資産との距離のデータが無いため**確定的なGEX判定は不可**。
+  「-GEX環境である」「ディーラーはネガティブガンマ」と断定せず、
+  「週間フローからは-GEX方向のバイアスが示唆される（Proxy判定）」と表現する。
+- -GEX方向のバイアスが示唆される場合でも、裸のオプション売り（ネイキッド・ショート）は推奨しない。
+
+「現物先物の方向性乖離」とオプションフローの関係は「同方向のフローとして整合する」までで表現し、
+海外勢の「姿勢」「意図」「リスク管理方針」を断定しないでください。
 
 ## 参照知識（解釈フレームワークとして活用）
 
@@ -665,7 +968,7 @@ GEX判定・季節性アノマリー・マクロ環境の解釈はすべてこ�
 過去の特定イベント（例：関税ショック、特定の戦争・政策等の固有名詞）を
 原因として断定的に言及しないこと。外部リスク要因は「地政学的不確実性」
 「外部ショック」等の一般表現を使うこと。{extra_market}
-{_build_sq_facts(week_date)}{_build_scheduled_flow_note(week_date)}"""
+{_build_time_axis_facts(week_date, as_of)}{_build_sq_facts(week_date)}{_build_calendar_facts(week_date)}{_build_scheduled_flow_note(week_date)}"""
 
     # 週初日（月曜）と週末日（金曜）の表記を計算
     week_start = week_date - timedelta(days=4)
@@ -709,47 +1012,65 @@ Markdownレポートを生成してください。
 ## 🔍 注目セグメント動向
 ### 🔵 海外投資家（必須・最詳細に）
 - 現物・先物（日経225ラージ/ミニ・TOPIXラージ/ミニ）の個別数値を列挙し、商品別の強弱感の違いを解説する
-- 日経225先物とTOPIX先物の方向性の違いを必ず分析すること（比較は**ラージ換算枚数または金額ベース**で行い、生枚数の合算値を使わない）
-- 現物と先物の方向性の一致・乖離（ヘッジvsリスクオン等）を解釈すること
+- 日経225先物とTOPIX先物の方向性の違いを必ず分析すること。**日経225とTOPIXの規模比較・優劣判定は
+  実約定金額ネット（億円）のみで行い**、ラージ換算を含む枚数で「どちらが大きい」と比較しないこと
+  （枚数は同一原資産内のラージ/ミニ統合にのみ使う）
+- NTロング／NTショートの語は、データ末尾の「NT方向（機械判定による事実）」の分類に従うこと。
+  両指数が同符号の週はこれらの語を使わず、「両指数とも買い越し（TOPIX優位）」のように書く
+- 現物と先物の方向性の一致・乖離を解釈すること（「ヘッジ」「リスクオン」等の目的は断定せず可能性に留める）
 - Zスコアを踏まえた統計的な強弱の評価を含めること
 
 ### 🟢 信託銀行（必須・詳細に）
 - 現物・先物（日経225ラージ/ミニ・TOPIXラージ/ミニ）の個別数値を列挙すること
-- 信託銀行の先物の使われ方（ヘッジ目的か、インデックスリバランスか、テールリスクヘッジか）を解釈すること
-- 海外投資家と信託銀行の動向の相互関係（どちらがカウンターパーティになっているか）を分析すること
+- 信託銀行の先物の使われ方（ヘッジ・インデックスリバランス・テールリスクヘッジ等）は
+  **可能性を並べて評価**し、いずれか一つに断定しないこと
+- 海外投資家と信託銀行の**集計上の対応関係**（例:「一方の買い越しに対し他方が売り越し」）を記述すること。
+  ネット集計から相対取引の相手方は特定できないため「カウンターパーティ」と断定しないこと
 
 ### 🟡 個人投資家
 ### 🟤 投資信託
 （特異動向があれば事業法人・自己も）
 
-## 🎯 オプションフロー分析（日経225標準＋ミニ）
+## 🎯 オプションフロー分析（日経225標準＋ミニ／TOPIX・JPX400は別掲）
 データにオプション売買差引が含まれる場合のみ出力:
 - **オプションデータに含まれる全投資家**の **コール/プット別 net 枚数（生枚数と標準換算の両方）** をテーブルで提示
   （生枚数の内訳なしに標準換算値だけを引用しない）
-- **海外プット買い ≷ コール買い** の比較は**標準換算枚数**で行い、下方ヘッジ姿勢の強弱を判定
-- **自己のコール＋プット合計（標準換算）のネット方向** から MM のガンマ・ポジションを
-  **Proxy判定**として推定（±GEXバイアス表現・内訳併記・方向が割れれば「混在」）
-- 現物・先物の方向性乖離との整合性（ヘッジ的フローの裏付けになっているか）を解説
+- 標準換算の表題は必ず「**日経225オプション標準換算net**」とし、TOPIXオプション・JPX400オプションは
+  原資産別の別項目として記載すること。3商品を合算した「全体net」を作らない
+- **海外のプット net ≷ コール net** の比較は**日経225の標準換算枚数**で行う。
+  向き（買い越し/売り越し）と規模までを事実として書き、目的（ヘッジか弱気か手仕舞いか）は「確認不能」と明記する
+- **自己部門のコール＋プット合計（標準換算）のネット方向**から **Proxy GEX判定**を行う
+  （±GEXバイアスは「示唆」表現・内訳併記・方向が割れれば「混在」）。
+  見出しを「自己（MM）のガンマ・ポジション」とせず「自己部門を用いたProxy GEX判定」とし、
+  自己部門がMMのほか在庫・顧客反対売買を含むこと、週間フローが建玉在庫でないことを本文に明記する
+- 現物・先物の方向性乖離との整合性を「同方向のフローとして整合する」までで解説する
 - データが空（過去週でオプションデータ未投入）の場合は本セクションを省略してよい
 
 ## 📅 先週比・Zスコア分析
 （統計的な位置付けを言及）
 
 ## 💡 戦略示唆
-- GEX環境に応じた推奨アプローチ
-- 来週の注目点・警戒事項
-- セリングクライマックス等の反転確認シグナルは「□」のチェックリスト形式（5項目以上）で列挙すること
+- Proxy GEX判定に応じた推奨アプローチ（条件付きで書き、断定しない）
+- 対象週の翌週に関する項目の見出しは、system の「時間軸（機械判定による事実）」の判定に従うこと
+  （FUTURE=「次週の注目点」／ IN_PROGRESS=「進行中の週の残存監視項目」／ PAST=「対象週の翌週の事後検証項目」）。
+  作成時点で既に経過した日を「今後の警戒事項」として書かないこと
+- 反転確認シグナルは「□」のチェックリスト形式（5項目以上）で列挙すること
 ```
 
 ## 注意事項
 - **符号の解釈を絶対に間違えないこと**：データテーブルの正値=買い越し、負値=売り越し。レポート本文で「▲/▼」を使う場合は買い越し=▲、売り越し=▼で統一すること
 - **両輪買い／両輪売りの判定は現物と先物の符号が一致した場合のみ**。符号が逆（例: 現物=正、先物=負）の場合は「両輪」とは呼ばず「裁定的／方向性乖離」と表現する
 - 先物内訳テーブルは必ずMarkdownテーブル形式で出力すること（省略不可）
-- 「両輪買い（Twin-Buy）」が確認された場合は最強強気シグナルとして必ず明記する
-- 信託銀行の売り越しは「GPIFリバランス＝健全な上昇の証左」として解釈する
+- 「両輪買い（Twin-Buy）」が確認された場合は強気方向の強いシグナルとして必ず明記する（自己部門は判定対象外）
+- 信託銀行の売買は「GPIF等の年金リバランスを含む可能性がある信託銀行フロー」と表現し、GPIFと同一視しないこと。
+  「健全な上昇の証左」等の価値判断を根拠なく添えない
 - Zスコアが±2.0を超えている場合は統計的に異常な水準として言及する
 - 季節性アノマリー（SQ週・月末・4月効果・7月上旬のETF分配金捻出売り・8月夏枯れ等）に該当する場合は必ず記載する。SQ日程はsystemの「SQ日程（機械計算による事実）」のみを根拠とすること
 - 投資家セグメント内で先物内訳（日経225ラージ/ミニ・TOPIXラージ/ミニ）を列挙した後の「先物合計」行は必ず**金額（億円）のみ**で記載し、商品をまたぐ合計枚数（例:「先物合計: -20,543枚」）は絶対に記載しない
+- 日経225とTOPIXの**枚数（ラージ換算を含む）を「約3倍」等と規模比較しない**。原資産をまたぐ規模比較は金額のみ
+- 表示対象は6主体のみで全投資部門を網羅していない。「唯一」と書く場合は「表示対象6主体の中で唯一」と範囲を明示する
+- 規模の区分語（ノイズ／小〜中／大／超大）を使う場合は、参照知識の量的感覚スケールに基づく本レポート規定の区分であることを明記する
+- 許容損失率（「総資金の2%」等）・具体的な建玉枚数・投入金額は本データから導けない。記載する場合は「別途定めた資金管理ルール」と明示する
 - 客観的・簡潔に。投資家が実際に使えるコメントを目指す
 - 「関税ショック」「○○戦争」等の特定イベント固有名詞は断定的に使わず「外部ショック」「地政学的不確実性」等の一般表現を使うこと
 """
@@ -781,7 +1102,59 @@ Markdownレポートを生成してください。
     if message.stop_reason == "max_tokens":
         logger.warning(f"[AIエージェント] 週次レポートがmax_tokens上限で途中切断 ({len(report_md)}文字)")
     logger.info(f"[AIエージェント] レポート生成完了 ({len(report_md)}文字)")
+
+    _run_report_lint(report_md, context, week_date, as_of)
     return report_md
+
+
+def _run_report_lint(report_md: str, context: dict,
+                     week_date: date, as_of: datetime) -> list[dict]:
+    """生成後の公開前チェック。違反はWARNINGでログに出す（生成は止めない）。"""
+    from agents import report_lint
+
+    futures_rows = context.get("futures_rows", [])
+    nt_classifications = {
+        inv: classify_nt_bias(v["nikkei"], v["topix"])["classification"]
+        for inv, v in nt_amounts_by_investor(futures_rows).items()
+    } if futures_rows else None
+
+    next_start = week_date + timedelta(days=3)
+    next_end   = week_date + timedelta(days=7)
+    state = classify_period(as_of.date(), next_start, next_end)
+
+    findings = report_lint.lint_weekly_report(
+        report_md, nt_classifications=nt_classifications, next_week_state=state)
+
+    _write_lint_result(findings)
+
+    if not findings:
+        logger.info("[公開前チェック] 違反なし")
+        return findings
+
+    n_p0 = sum(1 for f in findings if f["severity"] == report_lint.SEVERITY_P0)
+    logger.warning(f"[公開前チェック] {len(findings)}件検出（P0={n_p0}件）")
+    for line in report_lint.format_findings(findings):
+        logger.warning(f"  {line}")
+    if n_p0:
+        logger.warning("  → P0はレポートの結論が反転し得る違反です。内容を確認し再生成を検討してください。")
+    return findings
+
+
+def _write_lint_result(findings: list[dict]) -> None:
+    """公開前チェックの結果をファイルに残す。
+
+    GitHub Actions のログは能動的に見に行かないと気づけないため、
+    後続ステップのサマリーメール（scripts/send_summary_mail.py）から読めるようにする。
+    """
+    from agents import report_lint
+
+    out_dir = Path(os.environ.get("OUTPUT_DIR", "./outputs"))
+    try:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        body = "\n".join(report_lint.format_findings(findings)) if findings else "OK"
+        (out_dir / "last_lint.txt").write_text(body + "\n", encoding="utf-8")
+    except Exception as e:  # 書けなくてもレポート生成は継続する
+        logger.warning(f"[公開前チェック] 結果ファイルの書き込みに失敗: {e}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -970,8 +1343,8 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
 - 季節性アノマリーとの比較（前年同月比）
 
 ### 🟢 信託銀行
-- 中期的な売買方向とリバランス解釈
-- 海外投資家とのカウンターパーティ関係の変化
+- 中期的な売買方向とリバランス解釈（GPIFと同一視せず「年金リバランスを含む可能性」に留める）
+- 海外投資家との集計上の対応関係の変化（「カウンターパーティ」と断定しない）
 
 ### 🟡 個人投資家
 - 逆張り/順張りパターンの継続性

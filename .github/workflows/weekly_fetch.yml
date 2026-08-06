@@ -81,6 +81,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # レポート生成規律の回帰テスト（AI呼び出しなし・1秒未満）。
+      # NT方向判定・時間軸判定・異種原資産の枚数合算禁止が壊れた状態で
+      # 本番レポートを作らないよう、取得の前に落とす。
+      - name: Run report rule regression tests
+        run: python -m pytest tests/ -q
+
       - name: Run JPX weekly fetch
         id: fetch
         run: |

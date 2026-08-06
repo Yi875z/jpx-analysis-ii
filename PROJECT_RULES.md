@@ -4,7 +4,7 @@
 > 本ファイルへの参照のみを記載し、ルール本文を複製しないこと。
 > 新しいAIエージェントを導入する場合も、そのエージェントの規約ファイルから本ファイルを参照させるだけでよい。
 
-- 最終更新: 2026-06-10（テンプレート v0.1 から初版作成）
+- 最終更新: 2026-08-06（外部査読v5反映に伴い pytest 導入。§5 のテストコマンドを更新）
 - 対象プロジェクト: jpx-analysis（JPX投資主体別 売買フロー分析・Supabase + Streamlit + Claude API）
 - 公開区分: L1（GitHub Private リポジトリ jpx-analysis-ii。限定アクセス。正式決定は未確認）
 
@@ -77,7 +77,9 @@
   - ダッシュボード: `streamlit run dashboard/app.py` → http://localhost:8501
   - 週次レポート再生成: `python main.py --report-only --date YYYY-MM-DD`
   - 月次サマリー: `python main.py --monthly YYYY-MM` / Excel再生成: `python scripts/build_excel.py` / バックフィル: `python scripts/backfill_jpx.py --from YYYY-MM-DD`
-- **テストコマンド**: なし（テストディレクトリ未整備・2026-06-10 時点。整備時は §5 を更新）
+- **テストコマンド**: `python -m pytest tests/ -q`
+  （`tests/test_report_rules.py` = レポート生成規律の回帰テスト。AI呼び出しを伴わない純粋関数のみを対象とし、
+  NT方向判定・時間軸判定・異種原資産の枚数合算禁止・公開前チェック（`agents/report_lint.py`）を検証する）
 - **DBスキーマの正**: `db/schema.sql`（Supabase SQL Editor で実行。推測禁止）。主要テーブル `weekly_futures`（week_date / investor_type / futures_type / long_lots / short_lots / net_lots / index_close / net_amount_oku / source_url）
 - **データソースと取得条件**: JPX先物CSV（`scripts/parse_futures_csv.py` v1.1）+ 現物XLS（`scripts/parse_spot_xls.py`）。投資家コードは下表で固定（誤ると全数値がズレる）:
   海外投資家=**60** / 信託銀行=**23** / 事業法人=**32** / 個人=30 / 自己=10

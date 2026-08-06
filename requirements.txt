@@ -15,3 +15,6 @@ streamlit>=1.32.0
 plotly>=5.18.0
 streamlit-authenticator>=0.3.2  # ログイン保護用（Cloud デプロイ時に有効化）
 pypdf>=4.0.0                    # JPX仕様確認・将来のPDF抽出用
+
+# ─── 開発・テスト ──────────────────────────────────────
+pytest>=8.0.0                   # python -m pytest tests/ -q（AI呼び出しを伴わない純粋関数の回帰テスト）
