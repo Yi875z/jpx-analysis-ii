@@ -62,7 +62,10 @@ jobs:
       # max_tokens=32000 + streaming が前提になっている（切断防止）。
       # バージョンは固定指定＝新モデルが出ても自動では変わらない（意図的）。
       # 新Opusが出たら outputs/ab_test/ の手順でA/B比較してからここを変更する。
-      CLAUDE_MODEL: claude-opus-5
+      # 2026-09-26 A/B（9/11週で Opus 5 high / Opus 5.5 medium・high）の結果 Opus 5.5 に切替。
+      # Opus 5.5 は effort の既定が medium（Opus 5 は high）なので、report_agent.py の
+      # DEFAULT_EFFORT で明示している。拒否（refusal）時は Opus 5 で1回だけ書き直す。
+      CLAUDE_MODEL: claude-opus-5-5
       OUTPUT_DIR: ./outputs
       LOG_DIR:    ./logs
 

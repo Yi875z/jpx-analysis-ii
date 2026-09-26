@@ -139,7 +139,8 @@ def _model_label() -> str:
             raw = DEFAULT_MODEL
         except Exception:
             return "Claude"
-    pretty = {"claude-opus-5": "Claude Opus 5", "claude-opus-4-8": "Claude Opus 4.8",
+    pretty = {"claude-opus-5-5": "Claude Opus 5.5",
+              "claude-opus-5": "Claude Opus 5", "claude-opus-4-8": "Claude Opus 4.8",
               "claude-sonnet-5": "Claude Sonnet 5", "claude-sonnet-4-6": "Claude Sonnet 4.6"}
     return pretty.get(raw, raw)
 

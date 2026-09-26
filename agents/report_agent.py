@@ -17,9 +17,19 @@ SKILL_REFS_DIR = Path(__file__).parent.parent / "skills" / "jpx-investor-data" /
 # 使用モデルは .env / GitHub Secrets の CLAUDE_MODEL で切替可能。
 # 2026-07-27 A/B比較（7/17週）の結果 Opus 5 へ移行。フォールバックも Opus 5 に揃える
 # （以前は Sonnet 4.6 で、CLAUDE_MODEL 未設定のローカル実行が黙って別モデルになっていた）。
-DEFAULT_MODEL = "claude-opus-5"
+# 2026-09-26 A/B比較の結果 Opus 5.5 へ移行（outputs/ab_test/ に比較結果）。
+DEFAULT_MODEL = "claude-opus-5-5"
 
-# Opus 5 は thinking 未指定でも適応思考が有効になり、思考トークンが max_tokens 枠を消費する。
+# 安全分類器に拒否された（stop_reason == "refusal"）ときに1回だけ書き直すモデル。
+# Opus 5.5 は Opus 5 より分類器の範囲が広い（bio・reasoning_extraction が追加）。
+# 拒否されると本文が空のまま公開前チェックとメールに進んでしまうため、別モデルで救う。
+REFUSAL_FALLBACK_MODEL = "claude-opus-5"
+
+# 思考の深さ。Opus 5.5 は既定が medium（Opus 5 は high）なので、黙って浅くならないよう明示する。
+# CLAUDE_EFFORT で上書き可（low / medium / high / xhigh / max）。
+DEFAULT_EFFORT = "high"
+
+# Opus 5 以降は適応思考が常に有効で、思考トークンが max_tokens 枠を消費する。
 # 実測では思考オフでも16,384枠の82%を使ったため上限を引き上げる。
 # 16k超の非ストリーミングはSDKのHTTPタイムアウトに当たるため streaming が必須。
 MAX_TOKENS = 32000
@@ -28,6 +38,36 @@ THINKING = {"type": "adaptive"}
 
 def _get_model() -> str:
     return os.environ.get("CLAUDE_MODEL", DEFAULT_MODEL)
+
+
+def _get_effort() -> str:
+    return os.environ.get("CLAUDE_EFFORT") or DEFAULT_EFFORT
+
+
+def _stream_report(client, model: str, system: list, user_prompt: str, label: str):
+    """レポートを1本生成する。安全分類器に拒否されたら REFUSAL_FALLBACK_MODEL で1回だけ書き直す。
+
+    戻り値は最終メッセージ。拒否が解消しなければ例外を送出する（空のレポートを公開しない）。
+    """
+    for attempt_model in dict.fromkeys((model, REFUSAL_FALLBACK_MODEL)):
+        with client.messages.stream(
+            model=attempt_model,
+            max_tokens=MAX_TOKENS,
+            thinking=THINKING,
+            output_config={"effort": _get_effort()},
+            system=system,
+            messages=[{"role": "user", "content": user_prompt}],
+        ) as stream:
+            message = stream.get_final_message()
+        if message.stop_reason != "refusal":
+            if attempt_model != model:
+                logger.warning(f"[AIエージェント] {label}は {attempt_model} で生成しました（{model} が拒否）")
+            return message
+        details = getattr(message, "stop_details", None)
+        logger.error(f"[AIエージェント] {label}の生成を {attempt_model} が拒否: "
+                     f"category={getattr(details, 'category', None)} "
+                     f"explanation={getattr(details, 'explanation', None)}")
+    raise RuntimeError(f"{label}の生成が安全分類器に拒否されました（{model} / {REFUSAL_FALLBACK_MODEL}）")
 
 INVESTOR_JP = {
     "foreign":    "海外投資家",
@@ -1076,11 +1116,9 @@ Markdownレポートを生成してください。
 """
 
     model = _get_model()
-    logger.info(f"[AIエージェント] レポート生成開始 (model={model})...")
-    with client.messages.stream(
-        model=model,
-        max_tokens=MAX_TOKENS,
-        thinking=THINKING,
+    logger.info(f"[AIエージェント] レポート生成開始 (model={model}, effort={_get_effort()})...")
+    message = _stream_report(
+        client, model,
         system=[
             {
                 "type": "text",
@@ -1092,9 +1130,9 @@ Markdownレポートを生成してください。
                 "text": dynamic_system,
             },
         ],
-        messages=[{"role": "user", "content": user_prompt}],
-    ) as stream:
-        message = stream.get_final_message()
+        user_prompt=user_prompt,
+        label="週次レポート",
+    )
 
     # thinkingブロックが先頭に付くモデル（Opus 5・Sonnet 5等）でも動くようtextブロックのみ抽出
     report_md = "\n".join(b.text for b in message.content if b.type == "text")
@@ -1374,11 +1412,9 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
 """
 
     model = _get_model()
-    logger.info(f"[AIエージェント] 月次レポート生成開始: {year_month} (model={model})")
-    with client.messages.stream(
-        model=model,
-        max_tokens=MAX_TOKENS,
-        thinking=THINKING,
+    logger.info(f"[AIエージェント] 月次レポート生成開始: {year_month} (model={model}, effort={_get_effort()})")
+    message = _stream_report(
+        client, model,
         system=[
             {
                 "type": "text",
@@ -1390,9 +1426,9 @@ def generate_monthly_report(year_month: str, monthly_rows: list[dict],
                 "text": dynamic_system,
             },
         ],
-        messages=[{"role": "user", "content": user_prompt}],
-    ) as stream:
-        message = stream.get_final_message()
+        user_prompt=user_prompt,
+        label="月次レポート",
+    )
 
     # thinkingブロックが先頭に付くモデル（Opus 5・Sonnet 5等）でも動くようtextブロックのみ抽出
     report_md = "\n".join(b.text for b in message.content if b.type == "text")

@@ -4,7 +4,8 @@
 > 本ファイルへの参照のみを記載し、ルール本文を複製しないこと。
 > 新しいAIエージェントを導入する場合も、そのエージェントの規約ファイルから本ファイルを参照させるだけでよい。
 
-- 最終更新: 2026-08-06（外部査読v5反映に伴い pytest 導入。§5 のテストコマンドを更新）
+- 最終更新: 2026-09-26（レポート生成モデルを Claude Opus 5.5・effort high に。§5 に AIモデルの項を追加）
+- 前回の更新: 2026-08-06（外部査読v5反映に伴い pytest 導入。§5 のテストコマンドを更新）
 - 対象プロジェクト: jpx-analysis（JPX投資主体別 売買フロー分析・Supabase + Streamlit + Claude API）
 - 公開区分: L1（GitHub Private リポジトリ jpx-analysis-ii。限定アクセス。正式決定は未確認）
 
@@ -73,6 +74,10 @@
 ## 5. プロジェクト固有情報
 
 - **技術スタック**: Python / pandas / openpyxl / Supabase(PostgreSQL) / Streamlit（ダッシュボード localhost:8501）/ Claude API（Anthropic・レポート生成）/ n8n（週次自動化）
+- **AIモデル**: `claude-opus-5-5`・effort `high`（2026-09-26 A/B で採用。`docs/handoff/20260926_handoff.md`）。
+  本番の指定は `.github/workflows/weekly_fetch.yml` の `CLAUDE_MODEL` が**コードの既定より優先**されるので、
+  変えるときは両方直す。新しいモデルは同じ週の入力で A/B（`outputs/ab_test/`）してから変える。
+  拒否（refusal）時は `claude-opus-5` で1回だけ書き直す（`agents/report_agent.py` の `_stream_report`）。
 - **起動コマンド**:
   - ダッシュボード: `streamlit run dashboard/app.py` → http://localhost:8501
   - 週次レポート再生成: `python main.py --report-only --date YYYY-MM-DD`
