@@ -38,6 +38,13 @@ on:
         required: false
         type: boolean
         default: false
+      source:
+        # Worker は worker を渡す（jpx-report-scheduler の全ジョブ共通の入力名。受け付けないと Worker の起動が 422 になる）。
+        # 処理には使っていない。実行履歴で起動元を見分けるための印。
+        description: '起動元（手動実行は manual のままでよい）'
+        required: false
+        default: manual
+        type: string
 
 # Worker・予備 schedule・手動が重なっても同時には走らせない（キャンセルせず順番待ち）。
 # 後から走る方は「生成済み」を見て静かにスキップするので、同じ週を二重に生成しない。
