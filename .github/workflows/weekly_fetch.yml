@@ -1,21 +1,23 @@
 name: JPX 週次データ取得・AIレポート生成
 
 # トリガー:
-#   1. 毎週 木・金・月 の 09:17 UTC（= 18:17 JST）の自動実行
-#   2. GitHub の Actions タブからの手動実行（workflow_dispatch）
+#   1. 正: Cloudflare Worker（jpx-report-scheduler）からの workflow_dispatch。平日 15:45 / 17:15 JST
+#      （JPX の公表は第4営業日 15:30。設定は JPX_Analysis_System リポの scheduler/src/index.js の SCHEDULE）
+#   2. 予備: 平日 09:17 UTC（= 18:17 JST）の schedule。Worker が止まったときの保険
+#   3. GitHub の Actions タブからの手動実行（workflow_dispatch・入力なしなら通常の週次）
 #
-# 木曜以外にも走らせる理由（2026-07-23 の取りこぼし）:
-# JPXの投資部門別売買状況は通常なら木曜公表だが、祝日があると1営業日ずれる。
-# 2026-07-20（海の日）の週は金曜公表となり、木曜のみの実行では取り逃した。
+# Worker を正にした理由（2026-10-02）: schedule は実測で毎回4〜8時間遅れて起動していた
+# （18:17 指定 → 22:32〜翌02:39 JST）。workflow_dispatch は約20秒で始まる。
+#
+# 平日毎日走らせる理由: JPXは通常木曜公表だが、祝日の分だけ後ろへずれる
+# （2026-07-20 海の日の週は金曜、9月の連休明けは火曜・木曜）。
 # main.py 側に「掴んだ週が生成済みなら何もせず終了」のガードがあるため、
-# 公表済みの週を重複実行しても即スキップされAPIコストも発生しない。
+# 新データが無い日は1分ほどで静かに終わり、AIの費用も発生しない。
 #
-# 注意: 分は意図的に 00 を避け 17 にしている。
-# GitHub Actions の schedule は共有キューで処理され、毎時00分は全世界のジョブが
-# 集中して数十分〜数時間の遅延・取りこぼしが起きる。00分以外（例:17分）にずらすと改善する。
+# 注意: 予備 schedule の分は意図的に 00 を避け 17 にしている（毎時00分は混雑して遅延・取りこぼしが増える）。
 on:
   schedule:
-    - cron: '17 9 * * 1,4,5'
+    - cron: '17 9 * * 1-5'
   workflow_dispatch:
     inputs:
       date:
@@ -36,6 +38,12 @@ on:
         required: false
         type: boolean
         default: false
+
+# Worker・予備 schedule・手動が重なっても同時には走らせない（キャンセルせず順番待ち）。
+# 後から走る方は「生成済み」を見て静かにスキップするので、同じ週を二重に生成しない。
+concurrency:
+  group: jpx-weekly-fetch
+  cancel-in-progress: false
 
 jobs:
   fetch:

@@ -4,8 +4,8 @@
 > 本ファイルへの参照のみを記載し、ルール本文を複製しないこと。
 > 新しいAIエージェントを導入する場合も、そのエージェントの規約ファイルから本ファイルを参照させるだけでよい。
 
-- 最終更新: 2026-09-26（レポート生成モデルを Claude Opus 5.5・effort high に。§5 に AIモデルの項を追加）
-- 前回の更新: 2026-08-06（外部査読v5反映に伴い pytest 導入。§5 のテストコマンドを更新）
+- 最終更新: 2026-10-02（起動を Cloudflare Worker の workflow_dispatch へ。§5 のスケジュール実行が n8n のままだったのを実態に合わせた）
+- 前回の更新: 2026-09-26（レポート生成モデルを Claude Opus 5.5・effort high に。§5 に AIモデルの項を追加）
 - 対象プロジェクト: jpx-analysis（JPX投資主体別 売買フロー分析・Supabase + Streamlit + Claude API）
 - 公開区分: L1（GitHub Private リポジトリ jpx-analysis-ii。限定アクセス。正式決定は未確認）
 
@@ -88,7 +88,13 @@
 - **DBスキーマの正**: `db/schema.sql`（Supabase SQL Editor で実行。推測禁止）。主要テーブル `weekly_futures`（week_date / investor_type / futures_type / long_lots / short_lots / net_lots / index_close / net_amount_oku / source_url）
 - **データソースと取得条件**: JPX先物CSV（`scripts/parse_futures_csv.py` v1.1）+ 現物XLS（`scripts/parse_spot_xls.py`）。投資家コードは下表で固定（誤ると全数値がズレる）:
   海外投資家=**60** / 信託銀行=**23** / 事業法人=**32** / 個人=30 / 自己=10
-- **スケジュール実行**: n8n 毎週木曜20時に自動実行（api_server.py + Windowsスタートアップ登録）。Claude API でレポート生成。
+- **スケジュール実行**: GitHub Actions `.github/workflows/weekly_fetch.yml`。起動の正は Cloudflare Worker
+  `jpx-report-scheduler`（**JPX_Analysis_System リポの `scheduler/src/index.js` の `SCHEDULE`**）からの
+  workflow_dispatch で、平日 15:45 / 17:15 JST（JPX の公表は第4営業日 15:30）。予備に平日 18:17 JST の `schedule:`。
+  GitHub の schedule は実測4〜8時間遅れるため正にしない（2026-10-02）。新データが無い日は静かにスキップする。
+  失敗（現物が読めない・週の不一致・前週の取りこぼし・公表停滞20日超）は exit 1 と理由付きメール。
+  Worker の GitHub トークン（fine-grained PAT）の対象リポに `jpx-analysis-ii` が含まれている必要がある。
+  旧来の n8n（api_server.py + Windowsスタートアップ）は使っていない。
 - **環境差異**: GitHub Private remote = `jpx-analysis-ii`。秘密の実値は `config/.env`（`SUPABASE_URL` / `SUPABASE_KEY` サービスロール / `ANTHROPIC_API_KEY`）にのみ置き、ドキュメント・チャットに実値を書かない。
 - **公開区分とその根拠**: L1 暫定（Private リポ・限定アクセス。投資分析のため一般公開しない。正式決定は未確認）
 - **詳細な作業履歴・次タスク候補**: `HANDOVER_20260412.md`（バックエンド）/ `HANDOVER_DASHBOARD_20260413.md`（ダッシュボード）/ git 履歴を参照（本ファイルには進捗ログを書かない）。
