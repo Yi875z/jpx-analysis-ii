@@ -290,7 +290,7 @@ _PERIOD_NOTES = {
 def _build_time_axis_facts(week_date: date, as_of: datetime) -> str:
     """レポート作成日時と対象週・翌週の時制関係を機械判定した事実ブロックを返す。"""
     as_of_date = as_of.date()
-    week_start = week_date - timedelta(days=4)
+    week_start = _week_first_day(week_date)
     next_start = week_date + timedelta(days=3)
     next_end   = week_date + timedelta(days=7)
 
@@ -336,6 +336,49 @@ def _last_weekday_of_month(d: date) -> date:
     while last.weekday() > 4:  # 土=5, 日=6
         last -= timedelta(days=1)
     return last
+
+
+_TSE_NEW_YEAR_CLOSED = {(12, 31), (1, 1), (1, 2), (1, 3)}
+
+
+def tse_trading_days(week_date: date) -> list[date]:
+    """週末日 week_date を含む週（月〜金）の東証営業日を返す。
+    休場日 = 土日・国民の祝日（jpholiday）・12/31・1/1〜1/3（東証の年末年始休業）。"""
+    import jpholiday
+    monday = week_date - timedelta(days=week_date.weekday())
+    days = [monday + timedelta(days=i) for i in range(5)]
+    return [d for d in days
+            if not jpholiday.is_holiday(d) and (d.month, d.day) not in _TSE_NEW_YEAR_CLOSED]
+
+
+def _week_first_day(week_date: date) -> date:
+    """対象週の初日（最初の東証営業日）。通常週は月曜＝従来の week_date - 4 日と同じ。"""
+    days = tse_trading_days(week_date)
+    return days[0] if days else week_date - timedelta(days=4)
+
+
+def _build_trading_days_facts(week_date: date) -> str:
+    """祝日で営業日が5日未満の短縮週だけ、営業日数の事実ブロックを返す（通常週は空文字）。
+
+    2026-09-25 週（9/21〜23 が連休で 9/24〜25 の2営業日）の金額を5営業日の週と並べると、
+    「売買が急減」「Zスコアが小さい＝平常」と誤読されるため、生成AIに尺度の違いを渡す。
+    通常週はプロンプトを変えない（過去週の再生成結果を変えない）。
+    """
+    days = tse_trading_days(week_date)
+    n = len(days)
+    if n >= 5:
+        return ""
+    listed = "・".join(d.strftime("%m/%d") for d in days)
+    return f"""
+## 営業日数（機械計算による事実）
+
+- 対象週の東証営業日は {n}日（{listed}）。通常の5営業日より短い短縮週である。
+- 現物の売買代金・ネット金額、先物・オプションの枚数は {n}営業日分の合計である。
+  5営業日の週と金額の大小を単純比較して「急減」「縮小」「細った」と書かない。
+  比較するなら1営業日あたりに直すか、短縮週である留保を付けること。
+- Zスコア・4週平均・前週比は5営業日の週と同じ尺度で計算されており、短縮週では絶対値が小さく出やすい。
+  Zスコアが小さいことを「平常」「動意に乏しい」の根拠にしない。
+"""
 
 
 def _build_calendar_facts(week_date: date) -> str:
@@ -1008,11 +1051,13 @@ GEX判定・季節性アノマリー・マクロ環境の解釈はすべてこ�
 過去の特定イベント（例：関税ショック、特定の戦争・政策等の固有名詞）を
 原因として断定的に言及しないこと。外部リスク要因は「地政学的不確実性」
 「外部ショック」等の一般表現を使うこと。{extra_market}
-{_build_time_axis_facts(week_date, as_of)}{_build_sq_facts(week_date)}{_build_calendar_facts(week_date)}{_build_scheduled_flow_note(week_date)}"""
+{_build_time_axis_facts(week_date, as_of)}{_build_trading_days_facts(week_date)}{_build_sq_facts(week_date)}{_build_calendar_facts(week_date)}{_build_scheduled_flow_note(week_date)}"""
 
-    # 週初日（月曜）と週末日（金曜）の表記を計算
-    week_start = week_date - timedelta(days=4)
+    # 週初日と週末日の表記を計算（祝日で月曜が休場なら最初の営業日から）
+    week_start = _week_first_day(week_date)
     period_label = f"{week_start.strftime('%Y年%m月%d日')}〜{week_date.strftime('%m月%d日')}"
+    n_days = len(tse_trading_days(week_date))
+    period_note = "月〜金" if n_days >= 5 else f"{n_days}営業日の短縮週"
 
     user_prompt = f"""以下のJPX需給データ（{period_label} の週）を分析し、
 Markdownレポートを生成してください。
@@ -1027,7 +1072,7 @@ Markdownレポートを生成してください。
 # JPX投資家別売買動向 {period_label}
 
 > データソース: JPX投資部門別売買状況（株式週間売買状況 / 投資部門別売買状況）
-> 対象期間: {period_label}（月〜金）
+> 対象期間: {period_label}（{period_note}）
 
 ---
 

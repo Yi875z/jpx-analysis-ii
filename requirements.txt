@@ -4,6 +4,7 @@ python-dotenv>=1.0.0
 pandas>=2.0.0
 openpyxl>=3.1.0
 xlrd>=2.0.1                     # JPX現物データは旧式 .xls 形式 → CIでの読込に必須
+jpholiday>=1.0.0                # 東証営業日の判定（祝日で短縮された週をレポートに伝える）
 requests>=2.31.0
 numpy>=1.26.0
 reportlab>=4.0.0
