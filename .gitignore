@@ -50,6 +50,8 @@ graphify-out/converted/
 # Excel出力
 *.xlsx
 *.xls
+# 回帰テスト用の JPX 現物ファイル（公開データ・小サイズ）は追跡する
+!tests/fixtures/*.xlsx
 
 # Claude Code ローカル設定
 .claude/settings.local.json

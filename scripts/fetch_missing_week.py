@@ -63,29 +63,19 @@ def _full_url(href: str) -> str:
 
 
 def _find_spot_url(spot_html: str, week_end: date) -> str | None:
-    """対象週末日に対応する stock_val URL を探す。
-    JPX_SPOT_INDEX を解析して、jpx_week_resolver と同じ手法で
-    {filename: week_end} を作って逆引きする。
+    """対象週末日に対応する現物ファイルの URL を探す（新旧両形式）。
+    新形式 stock_1_w_開始日_終了日.xlsx はファイル名、旧形式 stock_val_1_YYMMNN.xls は
+    ページの期間表記から週末日を決める（jpx_week_resolver.spot_files_by_week）。
     """
-    from scripts.jpx_week_resolver import _STOCK_VAL_RE, _parse_pairs
-    mapping = _parse_pairs(spot_html, _STOCK_VAL_RE)
-    target_stem = None
-    for stem, wi in mapping.items():
-        if wi.week_end == week_end:
-            target_stem = stem
-            break
-    if not target_stem:
-        return None
-    # HTML 内からその stem を含むhrefを探す
-    pattern = re.compile(rf'href="([^"]+{re.escape(target_stem)}\.xls)"', re.IGNORECASE)
-    m = pattern.search(spot_html)
-    return _full_url(m.group(1)) if m else None
+    from scripts.jpx_week_resolver import spot_files_by_week
+    return spot_files_by_week(spot_html).get(week_end)
 
 
-def _find_futures_url(fut_html: str, week_start: date, week_end: date) -> str | None:
-    """先物CSV URLを探す。Tousi_DV_W_YYYYMMDD_YYYYMMDD.csv のパターン"""
+def _find_futures_url(fut_html: str, week_end: date) -> str | None:
+    """先物CSV URLを探す。Tousi_DV_W_開始日_終了日.csv のうち終了日が一致するもの。
+    開始日は月曜とは限らない（2026-09-24〜25 のように連休明けの週は木曜始まり）ので見ない。"""
     pattern = re.compile(
-        rf'href="([^"]+Tousi_DV_W_{week_start.strftime("%Y%m%d")}_{week_end.strftime("%Y%m%d")}\.csv)"',
+        rf'href="([^"]+Tousi_DV_W_\d{{8}}_{week_end.strftime("%Y%m%d")}\.csv)"',
         re.IGNORECASE,
     )
     m = pattern.search(fut_html)
@@ -109,24 +99,24 @@ def main():
     args = p.parse_args()
 
     week_end = date.fromisoformat(args.week_end)
-    week_start = week_end.fromordinal(week_end.toordinal() - 4)
 
-    print(f"=== 欠落週取得: {week_start} 〜 {week_end} ===\n")
+    print(f"=== 欠落週取得: 週末 {week_end} ===\n")
 
     spot_html, fut_html = _fetch_jpx_pages()
 
     spot_url = _find_spot_url(spot_html, week_end)
-    fut_url  = _find_futures_url(fut_html, week_start, week_end)
+    fut_url  = _find_futures_url(fut_html, week_end)
 
     print(f"現物 URL: {spot_url}")
     print(f"先物 URL: {fut_url}")
 
-    if not spot_url and not fut_url:
-        print("対応するファイルが JPX ページに見つかりませんでした。")
-        return
+    if not spot_url or not fut_url:
+        # 片方だけで週次を確定させない（現物だけ・先物だけのレポートを作らない）
+        print("現物・先物の両方が JPX ページに見つかりませんでした。中止します。")
+        sys.exit(1)
 
-    spot_path = _download(spot_url, ".xls") if spot_url else None
-    fut_path  = _download(fut_url,  ".csv") if fut_url  else None
+    spot_path = _download(spot_url, Path(spot_url).suffix)   # .xls（旧）/ .xlsx（新）
+    fut_path  = _download(fut_url,  ".csv")
 
     print()
     if args.no_report:

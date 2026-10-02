@@ -251,31 +251,6 @@ def parse_futures(content: bytes, week_date: date, source_url: str,
 # ─────────────────────────────────────────
 # メイン取得関数
 # ─────────────────────────────────────────
-def _resolve_actual_week_end(target_url: str, fallback: date) -> date:
-    """取得ファイルのURLとJPXページの記載から、実態の週末日を取得する。
-    取れなければ fallback（呼び出し側の希望日付）を返す。
-    """
-    try:
-        # 遅延 import で循環を避ける
-        from .jpx_week_resolver import extract_filename_stem, resolve_from_jpx
-        stem = extract_filename_stem(target_url)
-        if not stem:
-            return fallback
-        mapping = resolve_from_jpx()
-        wi = mapping.get(stem)
-        if wi is None:
-            return fallback
-        if wi.week_end != fallback:
-            logger.warning(
-                f"[week_date補正] 指定 {fallback} → JPX実態 {wi.week_end} "
-                f"(file={stem}, JPX表記={wi.year}年{wi.month}月第{wi.week_num}週)"
-            )
-        return wi.week_end
-    except Exception as e:
-        logger.warning(f"[week_date解決失敗] {e} → fallback {fallback} を使用")
-        return fallback
-
-
 def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
     """JPXから現物・先物・オプションを自動取得してパース結果を返す。
 
@@ -289,33 +264,38 @@ def fetch_all(week_date: date, index_close: float = 0.0) -> dict:
         "errors": [],
         "resolved_week_date": week_date,
         "resolved_futures_week_date": None,
+        "published_spot_weeks": [],
     }
 
-    # ── 現物（XLS形式） ──────────────────────────────────────────────────
+    # ── 現物（XLS/XLSX形式） ─────────────────────────────────────────────
+    #   ページ上の並び順に頼らず、新旧両形式のリンクを「週末日」で引いて最新週を選ぶ。
+    #   週末日を決められないときに呼び出し側の日付で代用すると、別の週のデータに
+    #   実行日のラベルを付けてしまう（2026-10-02: 新形式名を読めず 10/2 扱い）ので、
+    #   その場合はエラーにして呼び出し側で失敗させる。
     try:
-        links = _get_csv_links(JPX_SPOT_INDEX)
-        xls_links = [l for l in links if l.lower().endswith(".xls") or l.lower().endswith(".xlsx")]
-        target = xls_links[0] if xls_links else (links[0] if links else None)
-        if target is None:
-            result["errors"].append("現物ファイルリンクが見つかりません")
+        from .jpx_week_resolver import _decode, spot_files_by_week
+        resp = requests.get(JPX_SPOT_INDEX, headers=HEADERS, timeout=30)
+        resp.raise_for_status()
+        files = spot_files_by_week(_decode(resp))
+        result["published_spot_weeks"] = sorted(files)
+        if not files:
+            result["errors"].append(
+                "現物ファイルのリンクが見つからないか、対象週を特定できません"
+                "（JPXのファイル名規則・ページ構成の変更を疑ってください）"
+            )
         else:
-            logger.info(f"[自動取得] 現物: {target}")
-            # JPX 記載の対象期間で week_date を補正
-            actual_wd = _resolve_actual_week_end(target, week_date)
+            actual_wd = max(files)
+            target = files[actual_wd]
+            logger.info(f"[自動取得] 現物: {target}（対象週末 {actual_wd}）")
             result["resolved_week_date"] = actual_wd
 
             tmp = _download_to_tempfile(target)
             try:
-                ext = tmp.suffix.lower()
-                if ext in (".xls", ".xlsx"):
-                    from .parse_spot_xls import parse_spot_xls
-                    rows = parse_spot_xls(str(tmp), str(actual_wd))
-                    for row in rows:
-                        row.setdefault("source_url", target)
-                    result["spot"] = rows
-                else:
-                    content = tmp.read_bytes()
-                    result["spot"] = parse_spot(content, actual_wd, target)
+                from .parse_spot_xls import parse_spot_xls
+                rows = parse_spot_xls(str(tmp), str(actual_wd))
+                for row in rows:
+                    row.setdefault("source_url", target)
+                result["spot"] = rows
             finally:
                 tmp.unlink(missing_ok=True)
     except Exception as e:
