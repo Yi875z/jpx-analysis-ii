@@ -14,6 +14,10 @@ JPX投資主体別売買動向 自動分析システム
 自動実行では「JPXがまだ次の週を公表していない」場合、スクレイパーがサイト上の
 最新＝処理済みの前週を掴む。その週のレポートが既にあれば何もせず終了する
 （--force で無効化）。
+
+次の場合は success で黙って終わらず exit 1（＝GitHub Actions の失敗＋失敗メール）にする:
+  現物が6主体そろって読めない／先物が読めない／現物と先物の対象週が合わない／
+  JPXに掲載中の前の週のレポートが無い（取りこぼし）／JPXの公表が長期間止まっている
 """
 
 import argparse
@@ -53,6 +57,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from db           import supabase_client as db
 from scripts      import fetch_jpx, analyze_jpx, build_excel as excel_builder, fetch_index
 from agents       import report_agent
+from scripts.jpx_week_resolver import unreported_weeks
+from scripts.parse_spot_xls    import SPOT_INVESTORS
 
 OUTPUT_DIR = Path(os.getenv("OUTPUT_DIR", "./outputs"))
 
@@ -93,7 +99,8 @@ def _generation_footer(data_label: str) -> str:
     )
 
 
-def _write_run_status(status: str, week_date: date | None = None) -> None:
+def _write_run_status(status: str, week_date: date | None = None,
+                      reason: str = "") -> None:
     """実行結果を outputs/last_run_status.txt に書き出す。
 
     GitHub Actions が「新規レポートを生成したか」を判定してサマリーメール送信の
@@ -104,8 +111,22 @@ def _write_run_status(status: str, week_date: date | None = None) -> None:
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         line = status if week_date is None else f"{status} {week_date}"
         (OUTPUT_DIR / "last_run_status.txt").write_text(line, encoding="utf-8")
+        if reason:
+            # 失敗メール（send_summary_mail.py --failure）が本文に載せる
+            (OUTPUT_DIR / "last_run_error.txt").write_text(f"{line}\n{reason}\n", encoding="utf-8")
     except Exception as e:
         logger.warning(f"[実行ステータス書き出し失敗] {e}")
+
+
+def _fail(status: str, week_date: date | None, reason: str) -> None:
+    """取得・整合性の異常で処理を止める。exit 1 で GitHub Actions を失敗にし、通知させる。"""
+    logger.error(f"[失敗:{status}] {reason}")
+    try:
+        db.save_log(week_date, "error", error_message=reason[:500])
+    except Exception as e:
+        logger.warning(f"[fetch_logs 記録失敗] {e}")
+    _write_run_status(status, week_date, reason)
+    sys.exit(1)
 
 
 def _save_markdown(content: str, week_date: date) -> Path:
@@ -189,6 +210,23 @@ def run_weekly(week_date: date, spot_path: str = None,
     errors       = fetch_result.get("errors", [])
     resolved_wd  = fetch_result.get("resolved_week_date")
     resolved_fut = fetch_result.get("resolved_futures_week_date")
+    auto_mode    = not (spot_path or futures_path)
+
+    for e in errors:
+        logger.warning(f"[警告] {e}")
+
+    # ①-0 取得結果の検査（ここで止めないと、読めなかった側を欠いたまま進むか黙って終わる）
+    #   2026-10-02: 現物の新形式ファイル名を読めず対象週を取り違え、success のまま何もしなかった。
+    want_spot    = auto_mode or bool(spot_path)
+    want_futures = auto_mode or bool(futures_path)
+    got_spot = {r["investor_type"] for r in spot_rows}
+    if want_spot and got_spot != set(SPOT_INVESTORS):
+        _fail("spot_unreadable", resolved_wd or week_date,
+              f"現物を6主体そろって読めませんでした（取得={sorted(got_spot)}）。"
+              f" エラー: {' / '.join(errors) or 'なし'}")
+    if want_futures and not futures_rows:
+        _fail("futures_unreadable", resolved_wd or week_date,
+              f"先物を読めませんでした。エラー: {' / '.join(errors) or 'なし'}")
 
     # JPX 記載の対象期間が呼び出し側の指定と異なる場合は実態を採用
     if resolved_wd and resolved_wd != week_date:
@@ -197,51 +235,47 @@ def run_weekly(week_date: date, spot_path: str = None,
         )
         week_date = resolved_wd
 
-    # ①-a 未公表ガード
+    # ①-a 取りこぼし検知
+    #   自動実行は最新の1週しか処理しない。実行と実行の間に2週分が公表されると古い方が
+    #   抜け落ちる（2026-09: 連休明けに 9/18週と9/25週が続けて公表され 9/18週が欠落）。
+    #   最新週を先に作ると前週比・Zスコアが欠けた履歴で計算されるため、古い週を
+    #   先に埋めてもらうよう、ここで止めて通知する。
+    if auto_mode and not force:
+        missing = unreported_weeks(fetch_result.get("published_spot_weeks", []),
+                                   week_date, db.weekly_report_exists)
+        if missing:
+            cmds = " → ".join(f"python scripts/fetch_missing_week.py --week-end {w}" for w in missing)
+            _fail("missing_previous_week", week_date,
+                  f"JPXに掲載中の {', '.join(map(str, missing))} 週のレポートがありません。"
+                  f" 古い順に {cmds} を実行してから、最新週 {week_date} を再実行してください。")
+
+    # ①-b 未公表ガード
     #   JPXスクレイパーは常に「サイト上の最新ファイル」を掴む。目的の週がまだ
     #   未公表だと、既に処理済みの前週を掴んで黙って再生成してしまう
     #   （2026-07-23: 7/20海の日で公表が金曜にずれ、7/10週を再生成して成功扱い）。
     #   既にレポートがある週を掴んだ＝新規データ無し、と判定して何もせず抜ける。
-    if not (spot_path or futures_path) and not force and db.weekly_report_exists(week_date):
+    if auto_mode and not force and db.weekly_report_exists(week_date):
         age_days = (date.today() - week_date).days
+        if age_days > STALE_ALARM_DAYS:
+            _fail("stale", week_date,
+                  f"JPXの公表が{age_days}日分停滞しています（閾値{STALE_ALARM_DAYS}日）。"
+                  " 連休による公表の後ろ倒しでなければ、JPXのURL構成変更・スクレイパー故障を疑ってください。")
         logger.warning(
             f"[未公表スキップ] JPX最新公表週 {week_date} は既にレポート生成済み"
             f"（週末から{age_days}日経過）。新規データが無いため何もせず終了します。"
         )
         _write_run_status("no_new_data", week_date)
-        if age_days > STALE_ALARM_DAYS:
-            logger.error(
-                f"[異常] JPXの公表が{age_days}日分停滞しています（閾値{STALE_ALARM_DAYS}日）。"
-                " JPXのURL構成変更・スクレイパー故障を疑ってください。"
-            )
-            db.save_log(week_date, "error",
-                        error_message=f"JPX公表停滞 {age_days}日")
-            sys.exit(1)
         return {"status": "no_new_data", "week_date": week_date}
 
-    # ①-b 部分公表ガード
-    #   現物(.xls)と先物(.csv)はJPXの別ページで、片方だけ先に公表されることがある。
-    #   そのまま進むと現物だけの週次レポートが確定してしまうため、揃うまで見送る。
-    if (not (spot_path or futures_path) and not force
-            and resolved_fut is not None and resolved_fut != week_date):
-        logger.warning(
-            f"[部分公表スキップ] 現物={week_date} / 先物={resolved_fut} で対象週が不一致。"
-            " 両方が揃ってから生成するため、今回は何もせず終了します。"
-        )
-        _write_run_status("partial_data", week_date)
-        return {"status": "partial_data", "week_date": week_date}
+    # ①-c 現物・先物の対象週の一致確認
+    #   JPXは現物・先物を同日15:30に公表する。実行時点で週が食い違うのは
+    #   片方の取得・週判定が壊れているときなので、黙ってスキップせず失敗にする。
+    if auto_mode and not force and resolved_fut is not None and resolved_fut != week_date:
+        _fail("week_mismatch", week_date,
+              f"現物={week_date} / 先物={resolved_fut} で対象週が一致しません。"
+              " 片方だけ公表済みなら次回実行で揃います。両方公表済みなら週の判定を疑ってください。")
 
-    if errors:
-        for e in errors:
-            logger.warning(f"[警告] {e}")
-
-    if not spot_rows and not futures_rows:
-        logger.error("[エラー] データが取得できませんでした")
-        db.save_log(week_date, "error", error_message="データ取得失敗")
-        _write_run_status("fetch_failed", week_date)
-        sys.exit(1)
-
-    # ①-b 指数終値を補完（CLI で明示指定が無ければ実勢を取得）
+    # ①-d 指数終値を補完（CLI で明示指定が無ければ実勢を取得）
     #     先物CSVに現物指数は含まれないため、外部取得して index_close を埋める。
     if index_close and index_close > 0:
         resolved_close = index_close  # CLI --index-close を優先

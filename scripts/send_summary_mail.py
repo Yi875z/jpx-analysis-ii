@@ -253,10 +253,41 @@ def send_mail(subject: str, body: str) -> bool:
         return False
 
 
+def build_failure_mail() -> tuple[str, str]:
+    """週次処理が失敗したときの通知メール。main.py が outputs/last_run_error.txt に書いた理由を載せる。
+    DB には触らない（DB 障害で失敗したときも送れるように）。"""
+    err_path = Path(os.environ.get("OUTPUT_DIR", "./outputs")) / "last_run_error.txt"
+    try:
+        detail = err_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        detail = "（理由ファイルなし。取得より前の工程＝依存インストールやテストで落ちた可能性。ログを確認してください）"
+    run_url = ""
+    if os.environ.get("GITHUB_RUN_ID"):
+        run_url = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/"
+                   f"{os.environ.get('GITHUB_REPOSITORY', '')}/actions/runs/{os.environ['GITHUB_RUN_ID']}")
+    first = detail.splitlines()[0] if detail else ""
+    subject = f"[JPX需給] ❌ 週次処理が失敗しました {first}".strip()
+    body = (
+        "JPX投資主体別の週次処理が失敗しました。レポートは生成・配信されていません。\n\n"
+        f"■ 理由\n{detail}\n\n"
+        f"■ 実行ログ\n{run_url or '(ローカル実行)'}\n"
+    )
+    return subject, body
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--dry-run", action="store_true", help="送信せずにメール本文を表示")
+    p.add_argument("--failure", action="store_true", help="失敗通知メールを送る（GitHub Actions の失敗時）")
     args = p.parse_args()
+
+    if args.failure:
+        subject, body = build_failure_mail()
+        if args.dry_run:
+            print(f"=== Subject ===\n{subject}\n\n=== Body ===\n{body}")
+        else:
+            send_mail(subject, body)
+        return
 
     report = fetch_latest_weekly_report()
     if not report:

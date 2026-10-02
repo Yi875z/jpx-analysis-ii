@@ -105,7 +105,7 @@ jobs:
           echo "TZ:   $TZ"
           date
 
-          rm -f outputs/last_run_status.txt
+          rm -f outputs/last_run_status.txt outputs/last_run_error.txt
 
           case "$MODE" in
             weekly)
@@ -146,6 +146,12 @@ jobs:
         if: success() && steps.status.outputs.status != 'generated'
         run: |
           echo "::notice::JPX未公表のため新規レポートなし（status=${{ steps.status.outputs.status }}）。メール送信はスキップしました。"
+
+      # 取得・整合性の異常（現物が読めない・週が合わない・前週の取りこぼし等）は
+      # main.py が exit 1 にする。GitHub 標準の失敗通知だけに頼らず、理由付きでメールする。
+      - name: Send failure mail
+        if: failure()
+        run: python scripts/send_summary_mail.py --failure || true
 
       - name: Show logs on failure
         if: failure()
