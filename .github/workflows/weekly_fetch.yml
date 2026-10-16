@@ -54,7 +54,9 @@ concurrency:
 
 jobs:
   fetch:
-    runs-on: ubuntu-latest
+    # ubuntu-latest は 2026-10-19 から Ubuntu 26 に切り替わる。動作確認済みの 24.04 に固定し、
+    # 26 への移行は手動の試し実行で確かめてから行う（2026-10-16）。
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
 
     env:
