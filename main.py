@@ -185,6 +185,13 @@ def _save_excel(week_date: date) -> Path:
 STALE_ALARM_DAYS = 20
 
 
+def _today() -> date:
+    """停滞判定の「今日」。テストで日付を固定するために関数に切り出している。
+    2026-10-16: テストが実日付を読み、固定データの 9/25週が21日前になった日に
+    回帰テストが落ちて本番の取得まで止まった。"""
+    return date.today()
+
+
 def run_weekly(week_date: date, spot_path: str = None,
                futures_path: str = None, index_close: float = 0.0,
                market_data: dict | None = None, force: bool = False):
@@ -256,7 +263,7 @@ def run_weekly(week_date: date, spot_path: str = None,
     #   （2026-07-23: 7/20海の日で公表が金曜にずれ、7/10週を再生成して成功扱い）。
     #   既にレポートがある週を掴んだ＝新規データ無し、と判定して何もせず抜ける。
     if auto_mode and not force and db.weekly_report_exists(week_date):
-        age_days = (date.today() - week_date).days
+        age_days = (_today() - week_date).days
         if age_days > STALE_ALARM_DAYS:
             _fail("stale", week_date,
                   f"JPXの公表が{age_days}日分停滞しています（閾値{STALE_ALARM_DAYS}日）。"

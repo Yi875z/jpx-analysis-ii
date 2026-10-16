@@ -102,8 +102,22 @@ jobs:
       # レポート生成規律の回帰テスト（AI呼び出しなし・1秒未満）。
       # NT方向判定・時間軸判定・異種原資産の枚数合算禁止が壊れた状態で
       # 本番レポートを作らないよう、取得の前に落とす。
+      # 落ちたら失敗メールに「テストで止まった・どのテストか」を載せる
+      # （2026-10-16: 理由ファイルが無く、メールから原因を読めなかった）。
       - name: Run report rule regression tests
-        run: python -m pytest tests/ -q
+        run: |
+          mkdir -p outputs
+          set +e
+          python -m pytest tests/ -q -p no:cacheprovider 2>&1 | tee pytest.out
+          rc=${PIPESTATUS[0]}
+          if [ "$rc" -ne 0 ]; then
+            {
+              echo "test_failed"
+              echo "回帰テストが失敗したため、JPXの取得より前に停止しました（データ・JPX側の異常とは限らない。テスト自体の不備も疑う）。"
+              grep -E '^(FAILED|ERROR) ' pytest.out | head -5
+            } > outputs/last_run_error.txt
+          fi
+          exit "$rc"
 
       - name: Run JPX weekly fetch
         id: fetch

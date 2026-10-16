@@ -42,7 +42,9 @@ def run(monkeypatch, tmp_path):
     monkeypatch.setattr(main, "OUTPUT_DIR", tmp_path)
     logs = []
 
-    def _run(fetch_result, reported):
+    def _run(fetch_result, reported, today=date(2026, 10, 2)):
+        # 実日付を読ませない（読ませると固定データの週が日を追って古くなり、いつか stale で落ちる）
+        monkeypatch.setattr(main, "_today", lambda: today)
         monkeypatch.setattr(main.fetch_jpx, "fetch_all", lambda wd, ic: fetch_result)
         monkeypatch.setattr(main.db, "weekly_report_exists", lambda w: w in reported)
         monkeypatch.setattr(main.db, "save_log", lambda *a, **k: logs.append((a, k)))
@@ -87,6 +89,18 @@ def test_week_mismatch_fails_instead_of_silent_success(run):
 def test_already_generated_is_quiet_skip(run):
     """JPX未公表で処理済みの週を掴んだだけなら、従来どおり静かにスキップ（失敗にしない）。"""
     status, code = run(_fetch_result(), reported=set(PUBLISHED))
+    assert (status, code) == ("no_new_data", 0)
+
+
+def test_stale_publication_fails(run):
+    """最新公表週が閾値（20日）を超えて古いまま → 公表停滞として失敗させる。"""
+    status, code = run(_fetch_result(), reported=set(PUBLISHED), today=date(2026, 10, 16))
+    assert (status, code) == ("stale", 1)
+
+
+def test_stale_threshold_is_exclusive(run):
+    """ちょうど20日は連休の後ろ倒しの範囲としてスキップ扱い（21日から失敗）。"""
+    status, code = run(_fetch_result(), reported=set(PUBLISHED), today=date(2026, 10, 15))
     assert (status, code) == ("no_new_data", 0)
 
 
